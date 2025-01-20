@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+      <div class="container-fluid login">
+        <div class="container">
+            <form method="POST" action="{% url 'tuerny_app:login' %}" class="ajaxFormTrue">
+                {% csrf_token %}
+                <div class="d-flex mb-3">
+                    <div class="ms-auto me-auto logincont">
+                        <h2>Giriş Yap</h2>
+                        {% if messages %}
+                            <div class="alert alert-danger">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <input type="email" class="form-control" name="mail" placeholder="Mail adresi" required>
+                        <div class="position-relative">
+                            <input type="password" class="form-control" name="password" placeholder="Şifre" required>
+                            <i class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye"
+                               style="color:#989491; display:none"></i>
+                            <i class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye-slash"
+                               style="color:#989491"></i>
+                        </div>
+                        <div class="col-md-12 vAjaxErrors"></div>
+                        <button type="submit" class="btn btn-default loginbtn">Giriş Yap</button>
+                        <a href="javascript:;" class="btn btn-default google">
+                            <img src="{% static 'tuerny_app/images/icons/image 2.svg' %}">
+                            Google ile Giriş Yap
+                        </a>
+                        <a href="javascript:;" class="btn btn-default apple">
+                            <img src="{% static 'tuerny_app/images/icons/image 3.svg' %}">
+                            Apple ile Giriş Yap
+                        </a>
+                        <div class="hstack gap-2 justify-content-center mt-4 text-roboto fw-light">
+                            <span>Üye değil misin?</span>
+                            <a class="text-decoration-underline" href="register.html">Üye Ol</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+    
+    
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.querySelector('input[name="password"]');
+            const eyeIcon = document.querySelector('.fa-eye');
+            const eyeSlashIcon = document.querySelector('.fa-eye-slash');
+    
+            function togglePasswordVisibility() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.style.display = 'inline';
+                    eyeSlashIcon.style.display = 'none';
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.style.display = 'none';
+                    eyeSlashIcon.style.display = 'inline';
+                }
+            }
+    
+            eyeIcon.addEventListener('click', togglePasswordVisibility);
+            eyeSlashIcon.addEventListener('click', togglePasswordVisibility);
+        });
+    
+    </script>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="/search">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endblock content %}

@@ -1,0 +1,363 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-around">
+        <div class="col-lg-6 p-0">
+            <div class="d-flex flex-column gap-4">
+                <div class="text-center d-flex flex-column gap-2">
+                    <p class="blog-category">{{blog_.blogs.name}}</p>
+                    <h1 class="blog-title fw-normal">
+                        {{blog_.title}}
+                    </h1>
+                    <p class="blog-text">
+                        {{blog_.short_description | safe}}
+                    </p>
+                    <p class="blog-author text-uppercase">BY Blog Author</p>
+                </div>
+
+                <div>
+                    <div class="ratio-16x9">
+                        <img src="{{blog_.media.url}}" class="w-100 h-100 object-fit-cover" />
+                    </div>
+                    
+                    <div class="blog-buttons d-flex gap-0 justify-content-end mt-3">
+                        <div class="share-container">
+                            <a href="#" class="share-btn">
+                                <svg width="44" height="44" viewBox="0 0 44 44" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
+                                        stroke="#414141" stroke-width="1.16919" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <div class="social-menu">
+                                <a href="#" class="social-btn facebook"
+                                    data-url="/blog-detail/<?= $row->slug ?>">Facebook</a>
+                                <a href="#" class="social-btn twitter"
+                                    data-url="/blog-detail/<?= $row->slug ?>">Twitter</a>
+                                <a href="#" class="social-btn linkedin"
+                                    data-url="/blog-detail/<?= $row->slug ?>">LinkedIn</a>
+                            </div>
+                        </div>
+                                <a data-id="<?= $modul->blog_id ?>" href="javascript:void(0)" class="saved">
+                                    <i class="fa-solid fa-bookmark"></i>
+                                </a>
+                                <a data-id="" href="javascript:void(0)" class="unsaved">
+                                    <i class="fa-regular fa-bookmark"></i>
+                                </a>
+                            <a href="/assets/src/views/register.html" class="unsaved">
+                                <i class="fa-regular fa-bookmark"></i>
+                            </a>
+                    </div>
+
+                    <style>
+                        .player {
+                            cursor: pointer;
+                            transition: fill 0.3s;
+                        }
+
+                        .playing circle {
+                            fill: #d63384;
+                            /* Oynatıldığında yeşil renk */
+                        }
+                    </style>
+
+                    <div id="player-container">
+                        <!-- SVG Icon -->
+                        <svg id="player-icon" class="player" width="44" height="44" viewBox="0 0 44 44" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="22" cy="22" r="22" fill="#989491" />
+                            <path id="icon-path" d="M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z"
+                                fill="#F2F2F2" />
+                        </svg>
+                    </div>
+
+                    <audio id="audio-player" src="../Public/assets/mp3/sound.mp3"></audio>
+
+                    <script>
+                        const playerIcon = document.getElementById('player-icon');
+                        const audioPlayer = document.getElementById('audio-player');
+                        const iconPath = document.getElementById('icon-path');
+
+                        // Toggle play/pause and change icon
+                        playerIcon.addEventListener('click', () => {
+                            if (audioPlayer.paused) {
+                                audioPlayer.play();
+                                playerIcon.classList.add('playing');
+                                // Change to pause icon (rectangle)
+                                iconPath.setAttribute('d', 'M18 18H21V26H18V18ZM23 18H26V26H23V18Z');
+                            } else {
+                                audioPlayer.pause();
+                                playerIcon.classList.remove('playing');
+                                // Change to play icon (triangle)
+                                iconPath.setAttribute('d', 'M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z');
+                            }
+                        });
+
+                        // Reset to play icon when audio ends
+                        audioPlayer.addEventListener('ended', () => {
+                            playerIcon.classList.remove('playing');
+                            iconPath.setAttribute('d', 'M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z');
+                        });
+                    </script>
+
+
+                </div>
+                <p class="blog-text">
+                    {{blog_.content | safe}}
+                </p>
+                {% if blog_.products.all %}
+                {% for product in blog_.products.all %}
+                <div class="blog-content d-flex flex-column gap-3">
+                        <div class="py-5">
+                            <div class="blog-card-3">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="blog-card-img">
+                                            <img src="{{product.image.url}}" class="w-100 object-fit-cover" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="blog-card-content product-detail">
+                                            <div class="blog-card-content-top pt-5">
+                                                <a href="#" class="blog-card-title stretched-link">{{product.title}}</a>
+                                                <p class="blog-card-text mb-0">
+                                                    {{product.description}}
+                                                </p>
+                                            </div>
+                                            <div class="blog-card-content-bottom justify-content-start">
+                                                <a href="{{product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+                                                    style="width: 207px;">
+                                                    DETAYLAR
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                {% endfor %}
+                {% else %}
+        <p>Bu blog ile ilişkili ürün bulunmamaktadır.</p>
+    {% endif %}
+    {% if blog_.products.all %}
+                {% for product in blog_.products.all %}
+                    <div class="d-flex flex-column gap-4 py-5">
+                        <div class="">
+                            <span style="    font-family: Playfair Display;
+    font-size: 16px;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 20.8px;
+    color: #8F4D61;">Teurny Önerileri</span>
+                            <p></p>
+                        </div>
+                        <div>
+                            <div class="blog-card-slider">
+                                    <div class="">
+                                        <div class="blog-card-1">
+                                            <div class="ratio-1">
+                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                            </div>
+                                            <a href="#" class="blog-card-title mb-0 stretched-link">
+                                                {{product.title}}
+                                            </a>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+       
+    {% endif %}
+                <!-- BLOG SECTION 1 -->
+                <div class="blog-comment">
+                    <form method="POST" class="ajaxFormTrue" action="#">
+                        <input type="hidden" name="type" value="blog">
+                        <input type="hidden" name="type_id" value="blog_id">
+                        <input type="hidden" name="parent" value="0">
+                            <input style="margin-bottom: 15px; box-shadow: none; border-radius: 0px" type="text"
+                                class="form-control vRequired" name="user_name" placeholder="Kullanıcı adınız">
+                        <textarea name="content" class="teurny-input w-100 vRequired" rows="10"
+                            placeholder="Yorum"></textarea>
+
+
+                        <div class="d-flex gap-3 mt-4">
+                            <div>
+                                <label for="cb-1" class="teurny-checkbox">
+                                    <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
+                                    <div class="teurny-checkbox-inner"></div>
+                                </label>
+                            </div>
+                            <div>
+                                <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
+                                    KULLANICI ADINI GİZLE
+                                </p>
+                                <p class="font-roboto blog-comment-checkbox-text">
+                                    Bu gönderi için kullanıcı adını gizlenecek
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12 vAjaxErrors"></div>
+                        <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
+
+                    </form>
+
+                    {% for comment in blog_.comments.all %}
+                    <div class="mt-5 d-flex flex-column gap-3">
+                                <div class="blog-comment-item">
+                                    {% if comment.anonymous %}
+                                    <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
+                                    {% else %}
+                                    <p class="blog-comment-item-author">@{{comment.user.username}}</p>
+                                    {% endif %}
+                                        
+                                        
+                                    <p class="blog-comment-item-text">
+                                        {{comment.content}}
+                                    </p>
+                                </div>
+                                <div class="teurny-divider"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="d-flex flex-column gap-5 blog-sidebar ps-0 ps-lg-5 mt-5 mt-lg-0">
+                <div>
+                    <div class="blog-section-title soru">
+                        <span>En Çok Okunanlar</span>
+                        <div class="blog-section-title-divider"></div>
+                        <p></p>
+                    </div>
+
+                    <div class="mt-3 d-flex flex-column gap-3">
+                        {% for blog in blog %}
+                        {% if forloop.counter <= 3 %}
+                            <div class="blog-card-5">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <div class="ratio-16x9">
+                                            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
+                                                <img src="{{ blog.media.url }}" class="w-100 h-100 object-fit-cover" alt="{{ blog.title }}">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ps-1 ps-md-0 mt-3 mt-md-0">
+                                        <div>
+                                            <p class="blog-card-title mb-0">
+                                                <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
+                                                    {{ blog.title }}
+                                                </a>
+                                            </p>
+                                            <!-- <p>{{ blog.short_description|truncatechars:100 }}</p> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="blog-section-title soru">
+                        <span>Son eklenenler</span>
+                        <div class="blog-section-title-divider"></div>
+                        <p></p>
+                    </div>
+
+                    <div class="mt-3 d-flex flex-column gap-3">
+                        {% for blog in blog %}
+                        {% if forloop.counter <= 3 %}
+                                <div class="blog-card-5">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-6">
+                                            <div class="ratio-16x9">
+                                                <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"><img src="{{ blog.media.url }}"
+                                                        class="w-100 h-100 object-fit-cover" /></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 ps-1 ps-md-0 mt-3 mt-md-0">
+                                            <div>
+                                                <p class="blog-card-title mb-0">
+                                                    <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
+                                                        {{ blog.title }}
+                                                    </a>
+
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                            {% endif %}
+                                {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <div
+    class="modal fade"
+    id="searchModal"
+    tabindex="-1"
+    aria-labelledby="searchModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12 col-sm-8">
+                <form method="GET" action="/search">
+                  <div>
+                    <div
+                      class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                    >
+                      <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                      <div class="flex-grow-1 ps-3">
+                        <input
+                          name="keyword"
+                          type="text"
+                          class="teurny-input border-0 w-100"
+                          placeholder="Ara..."
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        class="teurny-button-secondary w-auto"
+                      >
+                        ARA
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock content %}
