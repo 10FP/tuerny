@@ -110,7 +110,7 @@
   }
 }
 .question-card-survey-item-progress {
-  flex-grow: 1;
+  width: 50%;
   height: 25px;
   border: 1px solid var(--teurny-lighter);
   display: flex;
@@ -142,6 +142,8 @@
 
 .ask-title {
   font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 1.69px;
 }
 
 .question-card-rate-line-container {
@@ -191,6 +193,3 @@
 }
 
 /*# sourceMappingURL=question.css.map */
-.question-card-survey-item-progress {
-  min-width: 25% !important;
-}

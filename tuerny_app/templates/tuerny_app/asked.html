@@ -1,0 +1,63 @@
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+      <div class="py-4">
+        <div class="d-flex flex-column gap-4 asked-listing">
+          {% for question in request.user.questions.all %}    
+          <div class="question-card">
+            <div class="question-card-category">
+              <p>{{question.subcategory.name}}</p>
+            </div>
+            <div class="question-card-date">
+              <p>question card date</p>
+            </div>
+            <h3 class="question-card-title pb-2">
+              <a href="/assets/src/views/ask-detail.html">{{question.title}}</a>
+            </h3>
+            <p class="question-card-text py-2">{{question.description}}</p>
+  
+            <div class="d-flex justify-content-between align-items-center pt-4">
+              <div class="d-flex gap-4">
+                <div class="question-card-button">
+                  <i class="fa-regular fa-eye question-card-button-icon"></i>
+                  <span class="question-card-button-text"
+                    >0</span
+                  >
+                </div>
+                <div class="question-card-button">
+                  <i class="fa-regular fa-message question-card-button-icon"></i>
+                  <span class="question-card-button-text">0</span>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <div class="question-card-button">
+                  <i
+                    class="fa-solid fa-heart-crack question-card-button-icon"
+                  ></i>
+                  {{question.dislike_count}}
+                </div>
+                <div class="question-card-rate-line"></div>
+                <div class="question-card-button">
+                  <i class="fa-regular fa-heart question-card-button-icon"></i>
+                  {{question.like_count}}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="hstack justify-content-center mt-5">
+                <button
+                  data-start="9"
+                  class="teurny-button-primary-outline saved-more-ask"
+                  style="width: 383px; height: 39px"
+                >
+                  DAHA FAZLA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

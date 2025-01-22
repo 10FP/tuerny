@@ -50,13 +50,13 @@
               <div class="px-2">
                 <div class="blog-card-1">
                   <div class="ratio-1">
-                    <a href="/assets/src/views/blog-detail.html"
+                    <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
                       ><img
                         src="{{blog.media.url}}"
                         class="w-100 h-100 object-fit-cover"
                     /></a>
                   </div>
-                  <a href="/assets/src/views/blog-detail.html" class="blog-card-title mb-0 stretched-link">
+                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
                     {{ blog.title }}
                   </a>
                   <div

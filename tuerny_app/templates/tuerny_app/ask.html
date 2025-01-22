@@ -1,0 +1,282 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+      <div class="container py-5">
+        <div class="row justify-content-center askform">
+          <div class="col-12 col-xl-6">
+            <form method="POST" action="" class="ajaxFormFalse">
+              <div>
+                <p class="ask-title">Merak Ettiklerini Sor</p>
+                <div class="mt-4 d-flex flex-column gap-3">
+                    {% if user.is_authenticated %}
+                    <select
+                    name="category_id"
+                    class="teurny-input w-100 vRequired"
+                  >
+                    <option value="">Kategori</option>
+                    <option disabled value="">option</option>
+                    <option value="1">option</option>
+                  </select>
+                  <select
+                    name="subject_id"
+                    class="teurny-input w-100 vRequired"
+                  >
+                    <option value="">Konu</option>
+                    <option value="support">Destek Talebi</option>
+                    <option value="offer">Öneri</option>
+                    <option value="complaint">Şikayet</option>
+                    <option value="other">Diğer</option>
+                  </select>
+                  <div class="limit-counter">
+                    <label for="title" id="title-counter" class="counter-area"
+                      >00/90</label
+                    >
+                    <input
+                      name="title"
+                      type="text"
+                      placeholder="Soru Başlığı"
+                      class="teurny-input vRequired"
+                      id="counter-input"
+                      maxlength="90"
+                    />
+                  </div>
+
+                  <div class="limit-counter textarea-counter">
+                    <label
+                      for="content"
+                      id="content-counter"
+                      class="counter-area"
+                      >00/360</label
+                    >
+                    <textarea
+                      name="content"
+                      class="teurny-input"
+                      id="counter-textarea"
+                      rows="8"
+                      maxlength="360"
+                      placeholder="Detaylar(İsteğe Bağlı)"
+                      style="resize: none"
+                    ></textarea>
+                  </div>
+                  <div class="d-flex gap-3 mt-4">
+                    <div>
+                      <label for="cb-1" class="teurny-checkbox">
+                        <input
+                          name="hidden_user_name"
+                          type="checkbox"
+                          id="cb-1"
+                          class="d-none"
+                        />
+                        <div class="teurny-checkbox-inner"></div>
+                      </label>
+                    </div>
+                    <div>
+                      <p
+                        class="fw-medium font-roboto blog-comment-checkbox-label mb-0"
+                        style="
+                          font-size: 12px;
+                          letter-spacing: 1.69px;
+                          color: black;
+                        "
+                      >
+                        KULLANICI ADINI GİZLE
+                      </p>
+                      <p class="font-roboto blog-comment-checkbox-text">
+                        Bu gönderi için kullanıcı adını gizlenecek
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex gap-3 mt-4">
+                    <div>
+                      <label for="cb-2" class="teurny-checkbox">
+                        <input
+                          name="add_survey"
+                          type="checkbox"
+                          id="cb-2"
+                          class="d-none addsurvey_check"
+                        />
+                        <div class="teurny-checkbox-inner"></div>
+                      </label>
+                    </div>
+                    <div>
+                      <p
+                        class="fw-medium font-roboto blog-comment-checkbox-label mb-0"
+                        style="
+                          font-size: 12px;
+                          letter-spacing: 1.69px;
+                          color: black;
+                        "
+                      >
+                        ANKET EKLE
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="limit-counter">
+                      <label for="title" id="title-counter" class="counter-area"
+                        >00/90</label
+                      >
+                      <input
+                        name="survey_title"
+                        type="text"
+                        placeholder="Anket Sorusu"
+                        class="teurny-input w-100 survey-select"
+                        id="counter-input"
+                        maxlength="90"
+                        disabled
+                      />
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="mt-3">
+                          <input
+                            name="selection_a"
+                            type="text"
+                            placeholder="1. Şık"
+                            class="teurny-input w-100 survey-select vRequired"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="mt-3">
+                          <input
+                            name="selection_b"
+                            type="text"
+                            placeholder="2. Şık"
+                            class="teurny-input w-100 survey-select vRequired"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="mt-3">
+                          <input
+                            name="selection_c"
+                            type="text"
+                            placeholder="3. Şık"
+                            class="teurny-input w-100 survey-select vRequired"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="mt-3">
+                          <input
+                            name="selection_d"
+                            type="text"
+                            placeholder="4. Şık"
+                            class="teurny-input w-100 survey-select vRequired"
+                            disabled
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-3 mt-4 vCheckRequired">
+                    <div>
+                      <label for="cb-3" class="teurny-checkbox">
+                        <input type="checkbox" id="cb-3" class="d-none" />
+                        <div class="teurny-checkbox-inner"></div>
+                      </label>
+                    </div>
+                    <div>
+                      <p
+                        class="fs-6 fw-light font-roboto blog-comment-checkbox-label mb-1"
+                      >
+                        Şartları okudum ve kabul ediyorum
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <button class="teurny-footer-btn">YAYINLA</button>
+                  </div>
+                    {% else %}
+                    <div>
+                        <div>
+                          <span>Soru sorabilmek için üye olmanız gerekmektedir;</span>
+                          <a
+                            href="/assets/src/views/register.html"
+                            class="teurny-button-primary"
+                            style="text-align: center"
+                            >Üye Ol</a
+                          >
+                        </div>
+                        <div>
+                          <span>Zaten üye iseniz;</span>
+                          <a
+                            href="/assets/src/views/login.html"
+                            class="teurny-button-primary"
+                            style="text-align: center"
+                            >Giriş Yap</a
+                          >
+                        </div>
+                      </div>
+                    {% endif %}
+               
+                 
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="/search">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock content %}
+ 

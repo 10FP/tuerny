@@ -29,6 +29,9 @@
 .blog-buttons a i {
   color: var(--teurny-mid);
 }
+.blog-buttons a.saved i {
+  color: var(--teurny-1);
+}
 
 .blog-content-title {
   font-size: 24px;
@@ -49,6 +52,29 @@
 .blog-content p {
   font-size: 18px;
   text-indent: 30px;
+}
+.blog-content p.source-text {
+  text-indent: 0;
+  color: var(--teurny-mid);
+}
+.blog-content p.source-link {
+  color: var(--teurny-1);
+}
+.blog-content p.source-link a {
+  color: var(--teurny-1);
+}
+.blog-content h3 {
+  position: relative;
+  margin-left: 10px;
+}
+.blog-content h3::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 0;
+  height: 100%;
+  width: 10px;
+  border-left: 3px solid var(--teurny-1);
 }
 .blog-content .blog-card-img {
   width: 300px;
@@ -86,6 +112,23 @@
   top: 100px;
 }
 
+@media screen and (max-width: 992px) {
+  .product-detail .row {
+    flex-direction: row;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-title {
+    font-size: 25px;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-text {
+    display: block;
+    text-indent: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 @media screen and (max-width: 768px) {
   .blog-content-title {
     font-size: 15.7px;
@@ -97,11 +140,55 @@
   .blog-content p {
     font-size: 13.5px;
   }
-  .blog-comment-item .blog-comment-item-author .blog-comment-item-text {
+  .blog-comment-item {
+    padding-bottom: 25px;
+  }
+  .blog-comment-item .blog-comment-item-author {
+    font-style: italic;
+    font-size: 10px;
+  }
+  .blog-comment-item .blog-comment-item-text {
     font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .blog-sidebar {
-    position: static;
+    display: none !important;
+  }
+  .product-detail .blog-card-img {
+    width: 100%;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-title {
+    font-size: 24px;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-text {
+    color: var(--teurny-mid);
+    font-weight: 400;
+  }
+}
+@media screen and (max-width: 580px) {
+  .product-detail .blog-card-img img {
+    height: 100%;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-title {
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 20.8px;
+  }
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-text {
+    display: block;
+    text-indent: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .product-detail .blog-card-content-bottom {
+    display: none;
   }
 }
 

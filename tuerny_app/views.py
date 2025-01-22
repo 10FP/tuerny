@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog
+from .models import Poll, Blog, SubCategory
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -15,7 +15,13 @@ def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)
     return render(request, 'tuerny_app/ask-details.html', {"pool": pool})
 
+def ask(request):
+
+    return render(request, 'tuerny_app/ask.html')
+
 def register(request):
+    if request.user.is_authenticated:
+        return redirect("tuerny_app:index")
     if request.method == "POST":
         email = request.POST.get('mail')
         username = request.POST.get('user_name')
@@ -91,7 +97,7 @@ def settings(request):
     return render(request, "tuerny_app/settings.html")
 
 def saved(request):
-    return render(request, "tuerny_app/comments.html")
+    return render(request, "tuerny_app/saved.html")
 
 def comments(request):
     return render(request, "tuerny_app/saved.html")
@@ -102,12 +108,40 @@ def votes(request):
 def questions(request):
     return render(request, "tuerny_app/questions.html")
 
+def question(request):
+    return render(request, "tuerny_app/question.html")
+
+def x(request):
+    print(request.user.saved_items.all())
+    return render(request, "tuerny_app/x.html")
+
+def y(request):
+    print(request.user.saved_items.all())
+    return render(request, "tuerny_app/asked.html")
+
+def v(request):
+    print(request.user.saved_items.all())
+    return render(request, "tuerny_app/votes.html")
+
+def z(request):
+    print(request.user.saved_items.all())
+    return render(request, "tuerny_app/comments.html")
+
 def blog_detail(request, slug):
     blog = Blog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_})
 
 def category(request, slug):
+    category = SubCategory.objects.get(slug=slug)
+    if category:
+        
+        blogs = category.blogs.all()
+        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
+    else:
+        category = SubCategory.subcategories.objects.get(slug=slug)
 
-    return render(request, "tuerny_app/category_detail.html")
+
+        return render(request, "tuerny_app/category_detail.html", {"categery": category})
+        
     

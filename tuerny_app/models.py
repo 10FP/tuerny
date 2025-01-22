@@ -19,9 +19,14 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-    
 class MainCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -30,6 +35,12 @@ class MainCategory(models.Model):
 class SubCategory(models.Model):
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="subcategories")
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.main_category.name} -> {self.name}"
@@ -68,6 +79,7 @@ class PollOption(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name="options")
     option_text = models.CharField(max_length=255)
     votes = models.PositiveIntegerField(default=0)
+    voted_users = models.ManyToManyField(CustomUser, related_name="voted_options", blank=True, null=True)
 
     def __str__(self):
         return self.option_text
@@ -82,7 +94,7 @@ class Blog(models.Model):
         related_name="blogs"
     )
     title = models.CharField(max_length=255)
-    short_description = RichTextField()
+    short_description = RichTextField(default="", null=True, blank=True)
     content = RichTextField()  # CKEditor entegrasyonu için
     media = models.ImageField(upload_to='blog_media/', null=True, blank=True)
     media_extra = models.FileField(

@@ -1,0 +1,34 @@
+
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-6">
+      <div class="py-4">
+        <div class="row saved-listing">
+{% for save in request.user.saved_items.all %}
+
+          <div class="col-4 p-1">
+            <div class="ratio-1 mt-1">
+              <a href="{% url 'tuerny_app:blog_detail' save.blog.slug %}">
+                <img
+                  src="{{save.blog.media.url}}"
+                  class="w-100 h-100 object-fit-cover"
+              /></a>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="hstack justify-content-center mt-5">
+                <button
+                  data-start="9"
+                  class="teurny-button-primary-outline saved-more-ask"
+                  style="width: 383px; height: 39px"
+                >
+                  DAHA FAZLA
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

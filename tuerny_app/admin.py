@@ -38,10 +38,12 @@ class QuestionAdmin(admin.ModelAdmin):
 class SubCategoryInline(admin.TabularInline):
     model = SubCategory
     extra = 1
+    prepopulated_fields = {"slug": ("name",)}
 
 class MainCategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     inlines = [SubCategoryInline]
+    prepopulated_fields = {"slug": ("name",)}
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):

@@ -131,6 +131,7 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+  font-weight: 100;
 }
 .blog-card-2 .blog-card-content .blog-card-title {
   color: white;
@@ -208,9 +209,9 @@
 }
 .blog-card-3 .blog-card-title {
   font-family: "Playfair Display";
-  font-size: 32px;
+  font-size: 25px;
   font-weight: 400;
-  line-height: 41.6px;
+  line-height: 34.6px;
 }
 .blog-card-3 .blog-card-text {
   font-weight: 300;
@@ -245,6 +246,8 @@
 .blog-card-4 .blog-card-category {
   font-family: "Roboto";
   color: var(--teurny-mid);
+  text-transform: uppercase;
+  font-weight: 300;
 }
 .blog-card-4 .blog-card-title {
   font-family: "Playfair Display";
@@ -340,9 +343,6 @@
   }
 }
 @media screen and (max-width: 768px) {
-  .blog-section-title > *:last-child {
-    display: none;
-  }
   .blog-section-title::after {
     content: "";
     position: absolute;
@@ -375,7 +375,7 @@
     font-size: 12px;
   }
   .blog-card-4 .blog-card-title {
-    font-size: 16px;
+    font-size: 22px;
   }
   .blog-card-4 .blog-card-text {
     font-size: 12px;
