@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+      <div class="container py-5 confirm-container d-flex justify-content-center">
+        <div class="col-10">
+            <div
+              class="confirm-text d-flex flex-column justify-content-center align-items-center"
+            >
+              <div class="confirm-text-content w-50">
+                <p class="confirm-title">Üyeliğini Aktive Et</p>
+                <p class="confirm-desc">
+                  Üyeliğini aktive etmen için sana bir eposta yolladık! Epostadaki
+                  linke tıklayarak üyeliğini aktive edebilirsin.
+                </p>
+              </div>
+            </div>
+            <div class="confirm-img">
+              <div class="ratio-16x9">
+                <img
+                  src="{% static 'tuerny_app/images/3076795.jpg' %}"
+                  alt=""
+                  class="w-100 h-100 object-fit-cover"
+                />
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="/search">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+{% endblock content %}
