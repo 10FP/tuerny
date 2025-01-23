@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+      <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-6">
+                <form method="POST" action="" class="ajaxFormFalse contact-form">
+                    <div>
+                        <p class="ask-title">İLETİŞİM</p>
+                        <div class="mt-4 d-flex flex-column gap-3">
+                            <select name="subject" id="subject" class="teurny-input vRequired">
+                                <option value="">Konu</option>
+                                <option value="support">Destek Talebi</option>
+                                <option value="offer">Öneri</option>
+                                <option value="complaint">Şikayet</option>
+                                <option value="other">Diğer</option>
+                            </select>
+                            <!-- <input type="text" name="subject"  placeholder="Konu" class="teurny-input vRequired" /> -->
+                            <input type="email" name="mail" placeholder="Eposta" class="teurny-input vRequired" />
+                            <input type="text" name="phone" placeholder="Telefon" class="teurny-input vRequired" />
+                            <textarea name="message" class="teurny-input vRequired" rows="10"
+                                placeholder="Mesaj"></textarea>
+                            <div>
+                                <button type="submit" class="tuerny-button-third">Gönder</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 d-flex align-items-center gap-3">
+                        <div class="icon-circle">
+                            <i class="fa-solid fa-envelope fs-4"></i>
+                        </div>
+                        <p class="fw-light">info@teurny.com</p>
+                    </div>
+                </form>
+    
+            </div>
+        </div>
+    </div>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="/search">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% endblock content %}
+   

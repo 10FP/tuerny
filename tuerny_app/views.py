@@ -144,4 +144,20 @@ def category(request, slug):
 
         return render(request, "tuerny_app/category_detail.html", {"categery": category})
         
-    
+def confirm(request):
+    return render(request, 'tuerny_app/confirm.html')
+
+def answer(request):
+    return render(request, 'tuerny_app/answer.html')
+
+def broken(request):
+    return render(request, "tuerny_app/404.html")
+
+def contact(request):
+    return render(request, "tuerny_app/contact.html")
+
+def contract(request):
+    return render(request, 'tuerny_app/contract.html')
+
+def linkinbio(request):
+    return render(request, 'tuerny_app/linkinbio.html')
