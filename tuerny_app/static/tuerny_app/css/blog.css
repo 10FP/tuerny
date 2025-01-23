@@ -20,6 +20,9 @@
 .blog-section-title span,
 .blog-section-title a {
   font-family: "Playfair Display";
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20.8px;
 }
 .blog-section-title.soru.blog-section-title span {
   font-family: "Playfair Display";
@@ -68,10 +71,17 @@
 .blog-section-1 {
   background-color: #ffffff;
 }
-.blog-section-1.section-5 .blog-card-slider-3 .slick-slide.slick-active .blog-card-1 {
+.blog-section-1.section-5
+  .blog-card-slider-3
+  .slick-slide.slick-active
+  .blog-card-1 {
   gap: 12px;
 }
-.blog-section-1.section-5 .blog-card-slider-3 .slick-slide.slick-active .blog-card-1 .blog-card-title {
+.blog-section-1.section-5
+  .blog-card-slider-3
+  .slick-slide.slick-active
+  .blog-card-1
+  .blog-card-title {
   font-size: 20px;
   line-height: 26px;
   font-weight: 400;
@@ -95,11 +105,15 @@
   font-size: 14px;
   line-height: 18.2px;
   color: #8f4d61;
+  font-family: "Roboto";
+  font-weight: 400;
 }
 .blog-card-1 .blog-card-title {
   font-family: "Playfair Display";
   color: #202020;
   line-height: 20.8px;
+  font-size: 20px;
+  line-height: 26px;
 }
 
 /* BLOG CARD 2 */
@@ -136,10 +150,14 @@
 .blog-card-2 .blog-card-content .blog-card-title {
   color: white;
   font-size: 20px;
+  line-height: 26px;
+  font-weight: 400;
 }
 .blog-card-2 .blog-card-content .blog-card-category {
   color: white;
   font-size: 18px;
+  line-height: 23.4px;
+  font-weight: 400;
 }
 
 /* BLOG CARD 3 */
@@ -209,13 +227,16 @@
 }
 .blog-card-3 .blog-card-title {
   font-family: "Playfair Display";
-  font-size: 25px;
+  font-size: 26px;
   font-weight: 400;
-  line-height: 34.6px;
+  line-height: 37.6px;
 }
 .blog-card-3 .blog-card-text {
   font-weight: 300;
   line-height: 20.8px;
+  font-family: "Poppins";
+  font-size: 16px;
+  color: var(--teurny-dark);
 }
 .blog-card-3 .blog-card-author {
   font-weight: 300;
@@ -223,6 +244,7 @@
   font-size: 12px;
   text-transform: uppercase;
   font-family: "Roboto";
+  line-height: 15.6px;
 }
 .blog-card-3 .blog-card-content-bottom {
   display: flex;
@@ -246,8 +268,9 @@
 .blog-card-4 .blog-card-category {
   font-family: "Roboto";
   color: var(--teurny-mid);
-  text-transform: uppercase;
-  font-weight: 300;
+  /* text-transform: uppercase; */
+  font-weight: 400;
+  line-height: 20.8px;
 }
 .blog-card-4 .blog-card-title {
   font-family: "Playfair Display";
@@ -256,6 +279,10 @@
 }
 .blog-card-4 .blog-card-text {
   font-weight: 300;
+  line-height: 20.8px;
+  font-family: "Roboto";
+  color: var(--teurny-dark);
+  font-size: 16px;
 }
 .blog-card-4 .blog-card-content-bottom {
   display: flex;
@@ -317,6 +344,34 @@
   justify-content: space-between;
 }
 
+.blog-section-2.blog-card-slider-2-container .tuerny-button-third {
+  padding: 5px 12px;
+}
+.blog-section-2.blog-card-slider-2-container .tuerny-button-third a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.blog-section-2.blog-card-slider-2-container
+  .tuerny-button-third
+  a
+  .fa-instagram {
+  padding-right: 15px;
+}
+.blog-section-2.blog-card-slider-2-container
+  .tuerny-button-third
+  a
+  .fa-instagram::before {
+  font-size: 32px;
+}
+.blog-section-2.blog-card-slider-2-container .tuerny-button-third a span {
+  font-size: 12px;
+  line-height: 25px;
+  font-weight: 900;
+  letter-spacing: 1.69px;
+  font-family: "Roboto";
+}
+
 @media screen and (max-width: 992px) {
   .blog-card-3 .blog-card-img {
     aspect-ratio: 1;
@@ -359,6 +414,7 @@
   .blog-section-2 {
     padding: 50px 0 30px 0;
   }
+
   .blog-card-2 .blog-card-content {
     left: 17px;
     bottom: 30px;

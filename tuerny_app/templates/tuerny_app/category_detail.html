@@ -1,13 +1,11 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
-<div class="container py-5">
-    <div class="page-title">
-      <h1 class="mb-0 fw-normal">{{category.name}}</h1>
-    </div>
+<div class="container py-5 category-title">
+  <div class="page-title">
+    <h1 class="mb-0 fw-normal">{{category.name}}</h1>
   </div>
-
+</div>
+<div class="category-content">
   <div class="container">
     <div class="row category-row">
       {% for blog in blogs %}
@@ -23,10 +21,15 @@
             </div>
             <div class="blog-card-content">
               <p class="blog-card-category mb-2">{{category.name}}</p>
-              <a href="/assets/src/views/blog-detail.html" class="blog-card-title stretched-link">
+              <a
+                href="/assets/src/views/blog-detail.html"
+                class="blog-card-title stretched-link"
+              >
                 {{blog.title}}
               </a>
-              <p class="blog-card-text mb-0 mt-3">{{blog.short_description | safe}}</p>
+              <div class="blog-card-text mb-0 mt-3">
+                {{blog.short_description | safe}}
+              </div>
               <div style="clear: both"></div>
               <div class="blog-card-content-bottom mt-2 mt-md-4">
                 <p class="mb-0 blog-card-author text-uppercase">
@@ -78,7 +81,7 @@
         </div>
       </div>
       {% endfor %}
-
+    </div>
   </div>
 
   <div class="py-5">
@@ -96,11 +99,7 @@
             <div>
               <p
                 class="blog-category"
-                style="
-                  font-size: 14px;
-                  margin-bottom: 10px;
-                  margin-top: 16px;
-                "
+                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
               >
                 Category Title
               </p>
@@ -427,4 +426,5 @@
       </div>
     </div>
   </div>
-{% endblock content %}
+  {% endblock content %}
+</div>

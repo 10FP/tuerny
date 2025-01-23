@@ -18,19 +18,49 @@
                             </button>
                             <ul class="dropdown-menu">
                                     <li><a class="dropdown-item disabled" href="#">Title</a></li>
-                                            <li><a class="dropdown-item" href="#"> aa</a></li>
+                                            <li><a class="dropdown-item" href="#"> Category Titles</a></li>
                             </ul>
                         </div>
-                        <button class="btn">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16" fill="none">
+                        <div class="dropdown">
+                            <button
+                              class="btn"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="16"
+                                viewBox="0 0 24 16"
+                                fill="none"
+                              >
                                 <path
-                                    d="M0.75 15.5V13H8.25V15.5H0.75ZM0.75 9.25V6.75H15.75V9.25H0.75ZM0.75 3V0.5H23.25V3H0.75Z"
-                                    fill="#414141" />
-                            </svg>
-                        </button>
+                                  d="M0.75 15.5V13H8.25V15.5H0.75ZM0.75 9.25V6.75H15.75V9.25H0.75ZM0.75 3V0.5H23.25V3H0.75Z"
+                                  fill="#414141"
+                                />
+                              </svg>
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="#">En son eklenenler</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#">İlk eklenenler</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#">En çok yorum alanlar</a>
+                              </li>
+                              <li>
+                                <a class="dropdown-item" href="#"
+                                  >En çok yorum beğenilenler</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
                     </div>
                     <div class="flex-grow-1 text-center">
-                        <p class="mb-0 text-teurny-mid">oo</p>
+                        <p class="mb-0 text-teurny-mid">Filtrelere göre 'Gündemdeki sorular vs.'</p>
                     </div>
                     <div>
                         <a href="/assets/src/views/ask.html" class="teurny-button-secondary">SOR</a>
@@ -214,7 +244,7 @@
                         <div class="mt-3 d-flex flex-column gap-3">
                                     <div class="question-card-2">
                                         <div>
-                                            <img src="{% static 'tuerny_app//assets/src/images/icons/question1.png' %}" alt="">
+                                            <img src="{% static 'tuerny_app/images/icons/question1.png' %}" alt="">
                                         </div>
                                         <p class="question-card-2-title">
                                             <a href="/assets/src/views/ask-detail.html"> Beğenilen Soru </a>
@@ -235,7 +265,7 @@
                                 <div class="mt-3 d-flex flex-column gap-3">
                                     <div>
                                         <p>
-                                            <span><img src="{% static 'tuerny_app//assets/src/images/icons/question2.png' %}" alt=""></span>
+                                            <span><img src="{% static 'tuerny_app/images/icons/question2.png' %}" alt=""></span>
                                             Lorem ipsum dolor sit amet, ipsum dolor consectetur adipiscing elit.
                                         </p>
                                     </div>

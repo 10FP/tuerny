@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="hero-slider-bottom-container position-relative">
-          <div id="hero-slider-bottom" class="bg-danger">
+          <div id="hero-slider-bottom">
             <div class="slider-item">
               <span>Slider Title 1</span>
             </div>
@@ -41,7 +41,7 @@
           <div class="blog-section-title px-2">
             <span class="fs-m-12">Cinsel Sağlık</span>
             <div class="blog-section-title-divider"></div>
-            <a class="home-blogs" href="/assets/src/views/category.html">Daha Fazla</a>
+            <a class="home-blogs" href="/assets/src/views/category.html">Daha Fazlası</a>
           </div>
           <div>
             <div class="blog-card-slider">
@@ -155,8 +155,8 @@
         </div>
       </div>
 
-      <!-- PRODUCT SECTION -->
-      <div class="d-lg-none">
+      <!-- teurny suggestions -->
+      <div class="d-lg-none suggestions">
         <div
           class="w-100 position-relative pt-5 pb-lg-0 pb-5"
           style="background: #f2f2f2"
@@ -175,7 +175,7 @@
             >Teurny Önerileri</span
           >
           <div class="slide-products">
-            <div class="px-2 slider">
+            <div class="px-2 slider suggestions-item">
               <a href="#">
                 <img
                   src="{% static 'tuerny_app/images/7885103.png' %}"
@@ -235,7 +235,7 @@
                             <a href="/assets/src/views/blog-detail.html" class="blog-card-title stretched-link">
                               {{blog.title}}</a
                             >
-                            <p class="blog-card-text mb-0">{{blog.short_description | safe}}</p>
+                            <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>
                             <p class="blog-card-author mb-0">BY Blog Author</p>
                           </div>
                           <div class="blog-card-content-bottom gap-0">
@@ -348,15 +348,16 @@
         </div>
       </div>
 
-      <div class="py-5 d-lg-none">
+      <!-- PRODUCT SECTION -->
+      <div class="py-5 d-lg-none product-section">
         <div class="container d-flex flex-column gap-4">
-          <div class="d-flex flex-column gap-4d section-3 px-2">
+          <div class="d-flex gap-4 section-3 px-2 product-item">
             <img
               style="height: 250px; object-fit: cover"
               src="{% static 'tuerny_app/images/883e06d31e2ffb8986316ca00303f43a.jpg' %}"
             />
             <div
-              class="blog-section-title mt-4 flex-column justify-content-start align-items-start"
+              class="blog-section-title flex-column justify-content-start align-items-start"
             >
               <span class="d-block text-dark p-0">Ürün Detay</span>
               <span

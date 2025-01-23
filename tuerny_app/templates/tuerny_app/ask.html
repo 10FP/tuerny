@@ -278,5 +278,42 @@
           </div>
         </div>
       </div>
+
+      <script>
+        const checkbox = document.querySelector(".addsurvey_check");
+        const surveyArea = document.querySelector(".survey-area");
+        const surveyInputs = document.querySelectorAll(
+          ".survey-select, #survey-counter-input"
+        );
+  
+        function setInitialState() {
+          if (window.matchMedia("(max-width: 580px)").matches) {
+            surveyInputs.forEach((input) => {
+              input.disabled = false;
+            });
+            surveyArea.style.display = checkbox.checked ? "block" : "none";
+          } else {
+            surveyInputs.forEach((input) => {
+              input.disabled = !checkbox.checked;
+            });
+            surveyArea.style.display = "block";
+          }
+        }
+  
+        checkbox.addEventListener("change", () => {
+          if (window.matchMedia("(max-width: 580px)").matches) {
+            surveyArea.style.display = checkbox.checked ? "block" : "none";
+          } else {
+            surveyInputs.forEach((input) => {
+              input.disabled = !checkbox.checked;
+            });
+          }
+        });
+  
+        window.addEventListener("resize", setInitialState);
+  
+        setInitialState();
+      </script>
+      
 {% endblock content %}
  

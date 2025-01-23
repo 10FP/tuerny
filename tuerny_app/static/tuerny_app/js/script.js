@@ -4,46 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const initHeroSlider = () => {
-  // $("#hero-slider-top").slick({
-  //   slidesToShow: 3,
-  //   slidesToScroll: 1,
-  //   infinite: true,
-  //   asNavFor: "#hero-slider-bottom",
-  //   focusOnSelect: true,
-  //   arrows: false,
-  //   centerMode: true,
-  //   centerPadding: "0px",
-  //   variableWidth: false,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1024,
-  //       settings: {
-  //         slidesToShow: 2,
-  //         slidesToScroll: 1,
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 580,
-  //       settings: {
-  //         slidesToShow: 1,
-  //         slidesToScroll: 1,
-  //         centerPadding: "50px",
-  //       },
-  //     },
-  //   ],
-  // });
-  //  $("#hero-slider-bottom").slick({
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   infinite: true,
-  //   asNavFor: "#hero-slider-top",
-  //   focusOnSelect: true,
-  //   arrows: true,
-  //   dots: true,
-  //   centerMode: true,
-  //   centerPadding: "0px",
-  //   //nextArrow: $("#hero-slider .next-arrow"),
-  // });
 
   $(".feature-box-gallery1").slick({
     slidesToShow: 3,
@@ -106,14 +66,14 @@ const initHeroSlider = () => {
     focusOnSelect: true,
     arrows: false,
     centerMode: true,
-    centerPadding: "0px",
+    centerPadding: "20px",
     // variableWidth: true,
     // fade: true,
     responsive: [
       {
-        breakpoint: 1025,
+        breakpoint: 768,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -148,7 +108,7 @@ const initBlogCardSlider = () => {
     slidesToScroll: 1,
     infinite: true,
     focusOnSelect: true,
-    arrows: true,
+    arrows: false,
     dots: false,
     centerMode: false,
     responsive: [
@@ -165,6 +125,7 @@ const initBlogCardSlider = () => {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          arrows: true,
           dots: true,
         },
       },
@@ -273,26 +234,26 @@ const initBlogCardSlider = () => {
   });
 };
 
-$(".menu-loader").hover(function () {
-  var id = $(this).attr("data-id");
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=menu-load&id=" + id + "",
-    success: function (response) {
-      $(".menu-load-div").html(response);
-    },
-  });
-});
+// $(".menu-loader").hover(function () {
+//   var id = $(this).attr("data-id");
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=menu-load&id=" + id + "",
+//     success: function (response) {
+//       $(".menu-load-div").html(response);
+//     },
+//   });
+// });
 
-$(".logoutbtn").click(function () {
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=logout",
-    success: function (response) {
-      $(".general-response").html(response);
-    },
-  });
-});
+// $(".logoutbtn").click(function () {
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=logout",
+//     success: function (response) {
+//       $(".general-response").html(response);
+//     },
+//   });
+// });
 
 $(".addsurver_check").click(function () {
   if (!$(this).is(":checked")) {
@@ -309,23 +270,23 @@ $(".survey-btn").click(function () {
   alert(radioValue);
 });
 
-$(".morebtn").click(function () {
-  var start = $(this).attr("data-start");
-  var category = $(this).attr("data-category");
-  $(this).attr("data-start", parseInt(start) + 5);
-  $.ajax({
-    type: "POST",
-    url:
-      "/Controller/ajax/ajax.php?process=moreask&start=" +
-      start +
-      "&category=" +
-      category +
-      "",
-    success: function (response) {
-      $(".quest-listdiv").append(response);
-    },
-  });
-});
+// $(".morebtn").click(function () {
+//   var start = $(this).attr("data-start");
+//   var category = $(this).attr("data-category");
+//   $(this).attr("data-start", parseInt(start) + 5);
+//   $.ajax({
+//     type: "POST",
+//     url:
+//       "/Controller/ajax/ajax.php?process=moreask&start=" +
+//       start +
+//       "&category=" +
+//       category +
+//       "",
+//     success: function (response) {
+//       $(".quest-listdiv").append(response);
+//     },
+//   });
+// });
 
 $(".share-btn").on("click", function (e) {
   e.preventDefault();
@@ -371,22 +332,22 @@ $("body").on("click", ".saved", function () {
   $(this).removeClass("saved");
   $(this).addClass("unsaved");
   $(this).html('<i class="fa-regular fa-bookmark"></i>');
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=insert-saved&id=" + id + "",
-    success: function (response) {},
-  });
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/Controller/ajax/ajax.php?process=insert-saved&id=" + id + "",
+  //   success: function (response) {},
+  // });
 });
 $("body").on("click", ".unsaved", function () {
-  var id = $(this).attr("data-id");
+  // var id = $(this).attr("data-id");
   $(this).removeClass("unsaved");
   $(this).addClass("saved");
   $(this).html('<i class="fa-solid fa-bookmark"></i>');
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=delete-saved&id=" + id + "",
-    success: function (response) {},
-  });
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/Controller/ajax/ajax.php?process=delete-saved&id=" + id + "",
+  //   success: function (response) {},
+  // });
 });
 
 $(".unsaved").hover(
@@ -405,79 +366,79 @@ $(".unsaved").hover(
   }
 );
 
-$(".saved-more").click(function () {
-  var start = $(this).attr("data-start");
-  $(this).attr("data-start", parseInt(start) + 9);
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=saved_more&start=" + start + "",
-    success: function (response) {
-      $(".saved-listing").append(response);
-    },
-  });
-});
+// $(".saved-more").click(function () {
+//   var start = $(this).attr("data-start");
+//   $(this).attr("data-start", parseInt(start) + 9);
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=saved_more&start=" + start + "",
+//     success: function (response) {
+//       $(".saved-listing").append(response);
+//     },
+//   });
+// });
 
-$(".saved-more-ask").click(function () {
-  var start = $(this).attr("data-start");
-  $(this).attr("data-start", parseInt(start) + 9);
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=saved_more_ask&start=" + start + "",
-    success: function (response) {
-      $(".asked-listing").append(response);
-    },
-  });
-});
+// $(".saved-more-ask").click(function () {
+//   var start = $(this).attr("data-start");
+//   $(this).attr("data-start", parseInt(start) + 9);
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=saved_more_ask&start=" + start + "",
+//     success: function (response) {
+//       $(".asked-listing").append(response);
+//     },
+//   });
+// });
 
-$(".saved-more-votes").click(function () {
-  var start = $(this).attr("data-start");
-  $(this).attr("data-start", parseInt(start) + 9);
-  $.ajax({
-    type: "POST",
-    url:
-      "/Controller/ajax/ajax.php?process=saved_more_votes&start=" + start + "",
-    success: function (response) {
-      $(".saved-votes-listing-div").append(response);
-    },
-  });
-});
+// $(".saved-more-votes").click(function () {
+//   var start = $(this).attr("data-start");
+//   $(this).attr("data-start", parseInt(start) + 9);
+//   $.ajax({
+//     type: "POST",
+//     url:
+//       "/Controller/ajax/ajax.php?process=saved_more_votes&start=" + start + "",
+//     success: function (response) {
+//       $(".saved-votes-listing-div").append(response);
+//     },
+//   });
+// });
 
-$(".saved-comments-more").click(function () {
-  var start = $(this).attr("data-start");
-  $(this).attr("data-start", parseInt(start) + 9);
-  $.ajax({
-    type: "POST",
-    url:
-      "/Controller/ajax/ajax.php?process=saved_more_comments&start=" +
-      start +
-      "",
-    success: function (response) {
-      $(".saved-comments-list").append(response);
-    },
-  });
-});
+// $(".saved-comments-more").click(function () {
+//   var start = $(this).attr("data-start");
+//   $(this).attr("data-start", parseInt(start) + 9);
+//   $.ajax({
+//     type: "POST",
+//     url:
+//       "/Controller/ajax/ajax.php?process=saved_more_comments&start=" +
+//       start +
+//       "",
+//     success: function (response) {
+//       $(".saved-comments-list").append(response);
+//     },
+//   });
+// });
 
-$(".fa-heart-crack").click(function () {
-  var id = $(this).attr("data-id");
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=ask-un-heart&id=" + id + "",
-    success: function (response) {
-      $(".heart-crack-result-" + id + "").html(response);
-    },
-  });
-});
+// $(".fa-heart-crack").click(function () {
+//   var id = $(this).attr("data-id");
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=ask-un-heart&id=" + id + "",
+//     success: function (response) {
+//       $(".heart-crack-result-" + id + "").html(response);
+//     },
+//   });
+// });
 
-$(".fa-heart").click(function () {
-  var id = $(this).attr("data-id");
-  $.ajax({
-    type: "POST",
-    url: "/Controller/ajax/ajax.php?process=ask-heart&id=" + id + "",
-    success: function (response) {
-      $(".heart-result-" + id + "").html(response);
-    },
-  });
-});
+// $(".fa-heart").click(function () {
+//   var id = $(this).attr("data-id");
+//   $.ajax({
+//     type: "POST",
+//     url: "/Controller/ajax/ajax.php?process=ask-heart&id=" + id + "",
+//     success: function (response) {
+//       $(".heart-result-" + id + "").html(response);
+//     },
+//   });
+// });
 $(document).ready(function ($) {
   $(".telefoninput").mask("(999) 999 99 99", {
     placeholder: "(___) ___ __ __",
@@ -492,55 +453,15 @@ $(document).ready(function () {
   $("#counter-input").keyup(function () {
     $("#title-counter").text(this.value.replace(/ /g, "").length + "/90");
   });
+ 
+  $("#survey-counter-input").keyup(function () {
+    $("#survey-title-counter").text(this.value.replace(/ /g, "").length + "/90");
+  });
 
   $("#counter-textarea").keyup(function () {
     $("#content-counter").text(this.value.replace(/ /g, "").length + "/360");
   });
 });
-
-// $(document).on("submit", ".ajaxFormTrue", function (e) {
-//   e.preventDefault();
-
-//   var form = $(this);
-//   $.ajax({
-//     url: form.attr("action"),
-//     type: "POST",
-//     data: form.serialize(),
-//     dataType: "json",
-//     success: function (response) {
-//       if (response.success) {
-//         var updatedRates = response.updatedRates;
-
-//         updatedRates.forEach(function (item) {
-//           var progressBar = $(
-//             '.question-card-survey-item-progress[data-option="' +
-//               item.option_id +
-//               '"]'
-//           );
-//           var progressRate = progressBar.find(
-//             ".question-card-survey-item-progress-rate"
-//           );
-
-//           // Oranı güncelle
-//           progressBar.css("width", item.rate + "%");
-//           progressRate.text("%" + Math.round(item.rate));
-
-//           // En yüksek oran için arkaplan ayarı
-//           if (item.rate == Math.max(...updatedRates.map((r) => r.rate))) {
-//             progressBar.addClass("active-rate");
-//             progressRate.css({ color: "#fff", background: "#000" });
-//           } else {
-//             progressBar.removeClass("active-rate");
-//             progressRate.css({ color: "black", background: "#fff" });
-//           }
-//         });
-//       }
-//     },
-//     error: function () {
-//       alert("Bir hata oluştu. Lütfen tekrar deneyin.");
-//     },
-//   });
-// });
 
 function updateRateLine(id) {
   const likeCount = parseInt($(`.heart-result-${id}`).text()) || 0;
@@ -621,4 +542,57 @@ $(".nav-link.profile-tab").on("click", function () {
 
   const url = $(this).data("url");
   loadContent(url);
+});
+
+$(".header-link-container.open-header-link").hover(function() {
+  $(".header-menu").addClass("show-before");
+  let scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  $("body").css({
+    "overflow": "hidden",
+    "padding-right": scrollBarWidth + "px"
+  });
+}, function() {
+  $(".header-menu").removeClass("show-before")
+  $("body").css({
+    "overflow": "auto",
+    "padding-right": "0"
+  });
+});
+
+// $('.menu-loader').on('click', function (e) {
+//   const selectedCategory = $(this).data('category');
+
+//   if (selectedCategory) {
+//     e.preventDefault(); 
+//     $('.blog-item').hide();
+//     $(`.blog-item[data-category="${selectedCategory}"]`).fadeIn();
+
+//     setTimeout(() => {
+//       window.location.href = $(this).attr('href');
+//     }, 1000);
+//   }
+// });
+
+$(document).ready(function () {
+  // Hover olayı için
+  $(".menu-loader").hover(
+    function () {
+      const selectedCategory = $(this).data("category"); // Menüdeki kategori
+      
+      // Blog kategorilerini kontrol et ve göster/gizle
+      $(".menu-load-div .col-md-2").each(function () {
+        const blogCategory = $(this).data("category"); // Blogun kategori verisi
+
+        if (blogCategory === selectedCategory) {
+          $(this).show(); // Kategori eşleşiyorsa göster
+        } else {
+          $(this).hide(); // Eşleşmiyorsa gizle
+        }
+      });
+    },
+    function () {
+      // Hover'dan çıkınca tüm blogları geri yükle
+      $(".menu-load-div .col-md-2").show();
+    }
+  );
 });
