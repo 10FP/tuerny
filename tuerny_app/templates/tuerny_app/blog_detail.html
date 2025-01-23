@@ -105,23 +105,23 @@
 
 
                 </div>
-                <p class="blog-text">
+                <div class="blog-content d-flex flex-column gap-3">
                     {{blog_.content | safe}}
-                </p>
+                </div>
                 {% if blog_.products.all %}
                 {% for product in blog_.products.all %}
                 <div class="blog-content d-flex flex-column gap-3">
                         <div class="py-5">
-                            <div class="blog-card-3">
+                            <div class="blog-card-3 product-detail">
                                 <div class="row">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-6 col-md-6">
                                         <div class="blog-card-img">
                                             <img src="{{product.image.url}}" class="w-100 object-fit-cover" />
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <div class="blog-card-content product-detail">
-                                            <div class="blog-card-content-top pt-5">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="blog-card-content">
+                                            <div class="blog-card-content-top">
                                                 <a href="#" class="blog-card-title stretched-link">{{product.title}}</a>
                                                 <p class="blog-card-text mb-0">
                                                     {{product.description}}
@@ -176,12 +176,35 @@
     {% endif %}
                 <!-- BLOG SECTION 1 -->
                 <div class="blog-comment">
+                  <div class="blog-section-title soru">
+                    <span>Yorumlar</span>
+                    <div class="blog-section-title-divider"></div>
+                    <p></p>
+                  </div>
+
+                  
+                  {% for comment in blog_.comments.all %}
+                  <div class="mt-5 d-flex flex-column gap-3">
+                              <div class="blog-comment-item">
+                                  {% if comment.anonymous %}
+                                  <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
+                                  {% else %}
+                                  <p class="blog-comment-item-author">@{{comment.user.username}}</p>
+                                  {% endif %}
+                                      
+                                      
+                                  <p class="blog-comment-item-text">
+                                      {{comment.content}}
+                                  </p>
+                              </div>
+                              <div class="teurny-divider"></div>
+                  </div>
+                  {% endfor %}
+                  
                     <form method="POST" class="ajaxFormTrue" action="#">
                         <input type="hidden" name="type" value="blog">
                         <input type="hidden" name="type_id" value="blog_id">
                         <input type="hidden" name="parent" value="0">
-                            <input style="margin-bottom: 15px; box-shadow: none; border-radius: 0px" type="text"
-                                class="form-control vRequired" name="user_name" placeholder="Kullanıcı adınız">
                         <textarea name="content" class="teurny-input w-100 vRequired" rows="10"
                             placeholder="Yorum"></textarea>
 
@@ -207,23 +230,6 @@
 
                     </form>
 
-                    {% for comment in blog_.comments.all %}
-                    <div class="mt-5 d-flex flex-column gap-3">
-                                <div class="blog-comment-item">
-                                    {% if comment.anonymous %}
-                                    <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
-                                    {% else %}
-                                    <p class="blog-comment-item-author">@{{comment.user.username}}</p>
-                                    {% endif %}
-                                        
-                                        
-                                    <p class="blog-comment-item-text">
-                                        {{comment.content}}
-                                    </p>
-                                </div>
-                                <div class="teurny-divider"></div>
-                    </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>

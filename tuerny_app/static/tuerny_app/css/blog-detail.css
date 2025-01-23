@@ -112,6 +112,26 @@
   top: 100px;
 }
 
+@media screen and (max-width: 1024px) {
+  .product-detail .blog-card-content .blog-card-content-top .blog-card-text {
+    display: block;
+    text-indent: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .product-detail.blog-card-3 .blog-card-content {
+    height: auto;
+  }
+
+  .blog-content .product-detail .blog-card-img {
+    height: auto;
+}
+}
+
 @media screen and (max-width: 992px) {
   .product-detail .row {
     flex-direction: row;

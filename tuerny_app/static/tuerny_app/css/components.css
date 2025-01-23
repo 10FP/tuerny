@@ -840,6 +840,27 @@ p.blog-card-text.mb-0.mt-3 {
   .confirm-container .confirm-text .confirm-text-content {
     width: 75% !important;
   }
+
+  .blog-content .blog-card-img {
+    width: 100% !important;
+  }
+  .blog-card-3 .blog-card-title {
+    font-size: 20px !important;
+    line-height: 27px !important;
+  }
+  .product-detail .blog-card-text {
+    font-size: 12px !important;
+    line-height: 15px !important;
+  }
+  .blog-detail-product-btn {
+    margin-top: 20px !important;
+    padding: 5px 12px;
+    letter-spacing: 1.69px;
+  }
+  .blog-card-3 .blog-card-content-bottom a {
+    font-size: 12px;
+  }
+
   footer .footer-top {
     padding: 20px 0;
   }
