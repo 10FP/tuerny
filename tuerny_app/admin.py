@@ -51,7 +51,7 @@ class BlogAdmin(admin.ModelAdmin):
     search_fields = ('title', 'content')
     list_filter = ('category', 'created_at')
     prepopulated_fields = {'slug': ('title',)} 
-
+    
     def copy_blog(self, request, queryset):
         """
         Seçilen blog objelerini kopyalar.

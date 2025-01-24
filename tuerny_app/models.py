@@ -109,6 +109,7 @@ class Blog(models.Model):
         related_name="blogs"
     )
     source = models.URLField(max_length=500, null=True, blank=True)  # Kaynak (isteğe bağlı)
+    author = models.CharField(max_length=200, null=True, blank=True)  # Kaynak (isteğe bağlı)
     slug = models.SlugField(max_length=255, unique=True, blank=True)  # Slug alanı
     created_at = models.DateTimeField(auto_now_add=True)
 

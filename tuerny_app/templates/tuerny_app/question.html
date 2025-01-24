@@ -69,18 +69,136 @@
     
                 <div class="mt-5">
                     <div class="d-flex flex-column gap-4 quest-listdiv">
+                        {% for q in questions %}
                                 <div class="question-card">
                                     <div class="question-card-category">
-                                        <p>Question Category</p>
+                                        <p>{{q.subcategory.name}}</p>
+                                    </div>
+                                    <div class="question-card-date">
+                                        <p>{{ q.created_at|date:"d-m-Y" }}</p>
+                                    </div>
+                                    <h3 class="question-card-title pb-2">
+                                        <a href="#"> {{q.title}} </a>
+                                    </h3>
+                                    <p class="question-card-text py-2">
+                                        {{q.description}}
+                                    </p>
+                                        
+                           
+                                    <div class="d-flex justify-content-between align-items-center pt-4">
+                                        <div class="d-flex gap-4">
+                                            <div class="question-card-button">
+                                                <i class="fa-regular fa-eye question-card-button-icon"></i>
+                                                <span class="question-card-button-text">0</span>
+                                            </div>
+                                            <div class="question-card-button">
+                                                <i class="fa-regular fa-message question-card-button-icon"></i>
+                                                <span
+                                                    class="question-card-button-text">0</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div class="question-card-button">
+                                                <i style="cursor: pointer" data-id=""
+                                                    class="fa-solid fa-heart-crack question-card-button-icon dislike-button"></i>
+                                                <span
+                                                    class="heart-crack-result-0">0</span>
+                                            </div>
+    
+                                            <div class="question-card-rate-line-container">
+                                                <div class="question-card-rate-line">
+                                                    <div class="rate-line-dislike" id="rate-dislike-0"></div>
+                                                    <div class="rate-line-like" id="rate-like-0"></div>
+                                                </div>
+                                            </div>
+    
+                                            <div class="question-card-button">
+                                                <i style="cursor: pointer" data-id=""
+                                                    class="fa-regular fa-heart question-card-button-icon like-button"></i>
+                                                <span
+                                                    class="heart-result-0">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="question-card-comments" style="padding-top: 15px">
+                                        <div class="blog-section-title">
+                                            <span>Yorumlar</span>
+                                            <div class="blog-section-title-divider"></div>
+                                        </div>
+    
+                                        <div class="d-flex flex-column gap-3 mt-4">
+                                            {% for c in q.comments.all %}
+                                            <div class="blog-comment-item">
+                                                {% if c.anonymous %}
+                                                <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
+                                                {% else %}
+                                                <p class="blog-comment-item-author">
+                                                    @{{c.user.username}}</p>
+                                                {% endif %}
+                                                
+                                               
+                                            <p class="blog-comment-item-text">
+                                                {{c.content}}
+                                            </p>
+                                        </div>
+                                        <div class="teurny-divider"></div>
+                                            {% endfor %}
+                                                
+                                                
+                                                    
+                                                   
+                                        </div>
+                                        <div class="mt-4">
+                                            <form method="POST" class="ajaxFormTrue"
+                                                action="/Controller/ajax/ajax.php?process=add-comments">
+                                                <input type="hidden" name="type" value="ask">
+                                                <input type="hidden" name="type_id" value="type_id">
+                                                <input type="hidden" name="parent" value="0">
+                                                    <input style="margin-bottom: 15px; box-shadow: none; border-radius: 0px" type="text"
+                                                        class="form-control vRequired" name="user_name" placeholder="Kullanıcı adınız">
+                                                <input type="text" name="content" class="teurny-input w-100"
+                                                    placeholder="Yorum Yap">
+    
+                                                <div class="d-flex gap-3 mt-4">
+                                                    <div>
+                                                        <label for="cb-1" class="teurny-checkbox">
+                                                            <input name="hidden_user_name" type="checkbox" id="cb-1"
+                                                                class="d-none" />
+                                                            <div class="teurny-checkbox-inner"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
+                                                            Kullanıcı adını gizle
+                                                        </p>
+                                                        <p class="font-roboto blog-comment-checkbox-text">
+                                                            Bu gönderi için kullanıcı adını gizlenecek
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 vAjaxErrors"></div>
+                                                <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
+    
+                                            </form>
+    
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                        {% for q in questions %}
+                                <div class="question-card">
+                                    <div class="question-card-category">
+                                        <p>{{q.subcategory.name}}</p>
                                     </div>
                                     <div class="question-card-date">
                                         <p>Question Date</p>
                                     </div>
                                     <h3 class="question-card-title pb-2">
-                                        <a href="#"> Question Title </a>
+                                        <a href="#"> {{q.title}} </a>
                                     </h3>
                                     <p class="question-card-text py-2">
-                                        Question Text
+                                        {{q.description}}
                                     </p>
                                         <p class="question-card-text py-2">
                                             Title
@@ -215,6 +333,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endfor %}
     
                     </div>
                     <div class="col-md-12 mt-5" style="text-align: center">

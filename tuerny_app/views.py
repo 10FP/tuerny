@@ -117,7 +117,8 @@ def questions(request):
     return render(request, "tuerny_app/questions.html")
 
 def question(request):
-    return render(request, "tuerny_app/question.html")
+    questions = Question.objects.all()
+    return render(request, "tuerny_app/question.html", {"questions": questions})
 
 def save(request):
     

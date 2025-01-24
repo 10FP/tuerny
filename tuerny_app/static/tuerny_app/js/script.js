@@ -98,7 +98,7 @@ const initHeroSlider = () => {
     dots: true,
     // centerMode: true,
     // centerPadding: "0px",
-    fade: true,
+    
   });
 };
 
