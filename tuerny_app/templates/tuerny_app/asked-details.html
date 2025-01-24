@@ -8,24 +8,24 @@
           <div class="d-flex flex-column gap-4">
             <div class="question-card">
               <div class="question-card-category">
-                <p>{{pool.question.subcategory.name}}</p>
+                <p>{{question.subcategory.name}}</p>
               </div>
               <div class="question-card-date">
                 <p>Question Date</p>
               </div>
               <h3 class="question-card-title pb-2">
                 <a href="{% url 'tuerny_app:ask' %}">
-                  {{pool.question.title}}
+                  {{question.title}}
                 </a>
               </h3>
-              <p class="question-card-text py-2">{{pool.poll_question}}</p>
+              <p class="question-card-text py-2">{{question.description}}</p>
               <form
                 method="post"
                 action="/Controller/ajax/ajax.php?process=surveyvote"
                 class="ajaxFormTrue"
               >
 
-                {% for answer in pool.options.all %}
+                {% for answer in options.all %}
                 <div class="question-card-survey py-2 vCheckRequired">
                     <input type="hidden" name="survey_id" value="0" />
                     <div class="question-card-survey-item">
@@ -48,18 +48,7 @@
                 
                 <div class="col-md-12 vAjaxErrors"></div>
 
-                <button
-                  type="submit"
-                  class="btn survey-btn"
-                  style="
-                    background-color: #000;
-                    color: #fff;
-                    border-radius: 0px;
-                    padding: 3px;
-                  "
-                >
-                  Oy Ver
-                </button>
+                
               </form>
               <div
                 class="d-flex justify-content-between align-items-center pt-4"
@@ -85,7 +74,7 @@
                       data-id=""
                       class="fa-solid fa-heart-crack question-card-button-icon"
                     ></i>
-                    <span class="heart-crack-result-0">{{pool.question.like_count}}</span>
+                    <span class="heart-crack-result-0">{{question.like_count}}</span>
                   </div>
                   <div class="question-card-rate-line"></div>
                   <div class="question-card-button">
@@ -94,7 +83,7 @@
                       data-id=""
                       class="fa-regular fa-heart question-card-button-icon"
                     ></i>
-                    <span class="heart-result-0">{{pool.question.dislike_count}}</span>
+                    <span class="heart-result-0">{{question.dislike_count}}</span>
                   </div>
                 </div>
               </div>
@@ -106,7 +95,7 @@
                   <p></p>
                 </div>
 
-                {% for comment in pool.question.comments.all%}
+                {% for comment in question.comments.all%}
                 <div class="d-flex flex-column gap-3 mt-4">
                     <div class="blog-comment-item">
                         {% if comment.anonymous %}

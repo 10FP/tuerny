@@ -11,7 +11,7 @@
                               <p>question card date</p>
                           </div>
                           <h3 class="question-card-title pb-2">
-                              <a href="/assets/src/views/ask-detail.html">{{vote.poll.question.title}}</a>
+                              <a href="{% url 'tuerny_app:index' %}">{{vote.poll.question.title}}</a>
                           </h3>
                           <p class="question-card-text py-2">
                             {{ vote.option_text }}

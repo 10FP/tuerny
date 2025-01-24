@@ -31,6 +31,16 @@
       @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
     </style>
   </head>
+  <style>
+     
+  .slick-slide {
+      margin-left: 20px;
+      margin-right: 20px;
+  }
+  #hero-slider-top .slick-slide.slick-active .px-2 a{
+    max-width: fit-content;
+  }
+  </style>
   <body>
     <div class="wrapper">
       <!-- HEADER BRAND -->
@@ -93,7 +103,7 @@
                                 <a
                                   class="menu-loader text-uppercase"
                                   data-category="{{ category.name }}"
-                                  href="/assets/src/views/category.html"
+                                  href="{% url 'tuerny_app:category' category.slug %}"
                                   >{{category.name}}</a
                                 >
                                 {% endfor %}
@@ -169,13 +179,13 @@
                                   <div class="h-100">
                                     <div class="row h-100 menu-load-div">
                                       <a
-                                        href="/assets/src/views/ask.html"
+                                        href="{% url 'tuerny_app:ask'%}"
                                         class="header-link d-flex align-items-center gap-2 text-decoration-none"
                                       >
                                         <span>Soru Sor</span>
                                       </a>
                                       <a
-                                        href="/assets/src/views/question.html"
+                                        href="{% url 'tuerny_app:question' %}"
                                         class="header-link d-flex align-items-center gap-2 text-decoration-none"
                                       >
                                         <span>Gündemdeki Sorular</span>
@@ -246,14 +256,15 @@
                 </div>
               </div>
               <div class="d-none d-xl-flex">
-                <a href="/assets/src/views/profile/template-parts/saved.html" class="header-icon">
+                <a href="{% url 'tuerny_app:profile' %}" class="header-icon">
                   <i class="fa-regular fa-bookmark"></i>
                 </a>
               </div>
+              {% if request.user.is_authenticated %}
               <div>
                 <div class="dropdown header-profile-btn">
                   <a
-                    href="/assets/src/views/profile/template-parts/settings.html"
+                    href="{% url 'tuerny_app:profile' %}?tab=settings"
                     class="btn dropdown-toggle gap-2 hstack"
                     type="button"
                     data-bs-toggle="dropdown"
@@ -275,7 +286,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="/assets/src/views/profile/template-parts/saved.html"
+                        href="{% url 'tuerny_app:profile' %}"
                         >Kaydedilenler</a
                       >
                     </li>
@@ -283,7 +294,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="/assets/src/views/profile/template-parts/asked.html"
+                        href="{% url 'tuerny_app:profile' %}?tab=asked"
                         >Sorularım</a
                       >
                     </li>
@@ -291,7 +302,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="/assets/src/views/profile/template-parts/votes.html"
+                        href="{% url 'tuerny_app:profile' %}?tab=votes"
                         >Oylarım</a
                       >
                     </li>
@@ -299,7 +310,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="/assets/src/views/profile/template-parts/comments.html"
+                        href="{% url 'tuerny_app:profile' %}?tab=comments"
                         >Yorumlarım</a
                       >
                     </li>
@@ -307,7 +318,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="/assets/src/views/profile/template-parts/settings.html"
+                        href="{% url 'tuerny_app:profile' %}?tab=settings"
                         >Ayarlar</a
                       >
                     </li>
@@ -315,14 +326,14 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item logoutbtn"
-                        href="javascript:void(0);"
+                        href="{% url 'tuerny_app:logout' %}"
                         >Çıkış Yap</a
                       >
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="d-none">
+              {% else %}
                 <div class="dropdown header-profile-btn">
                   <button
                     class="btn dropdown-toggle gap-2 hstack"
@@ -334,11 +345,11 @@
                     <i class="fa-solid fa-caret-down"></i>
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/assets/src/views/register.html">Üye Ol</a></li>
-                    <li><a class="dropdown-item" href="/assets/src/views/login.html">Giriş Yap</a></li>
+                    <li><a class="dropdown-item" href="{% url 'tuerny_app:register' %}">Üye Ol</a></li>
+                    <li><a class="dropdown-item" href="{% url 'tuerny_app:login' %}">Giriş Yap</a></li>
                   </ul>
                 </div>
-              </div>
+              {% endif %}
 
               <div class="d-none d-xl-flex">
                 <div class="dropdown header-profile-btn">
@@ -447,16 +458,16 @@
             <div class="flex-fill d-flex flex-column" style="gap: 32px">
               <div class="d-flex flex-column gap-2">
                 <p class="fw-medium fs-6 mb-0">Hesap</p>
-                <a href="/assets/src/views/profile/template-parts/saved.html" class="fw-light">Kaydedilenler</a>
-                <a href="/assets/src/views/profile/template-parts/asked.html" class="fw-light">Sorularım</a>
-                <a href="/assets/src/views/profile/template-parts/votes.html" class="fw-light">Oylarım</a>
-                <a href="/assets/src/views/profile/template-parts/comments.html" class="fw-light">Yorumlarım</a>
-                <a href="/assets/src/views/profile/template-parts/settings.html" class="fw-light">Ayarlar</a>
+                <a href="{% url 'tuerny_app:profile' %}?tab=saved" class="fw-light">Kaydedilenler</a>
+                <a href="{% url 'tuerny_app:profile' %}?tab=asked" class="fw-light">Sorularım</a>
+                <a href="{% url 'tuerny_app:profile' %}?tab=votes" class="fw-light">Oylarım</a>
+                <a href="{% url 'tuerny_app:profile' %}?tab=comments" class="fw-light">Yorumlarım</a>
+                <a href="{% url 'tuerny_app:profile' %}?tab=settings" class="fw-light">Ayarlar</a>
               </div>
               <div class="d-flex flex-column gap-2">
                 <p class="fw-medium fs-6 mb-0">Site</p>
-                <a href="/assets/src/views/question.html" class="fw-light">Sorular</a>
-                <a href="/assets/src/views/ask.html" class="fw-light">Soru Sor</a>
+                <a href="{% url 'tuerny_app:question' %}" class="fw-light">Sorular</a>
+                <a href="{% url 'tuerny_app:ask' %}" class="fw-light">Soru Sor</a>
               </div>
 
               <div class="d-flex flex-column gap-2">

@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory
+from .models import Poll, Blog, SubCategory, Question
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -14,6 +16,10 @@ def index(request):
 def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)
     return render(request, 'tuerny_app/ask-details.html', {"pool": pool})
+
+def asked_details(request, asked_id):
+    question = Question.objects.get(id=asked_id)
+    return render(request, 'tuerny_app/asked-details.html', {"question": question})
 
 def ask(request):
 
@@ -91,7 +97,9 @@ def login(request):
 
 @login_required
 def profile(request):
-    return render(request, 'tuerny_app/profile.html')
+    tab = request.GET.get('tab', '')
+    print(tab)
+    return render(request, 'tuerny_app/profile.html', {"active_tab": tab})
 
 def settings(request):
     return render(request, "tuerny_app/settings.html")
@@ -111,20 +119,20 @@ def questions(request):
 def question(request):
     return render(request, "tuerny_app/question.html")
 
-def x(request):
-    print(request.user.saved_items.all())
-    return render(request, "tuerny_app/x.html")
+def save(request):
+    
+    return render(request, "tuerny_app/save.html")
 
 def y(request):
-    print(request.user.saved_items.all())
+    
     return render(request, "tuerny_app/asked.html")
 
 def v(request):
-    print(request.user.saved_items.all())
+    
     return render(request, "tuerny_app/votes.html")
 
 def z(request):
-    print(request.user.saved_items.all())
+    
     return render(request, "tuerny_app/comments.html")
 
 def blog_detail(request, slug):
@@ -161,3 +169,9 @@ def contract(request):
 
 def linkinbio(request):
     return render(request, 'tuerny_app/linkinbio.html')
+
+def logout_view(request):
+    # Kullanıcıyı oturumdan çıkar
+    logout(request)
+    # Oturumdan çıktıktan sonra yönlendirme yap (örneğin anasayfaya)
+    return redirect('tuerny_app:index')  # 'home' URL adını kendi projenize göre değiştirin

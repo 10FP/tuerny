@@ -13,7 +13,7 @@
         <div class="box-inner">
           <div class="blog-card-4">
             <div class="blog-card-img">
-              <a href="/assets/src/views/blog-detail.html">
+              <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
                 <img
                   src="{{blog.media.url}}"
                   class="w-100 h-100 object-fit-cover"
@@ -22,7 +22,7 @@
             <div class="blog-card-content">
               <p class="blog-card-category mb-2">{{category.name}}</p>
               <a
-                href="/assets/src/views/blog-detail.html"
+                href="{% url 'tuerny_app:blog_detail' blog.slug %}"
                 class="blog-card-title stretched-link"
               >
                 {{blog.title}}
@@ -71,7 +71,7 @@
                   <a data-id="" href="javascript:void(0)" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
-                  <a href="/assets/src/views/register.html" class="unsaved">
+                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
                 </div>
@@ -188,7 +188,7 @@
                   <a data-id="" href="javascript:void(0)" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
-                  <a href="/assets/src/views/register.html" class="unsaved">
+                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
                 </div>
@@ -298,7 +298,7 @@
                   <a data-id="" href="javascript:void(0)" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
-                  <a href="/assets/src/views/register.html" class="unsaved">
+                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
                 </div>
@@ -363,7 +363,7 @@
                   <a data-id="" href="javascript:void(0)" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
-                  <a href="/assets/src/views/register.html" class="unsaved">
+                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
                     <i class="fa-regular fa-bookmark"></i>
                   </a>
                 </div>

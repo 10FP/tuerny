@@ -66,7 +66,7 @@ const initHeroSlider = () => {
     focusOnSelect: true,
     arrows: false,
     centerMode: true,
-    centerPadding: "20px",
+    centerPadding: "0px",
     // variableWidth: true,
     // fade: true,
     responsive: [
