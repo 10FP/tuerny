@@ -3,6 +3,14 @@ from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCat
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
+import csv
+import zipfile
+from io import StringIO, BytesIO
+from django.http import HttpResponse
+from django.apps import apps
+from django.contrib import admin
+from django.contrib.admin import AdminSite
+from django.urls import path
 # Register your models here.
 
 class CustomUserAdmin(UserAdmin):
@@ -111,9 +119,67 @@ class SaveAdmin(admin.ModelAdmin):
         return "Bilinmeyen"
     get_saved_item.short_description = "Kaydedilen İçerik"
 
+class CustomAdminSite(AdminSite):
+    site_header = "Yönetim Paneli"
+    site_title = "Admin Panel"
+    index_title = "Hoş Geldiniz"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path('export-all-csv/', self.export_all_csv, name='export_all_csv'),
+        ]
+        return custom_urls + urls
+
+    def export_all_csv(self, request):
+        # ZIP dosyası oluşturmak için geçici bir bellek alanı
+        buffer = BytesIO()
+        zip_file = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
+
+        # Tüm modelleri al
+        models = apps.get_models()
+
+        for model in models:
+            model_name = model._meta.verbose_name_plural
+            queryset = model.objects.all()
+
+            # CSV yazmak için StringIO kullan
+            csv_buffer = StringIO()
+            writer = csv.writer(csv_buffer)
+
+            # CSV başlıkları
+            fields = [field.name for field in model._meta.fields]
+            writer.writerow(fields)
+
+            # Verileri yaz
+            for obj in queryset:
+                writer.writerow([getattr(obj, field) for field in fields])
+
+            # CSV dosyasını ZIP'e ekle
+            csv_filename = f"{model_name}.csv"
+            zip_file.writestr(csv_filename, csv_buffer.getvalue())
+            csv_buffer.close()
+
+        # ZIP dosyasını kapat
+        zip_file.close()
+        buffer.seek(0)
+
+        # HTTP yanıtını döndür
+        response = HttpResponse(buffer, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename="all_tables.zip"'
+        return response
 
 
+# Özel admin siteyi tanımlayın
+custom_admin_site = CustomAdminSite(name='custom_admin')
 
+# Tüm modelleri admin'e ekle
+models = apps.get_models()
+for model in models:
+    try:
+        custom_admin_site.register(model)
+    except admin.sites.AlreadyRegistered:
+        pass
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(MainCategory, MainCategoryAdmin)
