@@ -93,6 +93,11 @@ class Blog(models.Model):
         null=True, 
         related_name="blogs"
     )
+    extra_categories = models.ManyToManyField(  # Yeni çoklu kategori desteği
+        'SubCategory', 
+        related_name="extra_blogs", 
+        blank=True
+    )
     title = models.CharField(max_length=255)
     short_description = RichTextField(default="", null=True, blank=True)
     content = RichTextField()  # CKEditor entegrasyonu için
@@ -123,7 +128,7 @@ class Blog(models.Model):
 
     class Meta:
         ordering = ['-created_at']
-        
+
 class SuggestedBlog(models.Model):
     blog = models.OneToOneField(
         Blog,

@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-
+from itertools import chain
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -148,7 +148,9 @@ def category(request, slug):
         if category:
         
             blogs = category.blogs.all()
-            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
+            blogss = category.extra_blogs.all()
+            merged_blogs = chain(blogs, blogss)
+            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs})
     except:
         pass
     

@@ -52,6 +52,16 @@
 .blog-content p {
   font-size: 18px;
   text-indent: 30px;
+  
+}
+.blog-content h1 {
+  border-left: 5px solid red;
+  text-indent: 10px;
+}
+.blog-content h2 {
+  border-left: 5px solid blue;
+  text-indent: 10px;
+  
 }
 .blog-content p.source-text {
   text-indent: 0;
