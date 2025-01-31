@@ -207,9 +207,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .product-detail .blog-card-content-bottom {
-    display: none;
-  }
+  
 }
 @media screen and (max-width: 1400px) {
   .edit-special {
@@ -224,5 +222,5 @@
   }
   
 }
-
+}
 /*# sourceMappingURL=blog-detail.css.map */
