@@ -91,7 +91,7 @@
               {% for category in categories %}
                 <div class="header-link-container w-100 open-header-link">
                   <a
-                    href="#"
+                    href="{% url 'tuerny_app:category' category.slug %}"
                     class="header-link d-flex align-items-center gap-2 text-decoration-none"
                   >
                     <span>{{category.name}}</span>
@@ -264,7 +264,7 @@
                 </div>
               </div>
               <div class="d-none d-xl-flex">
-                <a href="{% url 'tuerny_app:profile' %}" class="header-icon">
+                <a href="{% url 'tuerny_app:profile' %}?tab=saved" class="header-icon">
                   <i class="fa-regular fa-bookmark"></i>
                 </a>
               </div>
@@ -294,7 +294,7 @@
                       <a
                         style="color: #414141"
                         class="dropdown-item mb-2"
-                        href="{% url 'tuerny_app:profile' %}"
+                        href="{% url 'tuerny_app:profile' %}?tab=saved"
                         >Kaydedilenler</a
                       >
                     </li>

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -138,20 +138,28 @@ def z(request):
 
 def blog_detail(request, slug):
     blog = Blog.objects.all()
+    s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
-    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_})
+    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
 
 def category(request, slug):
-    category = SubCategory.objects.get(slug=slug)
-    if category:
+    try:
+        category = SubCategory.objects.get(slug=slug)
+        if category:
         
-        blogs = category.blogs.all()
-        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
-    else:
-        category = SubCategory.subcategories.objects.get(slug=slug)
-
-
-        return render(request, "tuerny_app/category_detail.html", {"categery": category})
+            blogs = category.blogs.all()
+            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
+    except:
+        pass
+    
+    
+    category = MainCategory.objects.get(slug=slug)
+    if category:
+            first_subcategory = category.subcategories.first()
+            
+            blogs = first_subcategory.blogs.all()
+            
+            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
         
 def confirm(request):
     return render(request, 'tuerny_app/confirm.html')

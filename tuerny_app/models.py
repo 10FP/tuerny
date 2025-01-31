@@ -123,7 +123,17 @@ class Blog(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        
+class SuggestedBlog(models.Model):
+    blog = models.OneToOneField(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name="suggested_blog"
+    )
+    is_active = models.BooleanField(default=True)  # Blog önerilerini yönetmek için
 
+    def __str__(self):
+        return f"Önerilen: {self.blog.title}"
 
 class Product(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="products")
