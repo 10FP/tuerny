@@ -140,6 +140,17 @@ class SuggestedBlog(models.Model):
     def __str__(self):
         return f"Önerilen: {self.blog.title}"
 
+class CategorySuggestedBlog(models.Model):
+    blog = models.OneToOneField(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name="category_suggested_blog"
+    )
+    is_active = models.BooleanField(default=True)  # Blog önerilerini yönetmek için
+
+    def __str__(self):
+        return f"Önerilen: {self.blog.title}"
+
 class Product(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="products")
     image = models.ImageField(upload_to="product_images/", null=True, blank=True)

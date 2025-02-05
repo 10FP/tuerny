@@ -87,12 +87,13 @@
   <div class="py-5">
     <div class="blog-section-2 blog-card-slider-2-container">
       <div class="blog-card-slider-2 mb-5">
+        {% for e in extra %}
         <div class="px-2">
           <div class="blog-card-1 mw-100">
             <div class="ratio-1">
-              <a href="#">
+              <a href="{% url 'tuerny_app:blog_detail' e.blog.slug %}">
                 <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
+                  src="{{ e.blog.media.url }}"
                   class="w-100 h-100 object-fit-cover"
               /></a>
             </div>
@@ -101,146 +102,16 @@
                 class="blog-category"
                 style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
               >
-                Category Title
+              {{ e.blog.category.name }}
               </p>
               <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
+                {{ e.blog.title }}
               </a>
             </div>
           </div>
         </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="blog-card-1 mw-100">
-            <div class="ratio-1">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div>
-              <p
-                class="blog-category"
-                style="font-size: 14px; margin-bottom: 10px; margin-top: 16px"
-              >
-                Category Title
-              </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
-                Blog Title
-              </a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
+
       </div>
       <div class="row">
         <div class="col-6">
@@ -263,26 +134,27 @@
 
   <div class="container">
     <div class="row category-row">
+      {% for blog in second_blogs %}
       <div class="col-md-6 category-box">
         <div class="box-inner">
           <div class="blog-card-4">
             <div class="blog-card-img">
-              <a href="#">
+              <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
                 <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
+                  src="{{blog.media.url}}"
                   class="w-100 h-100 object-fit-cover"
               /></a>
             </div>
             <div class="blog-card-content">
-              <p class="blog-card-category mb-2">Category Name</p>
+              <p class="blog-card-category mb-2"> {{blog.category.name}}</p>
               <a href="#" class="blog-card-title stretched-link">
-                Blog Title
+                {{blog.title}}
               </a>
-              <p class="blog-card-text mb-0 mt-3">Blog Summary</p>
+              <p class="blog-card-text mb-0 mt-3"> {{blog.short_description | safe}}</p>
               <div style="clear: both"></div>
               <div class="blog-card-content-bottom mt-2 mt-md-4">
                 <p class="mb-0 blog-card-author text-uppercase">
-                  BY Blog Author
+                  {{blog.author}}
                 </p>
                 <div class="blog-card-buttons gap-0">
                   <div class="share-container">
@@ -329,6 +201,8 @@
           </div>
         </div>
       </div>
+      {% endfor %}
+
     </div>
   </div>
 
@@ -432,93 +306,27 @@
   </div>
 
   <div class="container">
+    
     <div class="row category-row">
-      <div class="col-md-6 category-box">
-        <div class="box-inner">
-          <div class="blog-card-4">
-            <div class="blog-card-img">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
-                  class="w-100 h-100 object-fit-cover"
-              /></a>
-            </div>
-            <div class="blog-card-content">
-              <p class="blog-card-category mb-2">Category Name</p>
-              <a href="#" class="blog-card-title stretched-link">
-                Blog Title
-              </a>
-              <p class="blog-card-text mb-0 mt-3">Blog Summary</p>
-              <div style="clear: both"></div>
-              <div class="blog-card-content-bottom mt-2 mt-md-4">
-                <p class="mb-0 blog-card-author text-uppercase">
-                  BY Blog Author
-                </p>
-                <div class="blog-card-buttons gap-0">
-                  <div class="share-container">
-                    <a href="#" class="share-btn">
-                      <svg
-                        width="44"
-                        height="44"
-                        viewBox="0 0 44 44"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
-                          stroke="#414141"
-                          stroke-width="1.16919"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                    </a>
-                    <div class="social-menu">
-                      <a href="#" class="social-btn facebook" data-url="#"
-                        >Facebook</a
-                      >
-                      <a href="#" class="social-btn twitter" data-url="#"
-                        >Twitter</a
-                      >
-                      <a href="#" class="social-btn linkedin" data-url="#"
-                        >LinkedIn</a
-                      >
-                    </div>
-                  </div>
-                  <a data-id="" href="javascript:void(0)" class="saved">
-                    <i class="fa-solid fa-bookmark"></i>
-                  </a>
-                  <a data-id="" href="javascript:void(0)" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
-                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row category-row">
+      {% for blog in third_blogs %}
       <div class="col-sm-6 col-lg-4 category-box">
         <div class="box-inner">
           <div class="blog-card-4">
             <div class="blog-card-img">
-              <a href="#">
+              <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
                 <img
-                  src="{% static 'tuerny_app/images/7574317.png' %}"
+                  src="{{blog.media.url}}"
                   class="w-100 h-100 object-fit-cover"
               /></a>
             </div>
             <div class="blog-card-content">
-              <p class="blog-card-category mb-2">Category Name</p>
+              <p class="blog-card-category mb-2">{{blog.category.name}}</p>
               <a href="#" class="blog-card-title stretched-link">
-                Blog Title
+                {{blog.title}}
               </a>
-              <p class="blog-card-text mb-0 mt-3">Blog Summary</p>
+              <p class="blog-card-text mb-0 mt-3">{{blog.short_description | safe}}</p>
               <div class="blog-card-content-bottom mt-2 mt-md-4">
-                <p class="mb-0 blog-card-author">BY Blog Author</p>
+                <p class="mb-0 blog-card-author">{{blog.author}}</p>
                 <div class="blog-card-buttons gap-0">
                   <div class="share-container">
                     <a href="#" class="share-btn">
@@ -564,6 +372,8 @@
           </div>
         </div>
       </div>
+      {% endfor %}
+
     </div>
   </div>
 

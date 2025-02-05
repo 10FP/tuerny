@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from itertools import chain
+import random
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -145,23 +146,37 @@ def blog_detail(request, slug):
 def category(request, slug):
     try:
         category = SubCategory.objects.get(slug=slug)
-        if category:
         
+        if category:
+            main_category = category.main_category 
+            other_subcategories = list(main_category.subcategories.exclude(id=category.id))
+            
+            extra = CategorySuggestedBlog.objects.all()
+            if len(other_subcategories) >= 2:
+                random_categories = random.sample(other_subcategories, 2)
+                second_category, third_category = random_categories
+                second_blogs = second_category.blogs.all()
+                second_blogss = second_category.extra_blogs.all()
+                merged_second_blogs = chain(second_blogs, second_blogss)
+                third_blogs = third_category.blogs.all()
+                third_blogss = third_category.extra_blogs.all()
+                merged_third_blogs = chain(third_blogs, third_blogss)
+                
             blogs = category.blogs.all()
             blogss = category.extra_blogs.all()
             merged_blogs = chain(blogs, blogss)
-            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs})
+            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs, "second_blogs": merged_second_blogs, "third_blogs": merged_third_blogs, "extra": extra})
     except:
         pass
     
     
     category = MainCategory.objects.get(slug=slug)
     if category:
-            first_subcategory = category.subcategories.first()
+        first_subcategory = category.subcategories.first()
             
-            blogs = first_subcategory.blogs.all()
+        blogs = first_subcategory.blogs.all()
             
-            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
+        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
         
 def confirm(request):
     return render(request, 'tuerny_app/confirm.html')
