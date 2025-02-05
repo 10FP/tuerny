@@ -193,3 +193,11 @@ class Save(models.Model):
     class Meta:
         ordering = ['-saved_at']
         unique_together = ('user', 'blog', 'question')
+
+class APISettings(models.Model):
+    name = models.CharField(max_length=255, unique=True, help_text="API Adı (Örn: Google Analytics)")
+    script = models.TextField(help_text="Tam script kodunu buraya girin")
+    is_active = models.BooleanField(default=True, help_text="API'yi aktif/pasif yap")
+
+    def __str__(self):
+        return self.name

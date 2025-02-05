@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings
 from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
@@ -198,6 +198,19 @@ class CategorySuggestedBlogAdmin(admin.ModelAdmin):
     def make_inactive(self, request, queryset):
         queryset.update(is_active=False)
     make_inactive.short_description = "Seçili blogları pasif hale getir"
+
+
+@admin.register(APISettings)
+class APISettingsAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active")  # Liste görünümünde gösterilecek alanlar
+    search_fields = ("name",)  # Arama çubuğunda API adını arayabilme
+    list_filter = ("is_active",)  # Filtreleme seçeneği ekleme
+    ordering = ("name",)  # Sıralama
+    fieldsets = (
+        (None, {
+            "fields": ("name", "script", "is_active"),
+        }),
+    )
 # Özel admin siteyi tanımlayın
 custom_admin_site = CustomAdminSite(name='custom_admin')
 

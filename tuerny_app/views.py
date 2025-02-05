@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -11,8 +11,9 @@ import random
 # Create your views here.
 User = get_user_model()
 def index(request):
+    api = APISettings.objects.all()
     blog = Blog.objects.all()
-    return render(request, 'tuerny_app/index.html', {"blog": blog})
+    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api})
 
 def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)
