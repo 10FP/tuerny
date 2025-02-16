@@ -24,6 +24,40 @@ def asked_details(request, asked_id):
     question = Question.objects.get(id=asked_id)
     return render(request, 'tuerny_app/asked-details.html', {"question": question})
 
+@login_required
+def add_blog_comment(request):
+    blog = Blog.objects.all()
+    s_blogs = SuggestedBlog.objects.all()
+    
+    if request.method == "POST":
+        
+        blog_id = request.POST.get("blog_id")  # Formdaki blog yazısının ID'si
+        
+        content = request.POST.get("content")
+        
+        anonymous = request.POST.get("hidden_user_name") == "on"  # Checkbox "on" olarak gelir
+
+        # 🔹 Blog yazısının var olup olmadığını kontrol et
+        try:
+            
+            blog_ = get_object_or_404(Blog, id=blog_id)
+        
+       
+            comment = Comment.objects.create(
+                blog=blog_,
+                user=request.user,
+                content=content,
+                anonymous=anonymous
+        )
+        except Exception as e:
+            print(e)
+
+        
+        
+        return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
+
+    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
+
 def add_comment(request):
     if request.method == "POST":
         question_id = request.POST.get("type_id")  # Formdaki `type_id`, `Question` ID'sini tutuyor

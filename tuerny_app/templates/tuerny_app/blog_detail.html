@@ -242,12 +242,13 @@
                   </div>
                   {% endfor %}
                   
-                    <form method="POST" class="ajaxFormTrue" action="#">
+                    <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add_blog_comment' %}">
+                        {% csrf_token %}
                         <input type="hidden" name="type" value="blog">
-                        <input type="hidden" name="type_id" value="blog_id">
+                        <input type="hidden" name="blog_id" value="{{ blog_.id }}">
                         <input type="hidden" name="parent" value="0">
                         <textarea name="content" class="teurny-input w-100 vRequired" rows="10"
-                            placeholder="Yorum"></textarea>
+                            placeholder="Yorum" required></textarea>
 
 
                         <div class="d-flex gap-3 mt-4">
@@ -442,5 +443,37 @@
   </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const commentForm = document.querySelector(".ajaxFormTrue");
 
+    if (commentForm) {
+        commentForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // Sayfanın yenilenmesini engelle
+
+            let formData = new FormData(commentForm); // Form verilerini al
+            let actionUrl = "{% url 'tuerny_app:add_blog_comment' %}"; // Django `urls.py` içindeki endpoint
+
+            fetch(actionUrl, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Eğer sunucudan hata içeren HTML gelirse, sayfa yenilenmeyebilir
+                    console.log("Yorum başarıyla eklendi!");
+                    location.reload(); // Yorum eklendiğinde sayfayı yenile
+                })
+                .catch(error => {
+                    console.error("Bağlantı Hatası:", error);
+                    alert("Sunucuyla bağlantı kurulamadı!");
+                });
+                
+        });
+    }
+});
+</script>
 {% endblock content %}
