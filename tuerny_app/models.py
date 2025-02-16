@@ -46,10 +46,18 @@ class SubCategory(models.Model):
         return f"{self.main_category.name} -> {self.name}"
     
 class Question(models.Model):
+    topics = [
+        ("destek", "Destek Talebi"),
+        ("oneri", "Öneri"),
+        ("sikayet", "Şikayet"),
+        ("diger", "Diğer"),
+    ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="questions")
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="question_category", null=True, blank=True)
+    topic = models.CharField(max_length=20, choices=topics, verbose_name="Konu", null=True, blank=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
+    anonymous = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(CustomUser, related_name="liked_questions", blank=True)
     dislikes = models.ManyToManyField(CustomUser, related_name="disliked_questions", blank=True)

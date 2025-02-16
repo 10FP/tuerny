@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from itertools import chain
+from django.http import JsonResponse
 import random
 # Create your views here.
 User = get_user_model()
@@ -23,9 +24,81 @@ def asked_details(request, asked_id):
     question = Question.objects.get(id=asked_id)
     return render(request, 'tuerny_app/asked-details.html', {"question": question})
 
-def ask(request):
+def add_comment(request):
+    if request.method == "POST":
+        question_id = request.POST.get("type_id")  # Formdaki `type_id`, `Question` ID'sini tutuyor
+        content = request.POST.get("content")
+        anonymous = request.POST.get("hidden_user_name") == "on"  # Checkbox "on" olarak gelir
 
-    return render(request, 'tuerny_app/ask.html')
+        # 🔹 Sorunun var olup olmadığını kontrol et
+        question = get_object_or_404(Question, id=question_id)
+
+        # 🔹 Yorum ekle
+        comment = Comment.objects.create(
+            question=question,
+            user=request.user,
+            content=content,
+            anonymous=anonymous
+        )
+        pool_id = request.POST.get("pool_id")
+
+        return redirect("tuerny_app:ask", pool_id=pool_id)
+
+    return JsonResponse({"status": "error", "message": "Geçersiz istek!"}, status=400)
+
+def ask(request):
+    subs = SubCategory.objects.all()
+    if request.method == "POST":
+        # 🔹 Formdan gelen verileri al
+        subcategory_id = request.POST.get("subcategory")
+        topic = request.POST.get("topic")
+        title = request.POST.get("title")
+        description = request.POST.get("description")
+        anonymous = request.POST.get("anonymous") == "on"  # Checkbox "on" olarak gelir
+        add_survey = request.POST.get("add_survey") == "on"  # Anket ekleme checkbox
+
+        # 🔹 Subcategory kontrolü
+        subcategory = SubCategory.objects.filter(id=subcategory_id).first() if subcategory_id else None
+
+        # 🔹 Question modeline kaydet
+        question = Question.objects.create(
+            user=request.user,
+            subcategory=subcategory,
+            topic=topic,
+            title=title,
+            description=description,
+            anonymous=anonymous
+        )
+
+        # 🔹 Eğer "Anket Ekle" seçeneği seçilmişse, Poll ve PollOptions oluştur
+        if add_survey:
+            survey_title = request.POST.get("survey_title")
+            selection_a = request.POST.get("selection_a")
+            selection_b = request.POST.get("selection_b")
+            selection_c = request.POST.get("selection_c", "").strip()
+            selection_d = request.POST.get("selection_d", "").strip()
+
+            # Eğer anket sorusu ve en az iki seçenek girilmişse
+            if survey_title and selection_a and selection_b:
+                poll = Poll.objects.create(
+                    question=question,
+                    poll_question=survey_title
+                )
+
+                # Anket seçeneklerini ekleyelim
+                PollOption.objects.create(poll=poll, option_text=selection_a)
+                PollOption.objects.create(poll=poll, option_text=selection_b)
+
+                # 3. ve 4. seçenekler boş değilse ekleyelim
+                if selection_c:
+                    PollOption.objects.create(poll=poll, option_text=selection_c)
+                if selection_d:
+                    PollOption.objects.create(poll=poll, option_text=selection_d)
+
+        
+        return render(request, 'tuerny_app/ask.html', context={"subs": subs})
+    
+    return render(request, 'tuerny_app/ask.html', context={"subs": subs})
 
 def register(request):
     if request.user.is_authenticated:

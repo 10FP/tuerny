@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-uv=!a=*9_@r)z&rtncj9deg12$o-n*au_jf8hsj7ra)ejfz8!n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 AUTH_USER_MODEL = 'tuerny_app.CustomUser'
 
 # Application definition
