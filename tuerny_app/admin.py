@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings
 from django.contrib.auth.admin import UserAdmin
+from django import forms
+from ckeditor.widgets import CKEditorWidget
 from django.utils.html import format_html
 from django.urls import reverse
 import csv
@@ -53,8 +55,32 @@ class MainCategoryAdmin(admin.ModelAdmin):
     inlines = [SubCategoryInline]
     prepopulated_fields = {"slug": ("name",)}
 
+
+
+class BlogPostForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Kullanıcı bilgisini al
+        super(BlogPostForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['content'].widget = CKEditorWidget(config_name=get_ck_editor_config(user))
+
+    class Meta:
+        model = Blog
+        fields = '__all__'
+
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
+    form = BlogPostForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        kwargs['form'] = type(
+            'CustomBlogPostForm',
+            (BlogPostForm,),
+            {'__init__': lambda self, *args, **kw: BlogPostForm.__init__(self, *args, user=request.user, **kw)}
+        )
+        return super().get_form(request, obj, **kwargs)
+
+
     list_display = ('title', 'category', 'user', 'created_at', 'copy_blog_link')
     search_fields = ('title', 'content')
     list_filter = ('category', 'created_at')
@@ -86,6 +112,7 @@ class BlogAdmin(admin.ModelAdmin):
 
     copy_blog_link.short_description = "Kopyala"
     copy_blog_link.allow_tags = True
+
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'blog', 'link')

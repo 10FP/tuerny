@@ -59,6 +59,36 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+def get_ck_editor_config(user):
+    if user.is_superuser:
+        # 🔥 Adminler için tam yetkili CKEditor
+        return {
+            'toolbar': 'Full',
+            'toolbar_Full': [
+                ['Bold', 'Italic', 'Underline'],
+                ['Format', 'Font', 'FontSize', 'TextColor', 'BGColor'],
+                ['Link', 'Unlink'],
+                ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+                ['RemoveFormat', 'Source'],
+                ['Styles', 'Format', 'Blockquote'],
+                ['NumberedList', 'BulletedList']
+            ],
+            'height': 300,
+            'width': '100%',
+            'extraPlugins': 'font,colorbutton',
+        }
+    else:
+        # ✂️ Editörler için sadece "Heading 1", "Heading 2" ve "Normal"
+        return {
+            'toolbar': 'Basic',
+            'toolbar_Basic': [
+                ['Format']
+            ],
+            'format_tags': 'h1;h2;p',  # Sadece Heading 1, Heading 2 ve Normal (Paragraf)
+            'height': 300,
+            'width': '100%',
+        }
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
