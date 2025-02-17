@@ -147,6 +147,17 @@ class SuggestedBlog(models.Model):
 
     def __str__(self):
         return f"Önerilen: {self.blog.title}"
+    
+class MainSuggestedBlog(models.Model):
+    blog = models.OneToOneField(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name="main_suggested_blog"
+    )
+    is_active = models.BooleanField(default=True)  # Blog önerilerini yönetmek için
+
+    def __str__(self):
+        return f"Önerilen: {self.blog.title}"
 
 class CategorySuggestedBlog(models.Model):
     blog = models.OneToOneField(

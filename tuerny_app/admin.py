@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -198,6 +198,21 @@ class CustomAdminSite(AdminSite):
 
 @admin.register(SuggestedBlog)
 class SuggestedBlogAdmin(admin.ModelAdmin):
+    list_display = ('blog', 'is_active')  # Liste görünümünde blog başlığı ve aktiflik durumu gösterilir
+    list_filter = ('is_active',)  # Filtreleme seçeneği eklenir
+    search_fields = ('blog__title',)  # Blog başlığına göre arama yapılabilir
+    actions = ['make_active', 'make_inactive']  # Toplu işlem butonları
+
+    def make_active(self, request, queryset):
+        queryset.update(is_active=True)
+    make_active.short_description = "Seçili blogları aktif hale getir"
+
+    def make_inactive(self, request, queryset):
+        queryset.update(is_active=False)
+    make_inactive.short_description = "Seçili blogları pasif hale getir"
+
+@admin.register(MainSuggestedBlog)
+class MainSuggestedBlogAdmin(admin.ModelAdmin):
     list_display = ('blog', 'is_active')  # Liste görünümünde blog başlığı ve aktiflik durumu gösterilir
     list_filter = ('is_active',)  # Filtreleme seçeneği eklenir
     search_fields = ('blog__title',)  # Blog başlığına göre arama yapılabilir

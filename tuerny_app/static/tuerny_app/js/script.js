@@ -574,6 +574,16 @@ $(".header-link-container.open-header-link").hover(function() {
 // });
 
 $(document).ready(function () {
+  // İlk başta sadece ilk kategorinin bloglarını göster, diğerlerini gizle
+  $(".menu-load-div .col-md-2").hide(); // Önce tüm blogları gizle
+  let firstCategory = $(".menu-loader").first().data("category"); // İlk menü kategorisini al
+  
+  $(".menu-load-div .col-md-2").each(function () {
+    if ($(this).data("category") === firstCategory) {
+      $(this).show(); // İlk kategoriye ait blogları göster
+    }
+  });
+
   // Hover olayı için
   $(".menu-loader").hover(
     function () {
@@ -591,8 +601,13 @@ $(document).ready(function () {
       });
     },
     function () {
-      // Hover'dan çıkınca tüm blogları geri yükle
-      $(".menu-load-div .col-md-2").show();
+      // Hover'dan çıkınca tekrar ilk kategorinin bloglarını göster
+      $(".menu-load-div .col-md-2").hide();
+      $(".menu-load-div .col-md-2").each(function () {
+        if ($(this).data("category") === firstCategory) {
+          $(this).show();
+        }
+      });
     }
   );
 });

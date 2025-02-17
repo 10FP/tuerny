@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -14,7 +14,8 @@ User = get_user_model()
 def index(request):
     api = APISettings.objects.all()
     blog = Blog.objects.all()
-    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api})
+    main = MainSuggestedBlog.objects.all()
+    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main})
 
 def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)

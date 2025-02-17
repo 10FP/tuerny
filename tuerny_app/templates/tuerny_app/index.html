@@ -4,41 +4,24 @@
 
       <div id="hero-slider" class="w-100 position-relative">
         <div id="hero-slider-top">
+          {% for m in main %}
           <div class="px-2 slider">
-            <a href="/assets/src/views/blog-detail.html">
-              <img src="{% static 'tuerny_app/images/8933412.jpg' %}" alt="Slider Image 1" />
+            <a href="{% url 'tuerny_app:blog_detail' m.blog.slug %}">
+              <img src="{{m.blog.media.url}}" alt="Slider Image 1" />
             </a>
           </div>
-          <div class="px-2 slider">
-            <a href="/assets/src/views/blog-detail.html">
-              <img src="{% static 'tuerny_app/images/7574317.png' %}" alt="Slider Image 2" />
-            </a>
-          </div>
-          <div class="px-2 slider">
-            <a href="/assets/src/views/blog-detail.html">
-              <img src="{% static 'tuerny_app/images/8780273.png' %}" alt="Slider Image 3" />
-            </a>
-          </div>
-          <div class="px-2 slider">
-            <a href="/assets/src/views/blog-detail.html">
-              <img src="{% static 'tuerny_app/images/211305.jpg' %}" alt="Slider Image 4" />
-            </a>
-          </div>
+          {% endfor %}
+          
+          
         </div>
         <div class="hero-slider-bottom-container position-relative">
           <div id="hero-slider-bottom">
+            {% for m in main %}
             <div class="slider-item">
-              <span>Slider Title 1</span>
+              <span>{{m.blog.title}}</span>
             </div>
-            <div class="slider-item">
-              <span>Slider Title 2</span>
-            </div>
-            <div class="slider-item">
-              <span>Slider Title 3</span>
-            </div>
-            <div class="slider-item">
-              <span>Slider Title 4</span>
-            </div>
+            {% endfor %}
+            
           </div>
         </div>
       </div>
