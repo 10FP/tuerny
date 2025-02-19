@@ -31,4 +31,5 @@ urlpatterns = [
     path("profil/template-parts/comments.html", views.z, name="z"),
     path("broken-link/", views.broken, name="404"),
     path('logout/', views.logout_view, name='logout'),
+    path("vote/<int:question_id>/<int:option_id>/", views.vote_poll, name="vote_poll"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

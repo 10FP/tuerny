@@ -888,9 +888,7 @@ p.blog-card-text.mb-0.mt-3 {
     border: none;
     min-height: auto;
   }
-  .header .header-profile-btn:hover .dropdown-menu {
-    left: -70%;
-  }
+
   #hero-slider {
     height: auto;
     margin-bottom: 0;
@@ -1134,5 +1132,27 @@ p.blog-card-text.mb-0.mt-3 {
 }
 #follow-btn {
   font-family: 'Roboto';
+}
+@media screen and (max-width: 392px) {
+  svg.d-lg-none {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .profile-tabs{
+    gap: 0 !important;
+  }
+}
+@media screen and (max-width: 320px) {
+  svg.d-lg-none {
+    width: 15px !important;
+    height: 15px !important;
+  }
+}
+.icon-button {
+  background: none;  /* Arkaplanı kaldır */
+  border: none;  /* Border kaldır */
+  padding: 0;  /* Ekstra boşluğu kaldır */
+  outline: none;  /* Tıklama efekti gelmesin */
+  cursor: pointer;  /* El simgesi çıksın */
 }
 /*# sourceMappingURL=components.css.map */

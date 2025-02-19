@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load math_filters %}
 {% block content %}
 
       <div class="container py-5">
@@ -83,7 +84,40 @@
                                     <p class="question-card-text py-2">
                                         {{q.description}}
                                     </p>
-                                        
+                                    {% if q.poll %}
+                                    {% with poll=poll_data|get_item:q.id %}
+                                    {% with total_votes=poll.total_votes|default:0 %}
+                                
+                                        {% for vote in q.poll.options.all %}
+                                            <div class="question-card-survey py-2 vCheckRequired">
+                                                <div class="question-card-survey-item" style="margin-bottom: 10px">
+                                                    
+                                                    <div class="question-card-survey-item-label">
+                                                        <input name="vote_{{ q.id }}" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
+                                                        {% if request.user in vote.voted_users.all %} checked {% endif %}>
+                                                        <label for="r{{ vote.id }}">{{ vote.option_text }}</label>
+                                                    </div>
+                                                    
+                                                    <div class="question-card-survey-item-progress">
+                                                        <div class="question-card-survey-item-progress-rate"
+                                                             id="progress-{{ vote.id }}"
+                                                             style="width: {% if total_votes > 0 %}{{ poll.percentages|get_item:vote.id|floatformat:1 }}{% else %}0{% endif %}%">
+                                                            <span id="percentage-{{ vote.id }}">
+                                                                {% if total_votes > 0 %}
+                                                                    {{ poll.percentages|get_item:vote.id|floatformat:1 }}%
+                                                                {% else %}
+                                                                    0%
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                
+                                    {% endwith %}
+                                {% endwith %}
+                            {% endif %}
                            
                                     <div class="d-flex justify-content-between align-items-center pt-4">
                                         <div class="d-flex gap-4">
@@ -155,8 +189,7 @@
                                                 <input type="hidden" name="type" value="ask">
                                                 <input type="hidden" name="type_id" value="type_id">
                                                 <input type="hidden" name="parent" value="0">
-                                                    <input style="margin-bottom: 15px; box-shadow: none; border-radius: 0px" type="text"
-                                                        class="form-control vRequired" name="user_name" placeholder="Kullanıcı adınız">
+                                                    
                                                 <input type="text" name="content" class="teurny-input w-100"
                                                     placeholder="Yorum Yap">
     
@@ -186,153 +219,7 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                        {% for q in questions %}
-                                <div class="question-card">
-                                    <div class="question-card-category">
-                                        <p>{{q.subcategory.name}}</p>
-                                    </div>
-                                    <div class="question-card-date">
-                                        <p>Question Date</p>
-                                    </div>
-                                    <h3 class="question-card-title pb-2">
-                                        <a href="#"> {{q.title}} </a>
-                                    </h3>
-                                    <p class="question-card-text py-2">
-                                        {{q.description}}
-                                    </p>
-                                        <p class="question-card-text py-2">
-                                            Title
-                                        </p>
-                                        <form method="post" action="/Controller/ajax/ajax.php?process=surveyvote" class="ajaxFormTrue">
-                                            <div class="question-card-survey py-2 vCheckRequired">
-                                                <input type="hidden" name="survey_id" value="">
-                                                <table class="w-100">
-                                                    <tbody>
-                                                            <tr>
-                                                                <td>
-                                                                    <div class="question-card-survey-item-label">
-                                                                        <input name="vote" value="" type="radio"
-                                                                            id="r" />
-                                                                        <label for="r"
-                                                                            class="text-nowrap">0</label>
-                                                                    </div>
-                                                                </td>
-                                                                <td class="w-100 ps-0 ps-lg-5">
-                                                                    <div class="question-card-survey-item-progress"
-                                                                        style="width: 4%">
-                                                                        <div class="question-card-survey-item-progress-rate 0"
-                                                                            style="width: 100%; color:black; background: #fff;">
-                                                                            0
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="col-md-12 vAjaxErrors"></div>
-                                                
-                                        </form>
-                                    <div class="d-flex justify-content-between align-items-center pt-4">
-                                        <div class="d-flex gap-4">
-                                            <div class="question-card-button">
-                                                <i class="fa-regular fa-eye question-card-button-icon"></i>
-                                                <span class="question-card-button-text">0</span>
-                                            </div>
-                                            <div class="question-card-button">
-                                                <i class="fa-regular fa-message question-card-button-icon"></i>
-                                                <span
-                                                    class="question-card-button-text">0</span>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <div class="question-card-button">
-                                                <i style="cursor: pointer" data-id=""
-                                                    class="fa-solid fa-heart-crack question-card-button-icon dislike-button"></i>
-                                                <span
-                                                    class="heart-crack-result-0">0</span>
-                                            </div>
-    
-                                            <div class="question-card-rate-line-container">
-                                                <div class="question-card-rate-line">
-                                                    <div class="rate-line-dislike" id="rate-dislike-0"></div>
-                                                    <div class="rate-line-like" id="rate-like-0"></div>
-                                                </div>
-                                            </div>
-    
-                                            <div class="question-card-button">
-                                                <i style="cursor: pointer" data-id=""
-                                                    class="fa-regular fa-heart question-card-button-icon like-button"></i>
-                                                <span
-                                                    class="heart-result-0">0</span>
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="question-card-comments" style="padding-top: 15px">
-                                        <div class="blog-section-title">
-                                            <span>Yorumlar</span>
-                                            <div class="blog-section-title-divider"></div>
-                                        </div>
-    
-                                        <div class="d-flex flex-column gap-3 mt-4">
-                                                <div class="blog-comment-item">
-                                                        <p class="blog-comment-item-author">
-                                                            @Kullanıcı-adı</p>
-                                                        <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
-                                                    <p class="blog-comment-item-text">
-                                                        Blog Comment
-                                                    </p>
-                                                </div>
-                                                <div class="teurny-divider"></div>
-                                                    <div class="blog-comment-item">
-                                                            <p class="blog-comment-item-author">
-                                                                @user_name</p>
-                                                            <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
-                                                        <p class="blog-comment-item-text">
-                                                            Blog Comment
-                                                        </p>
-                                                    </div>
-                                                    <div class="teurny-divider"></div>
-                                        </div>
-                                        <div class="mt-4">
-                                            <form method="POST" class="ajaxFormTrue"
-                                                action="/Controller/ajax/ajax.php?process=add-comments">
-                                                <input type="hidden" name="type" value="ask">
-                                                <input type="hidden" name="type_id" value="type_id">
-                                                <input type="hidden" name="parent" value="0">
-                                                    <input style="margin-bottom: 15px; box-shadow: none; border-radius: 0px" type="text"
-                                                        class="form-control vRequired" name="user_name" placeholder="Kullanıcı adınız">
-                                                <input type="text" name="content" class="teurny-input w-100"
-                                                    placeholder="Yorum Yap">
-    
-                                                <div class="d-flex gap-3 mt-4">
-                                                    <div>
-                                                        <label for="cb-1" class="teurny-checkbox">
-                                                            <input name="hidden_user_name" type="checkbox" id="cb-1"
-                                                                class="d-none" />
-                                                            <div class="teurny-checkbox-inner"></div>
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
-                                                            Kullanıcı adını gizle
-                                                        </p>
-                                                        <p class="font-roboto blog-comment-checkbox-text">
-                                                            Bu gönderi için kullanıcı adını gizlenecek
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12 vAjaxErrors"></div>
-                                                <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
-    
-                                            </form>
-    
-                                        </div>
-                                    </div>
-                                </div>
-                                {% endfor %}
-    
+                        
                     </div>
                     <div class="col-md-12 mt-5" style="text-align: center">
                         <nav aria-label="Page navigation example">
@@ -450,5 +337,47 @@
           </div>
         </div>
       </div>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("input[type=radio]").forEach(radio => {
+        radio.addEventListener("change", function() {
+            let questionId = this.name.split("_")[1]; // "vote_3" -> "3"
+            let optionId = this.value;
+            let csrfToken = "{{ csrf_token }}";
+
+            fetch(`/vote/${questionId}/${optionId}/`, {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": csrfToken,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+
+                    // Yüzdelik oranları güncelle
+                    Object.keys(data.percentages).forEach(optionId => {
+                        let progressBar = document.querySelector(`#progress-${optionId}`);
+                        let percentageText = document.querySelector(`#percentage-${optionId}`);
+
+                        if (progressBar && percentageText) {
+                            progressBar.style.width = data.percentages[optionId] + "%";
+                            percentageText.innerText = data.percentages[optionId] + "%";
+                        }
+                    });
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => console.error("Hata:", error));
+        });
+    });
+});
+</script>
+
 {% endblock content %}
   

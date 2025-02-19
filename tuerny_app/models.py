@@ -92,7 +92,12 @@ class PollOption(models.Model):
     def __str__(self):
         return self.option_text
     
-
+    
+    
+    @property
+    def vote_count(self):
+        """Toplam oy sayısını döndürür."""
+        return self.voted_users.count()
 
 class Blog(models.Model):
     category = models.ForeignKey(

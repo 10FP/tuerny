@@ -9,6 +9,7 @@ from django.contrib.auth import logout
 from itertools import chain
 from django.http import JsonResponse
 import random
+from django.db.models import Sum
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -227,8 +228,27 @@ def questions(request):
     return render(request, "tuerny_app/questions.html")
 
 def question(request):
-    questions = Question.objects.all()
-    return render(request, "tuerny_app/question.html", {"questions": questions})
+    questions = Question.objects.prefetch_related("poll__options")
+
+    poll_data = {}
+
+    for question in questions:
+        if hasattr(question, "poll"):
+            # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
+            total_votes = sum(option.vote_count for option in question.poll.options.all())
+
+            # Seçeneklerin yüzdesini hesapla
+            poll_data[question.id] = {
+                "total_votes": total_votes,
+                "percentages": {
+                    option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
+                    for option in question.poll.options.all()
+                }
+            }
+    return render(request, "tuerny_app/question.html", {
+        "questions": questions,
+        "poll_data": poll_data  # Template'e sadece yüzde verileri gönderiliyor
+    })
 
 def save(request):
     
@@ -310,3 +330,40 @@ def logout_view(request):
     logout(request)
     # Oturumdan çıktıktan sonra yönlendirme yap (örneğin anasayfaya)
     return redirect('tuerny_app:index')  # 'home' URL adını kendi projenize göre değiştirin
+
+
+def vote_poll(request, question_id, option_id):
+    """
+    Kullanıcı yeni oy verirse ekler, eski oyunu değiştirmek isterse günceller.
+    """
+    if request.method == "POST" and request.user.is_authenticated:
+        question = get_object_or_404(Question, id=question_id)
+
+        # Kullanıcının bu anket için önceki oyunu var mı?
+        previous_vote = PollOption.objects.filter(poll=question.poll, voted_users=request.user).first()
+
+        # Eğer daha önce oy verdiyse eski oyunu kaldır
+        if previous_vote:
+            previous_vote.voted_users.remove(request.user)
+
+        # Yeni oyu ekle
+        new_option = get_object_or_404(PollOption, id=option_id)
+        new_option.voted_users.add(request.user)
+
+        # Toplam oyları tekrar hesapla
+        total_votes = sum(option.vote_count for option in question.poll.options.all())
+
+        # Yüzdelik oranları tekrar hesapla
+        percentages = {
+            option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
+            for option in question.poll.options.all()
+        }
+
+        return JsonResponse({
+            "success": True,
+            "message": "Oy başarıyla güncellendi!",
+            "total_votes": total_votes,
+            "percentages": percentages
+        })
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"})
