@@ -35,9 +35,9 @@
     <link rel="stylesheet" href="{% static 'tuerny_app/css/profile.css' %}" />
     <link rel="stylesheet" href="{% static 'tuerny_app/css/sidebar.css' %}" />
     <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
+   
+    
+    
     <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
     <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
 
@@ -48,17 +48,14 @@
   </head>
   <style>
      
-  .slick-slide {
-      margin-left: 15px;
-      margin-right: 15px;
-  }
+
   .slick-list {
     margin: 0 -15px;
   }
-  /* .slick-center {
+  .slick-center {
       margin-left: 15px;
       margin-right: 15px;
-  } */
+  }
   #hero-slider-top .slick-slide.slick-active .px-2 a{
     max-width: fit-content;
   }
@@ -78,44 +75,56 @@
         <span class="fs-5 fw-semibold">Menü</span>
       </a>
       <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
-            Home
-          </button>
-          <div class="collapse" id="home-collapse" style="">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Updates</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reports</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-            Dashboard
-          </button>
-          <div class="collapse" id="dashboard-collapse" style="">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Weekly</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Monthly</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Annually</a></li>
-            </ul>
-          </div>
-        </li>
-        <li class="mb-1">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-            Orders
-          </button>
-          <div class="collapse" id="orders-collapse" style="">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Processed</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Shipped</a></li>
-              <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
-            </ul>
-          </div>
-        </li>
+        
+        <ul class="list-unstyled">
+          {% for category in categories %}
+              <li class="mb-1">
+                  <!-- Main Category Dropdown -->
+                  <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" 
+                          data-bs-toggle="collapse" data-bs-target="#category-{{ category.slug }}" 
+                          aria-expanded="false">
+                      {{ category.name }}
+                  </button>
+      
+                  <div class="collapse" id="category-{{ category.slug }}">
+                      <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                          {% for subcategory in category.subcategories.all %}
+                              <li>
+                                  <!-- SubCategory Dropdown -->
+                                  <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" 
+                                          data-bs-toggle="collapse" data-bs-target="#subcategory-{{ subcategory.slug }}" 
+                                          aria-expanded="false">
+                                      {{ subcategory.name }}
+                                  </button>
+      
+                                  <div class="collapse" id="subcategory-{{ subcategory.slug }}">
+                                      <ul class="list-unstyled">
+                                          {% for blog in subcategory.blogs.all %}
+                                              <li class="d-flex align-items-center mb-2">
+                                                  {% if blog.media %}
+                                                      <img src="{{ blog.media.url }}" alt="{{ blog.title }}" class="img-fluid rounded" width="50">
+                                                  {% endif %}
+                                                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="ms-2 text-decoration-none">
+                                                      {{ blog.title }}
+                                                  </a>
+                                              </li>
+                                          {% empty %}
+                                              <li class="text-muted">Bu kategoride henüz blog yazısı yok.</li>
+                                          {% endfor %}
+                                      </ul>
+                                  </div>
+                              </li>
+                          {% empty %}
+                              <li class="text-muted">Bu kategoride henüz alt kategori yok.</li>
+                          {% endfor %}
+                      </ul>
+                  </div>
+              </li>
+          {% empty %}
+              <li class="text-muted">Henüz kategori eklenmemiş.</li>
+          {% endfor %}
+      </ul>
+
         <li class="border-top my-3"></li>
         <li class="mb-1">
           <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
@@ -520,204 +529,204 @@
 {% block content %}
 {% endblock content %}
 <footer>
-    <div>
-      <div class="flex-fill d-lg-none">
-        <!-- FUTURE BOX -->
-        <div class="feature-box h-100">
-          <div class="p-2 flex-fill">
-            <div class="feature-box-gallery1">
-              <div>
-                <a href="#" target="_blank">
-                  <img src="{% static 'tuerny_app/images/5524788.jpeg' %}" alt="feature-box"
-                /></a>
-              </div>
+  <div>
+    <div class="flex-fill d-lg-none">
+      <!-- FUTURE BOX -->
+      <div class="feature-box h-100">
+        <div class="p-2 flex-fill">
+          <div class="feature-box-gallery1">
+            <div>
+              <a href="#" target="_blank">
+                <img src="{% static 'tuerny_app/images/5524788.jpeg' %}" alt="feature-box"
+              /></a>
             </div>
-          </div>
-
-          <div class="p-2 d-flex align-items-center justify-content-center">
-            <a
-              style="text-align: center; width: 310px"
-              href="#"
-              class="teurny-footer-btn"
-            >
-              <i class="fa-brands fa-instagram"></i>
-              <span>TAKİP ET</span>
-            </a>
           </div>
         </div>
-      </div>
-      <div class="container">
-        <div class="footer-top border-top d-flex gap-5 flex-column flex-xl-row">
-          <!-- FOOTER MENUS -->
-          <div class="flex-fill d-flex flex-column flex-sm-row gap-5" style="margin-top: 47px">
-            <div class="flex-fill d-flex flex-column" style="gap: 32px">
-              <div class="d-flex flex-column gap-2">
-                <p class="fw-medium fs-6 mb-0">Hesap</p>
-                <a href="{% url 'tuerny_app:profile' %}?tab=saved" class="fw-light">Kaydedilenler</a>
-                <a href="{% url 'tuerny_app:profile' %}?tab=asked" class="fw-light">Sorularım</a>
-                <a href="{% url 'tuerny_app:profile' %}?tab=votes" class="fw-light">Oylarım</a>
-                <a href="{% url 'tuerny_app:profile' %}?tab=comments" class="fw-light">Yorumlarım</a>
-                <a href="{% url 'tuerny_app:profile' %}?tab=settings" class="fw-light">Ayarlar</a>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <p class="fw-medium fs-6 mb-0">Site</p>
-                <a href="{% url 'tuerny_app:question' %}" class="fw-light">Sorular</a>
-                <a href="{% url 'tuerny_app:ask' %}" class="fw-light">Soru Sor</a>
-              </div>
 
-              <div class="d-flex flex-column gap-2">
-                <p class="fw-medium fs-6 mb-0">Gizlilik Politikası</p>
-                <a href="#" class="fw-light">Gizlilik P. Nav Title</a>
-              </div>
-            </div>
-            <div class="flex-fill d-flex flex-column" style="gap: 32px">
-              <div class="d-flex flex-column gap-2">
-                <p class="fw-medium fs-6 mb-0">Kategoriler</p>
-                <a href="#" class="fw-light">Kategoriler Nav Title</a>
-              </div>
-              <div class="d-flex flex-column gap-2">
-                <p class="fw-medium fs-6 mb-0">Teurny</p>
-                <a href="#" class="fw-light">Nav Title</a>
-              </div>
-            </div>
-          </div>
-          <div class="flex-fill d-flex gap-5 flex-column">
-            <!-- FEATURED BOXES -->
-            <div class="d-flex align-items-stretch gap-3">
-              <div class="flex-fill">
-                <!-- FUTURE BOX -->
-                <div class="feature-box h-100">
-                  <div class="feature-box-header">
-                    <div class="text-center w-100">
-                      <p class="mb-0 fs-4 fw-light read-more-title">
-                        READ MORE
-                      </p>
-                    </div>
-                  </div>
-                  <div class="p-2 flex-fill">
-                    <img
-                      src="{% static 'tuerny_app/images/subscribe-image.png' %}"
-                      alt="subscribe"
-                      class="w-100 h-100 object-fit-cover"
-                    />
-                  </div>
-                  <form
-                    method="POST"
-                    action="/Controller/ajax/ajax.php?process=subc"
-                    class="ajaxFormTrue"
-                  >
-                    <div class="p-2">
-                      <input
-                        name="mail"
-                        type="email"
-                        class="teurny-input w-100"
-                        placeholder="E-posta"
-                      />
-                    </div>
-                    <div
-                      class="col-md-12 vAjaxErrors sm"
-                      style="padding: 5px"
-                    ></div>
-                    <div class="p-2">
-                      <button type="submit" class="teurny-footer-btn">
-                        <i class="fa-regular fa-envelope"></i>
-                        <span>ABONE OL</span>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="flex-fill d-none d-md-block">
-                <!-- FUTURE BOX -->
-                <div class="feature-box h-100">
-                  <div class="feature-box-header">
-                    <img
-                      src="{% static 'tuerny_app/images/teurny-social-logo.png' %}"
-                      alt="teurny logo"
-                    />
-                    <div>
-                      <p class="mb-1 feature-box-title">Teurny</p>
-                      <p class="mb-0 feature-box-text">
-                        You’re life on the next level
-                      </p>
-                    </div>
-                  </div>
-                  <div class="p-2 flex-fill">
-                    <div class="feature-box-gallery">
-                      <div>
-                        <a href="#" target="_blank">
-                          <img
-                            src="{% static 'tuerny_app/images/5524788.jpeg' %}"
-                            alt="feature-box"
-                        /></a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="p-2">
-                    <a
-                      style="text-align: center"
-                      href="#"
-                      class="teurny-footer-btn"
-                    >
-                      <i class="fa-brands fa-instagram"></i>
-                      <span>TAKİP ET</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- SOCIAL ICONS -->
-            <div
-              class="flex-grow-1 d-flex align-items-end justify-content-center"
-            >
-              <div
-                class="d-flex align-items-center justify-content-center flex-wrap gap-5 footersocial"
-              >
-                <a href="#"><i class="fa-brands fa-instagram fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-tiktok fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-pinterest fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-facebook-f fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-x-twitter fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-youtube fs-2"></i></a>
-                <a href="#"><i class="fa-brands fa-linkedin fs-2"></i></a>
-              </div>
-            </div>
-          </div>
+        <div class="p-2 d-flex align-items-center justify-content-center">
+          <a
+            style="text-align: center; width: 310px"
+            href="#"
+            class="teurny-footer-btn"
+          >
+            <i class="fa-brands fa-instagram"></i>
+            <span>TAKİP ET</span>
+          </a>
         </div>
       </div>
     </div>
-    <div class="bg-black">
-      <div class="container">
-        <div
-          class="footer-bottom d-flex align-items-center justify-content-between flex-wrap flex-md-nowrap gap-5"
-        >
-          <div class="order-1 order-md-1">
-            <img
-              src="{% static 'tuerny_app/images/logo-light.svg' %}"
-              class="footer-logo"
-              alt="logo"
-            />
+    <div class="container">
+      <div class="footer-top border-top d-flex gap-5 flex-column flex-xl-row">
+        <!-- FOOTER MENUS -->
+        <div class="flex-fill d-flex flex-column flex-sm-row gap-5" style="margin-top: 47px">
+          <div class="flex-fill d-flex flex-column" style="gap: 32px">
+            <div class="d-flex flex-column gap-2">
+              <p class="fw-medium fs-6 mb-0">Hesap</p>
+              <a href="{% url 'tuerny_app:profile' %}?tab=saved" class="fw-light">Kaydedilenler</a>
+              <a href="{% url 'tuerny_app:profile' %}?tab=asked" class="fw-light">Sorularım</a>
+              <a href="{% url 'tuerny_app:profile' %}?tab=votes" class="fw-light">Oylarım</a>
+              <a href="{% url 'tuerny_app:profile' %}?tab=comments" class="fw-light">Yorumlarım</a>
+              <a href="{% url 'tuerny_app:profile' %}?tab=settings" class="fw-light">Ayarlar</a>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              <p class="fw-medium fs-6 mb-0">Site</p>
+              <a href="{% url 'tuerny_app:question' %}" class="fw-light">Sorular</a>
+              <a href="{% url 'tuerny_app:ask' %}" class="fw-light">Soru Sor</a>
+            </div>
+
+            <div class="d-flex flex-column gap-2">
+              <p class="fw-medium fs-6 mb-0">Gizlilik Politikası</p>
+              <a href="#" class="fw-light">Gizlilik P. Nav Title</a>
+            </div>
           </div>
-          <div class="order-3 order-md-2 w-100 text-center">
-            <p class="mb-0 copyright-text text-white">
-              © 2023 Teurny. Tüm Hakları Saklıdır.
-            </p>
+          <div class="flex-fill d-flex flex-column" style="gap: 32px">
+            <div class="d-flex flex-column gap-2">
+              <p class="fw-medium fs-6 mb-0">Kategoriler</p>
+              <a href="#" class="fw-light">Kategoriler Nav Title</a>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              <p class="fw-medium fs-6 mb-0">Teurny</p>
+              <a href="#" class="fw-light">Nav Title</a>
+            </div>
           </div>
-          <div class="order-2 order-md-3">
-            <img src="{% static 'tuerny_app/images/artrodite.svg' %}" alt="artrodite" />
+        </div>
+        <div class="flex-fill d-flex gap-5 flex-column">
+          <!-- FEATURED BOXES -->
+          <div class="d-flex align-items-stretch gap-3">
+            <div class="flex-fill">
+              <!-- FUTURE BOX -->
+              <div class="feature-box h-100">
+                <div class="feature-box-header">
+                  <div class="text-center w-100">
+                    <p class="mb-0 fs-4 fw-light read-more-title">
+                      READ MORE
+                    </p>
+                  </div>
+                </div>
+                <div class="p-2 flex-fill">
+                  <img
+                    src="{% static 'tuerny_app/images/subscribe-image.png' %}"
+                    alt="subscribe"
+                    class="w-100 h-100 object-fit-cover"
+                  />
+                </div>
+                <form
+                  method="POST"
+                  action="/Controller/ajax/ajax.php?process=subc"
+                  class="ajaxFormTrue"
+                >
+                  <div class="p-2">
+                    <input
+                      name="mail"
+                      type="email"
+                      class="teurny-input w-100"
+                      placeholder="E-posta"
+                    />
+                  </div>
+                  <div
+                    class="col-md-12 vAjaxErrors sm"
+                    style="padding: 5px"
+                  ></div>
+                  <div class="p-2">
+                    <button type="submit" class="teurny-footer-btn">
+                      <i class="fa-regular fa-envelope"></i>
+                      <span>ABONE OL</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="flex-fill d-none d-md-block">
+              <!-- FUTURE BOX -->
+              <div class="feature-box h-100">
+                <div class="feature-box-header">
+                  <img
+                    src="{% static 'tuerny_app/images/teurny-social-logo.png' %}"
+                    alt="teurny logo"
+                  />
+                  <div>
+                    <p class="mb-1 feature-box-title">Teurny</p>
+                    <p class="mb-0 feature-box-text">
+                      You’re life on the next level
+                    </p>
+                  </div>
+                </div>
+                <div class="p-2 flex-fill">
+                  <div class="feature-box-gallery">
+                    <div>
+                      <a href="#" target="_blank">
+                        <img
+                          src="{% static 'tuerny_app/images/5524788.jpeg' %}"
+                          alt="feature-box"
+                      /></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-2">
+                  <a
+                    style="text-align: center"
+                    href="#"
+                    class="teurny-footer-btn"
+                  >
+                    <i class="fa-brands fa-instagram"></i>
+                    <span>TAKİP ET</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="order-2 order-md-3 footer-vop-logo">
-            <img
-              src="{% static 'tuerny_app/images/VopagencyLogo2.png' %}"
-              alt="vopagency"
-            />
+
+          <!-- SOCIAL ICONS -->
+          <div
+            class="flex-grow-1 d-flex align-items-end justify-content-center"
+          >
+            <div
+              class="d-flex align-items-center justify-content-center flex-wrap gap-5 footersocial"
+            >
+              <a href="#"><i class="fa-brands fa-instagram fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-tiktok fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-pinterest fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-facebook-f fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-x-twitter fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-youtube fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-linkedin fs-2"></i></a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <div class="bg-black">
+    <div class="container">
+      <div
+        class="footer-bottom d-flex align-items-center justify-content-between flex-wrap flex-md-nowrap gap-5"
+      >
+        <div class="order-1 order-md-1">
+          <img
+            src="{% static 'tuerny_app/images/logo-light.svg' %}"
+            class="footer-logo"
+            alt="logo"
+          />
+        </div>
+        <div class="order-3 order-md-2 w-100 text-center">
+          <p class="mb-0 copyright-text text-white">
+            © 2023 Teurny. Tüm Hakları Saklıdır.
+          </p>
+        </div>
+        <div class="order-2 order-md-3">
+          <img src="{% static 'tuerny_app/images/artrodite.svg' %}" alt="artrodite" />
+        </div>
+        <div class="order-2 order-md-3 footer-vop-logo">
+          <img
+            src="{% static 'tuerny_app/images/VopagencyLogo2.png' %}"
+            alt="vopagency"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </footer>
 
 

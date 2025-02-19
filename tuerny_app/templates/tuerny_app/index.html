@@ -2,417 +2,417 @@
 {% load static %}
 {% block content %}
 
-      <div id="hero-slider" class="w-100 position-relative">
-        <div id="hero-slider-top">
-          {% for m in main %}
-          <div class="px-2 slider">
-            <a href="{% url 'tuerny_app:blog_detail' m.blog.slug %}">
-              <img src="{{m.blog.media.url}}" alt="Slider Image 1" />
+<div id="hero-slider" class="w-100 position-relative">
+  <div id="hero-slider-top">
+    {% for m in main %}
+    <div class="px-2 slider">
+      <a href="{% url 'tuerny_app:blog_detail' m.blog.slug %}">
+        <img src="{{m.blog.media.url}}" alt="Slider Image 1" />
+      </a>
+    </div>
+    {% endfor %}
+    
+    
+  </div>
+  <div class="hero-slider-bottom-container position-relative">
+    <div id="hero-slider-bottom">
+      {% for m in main %}
+      <div class="slider-item">
+        <span>{{m.blog.title}}</span>
+      </div>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+
+<!-- BLOG SECTION 1 -->
+<div class="blog-section-1 py-5">
+  <div class="container d-flex flex-column gap-4">
+    <div class="blog-section-title px-2">
+      <span class="fs-m-12">Cinsel Sağlık</span>
+      <div class="blog-section-title-divider"></div>
+      <a class="home-blogs" href="{% url 'tuerny_app:category' 'cinsel-saglik' %}">Daha Fazlası</a>
+    </div>
+    <div>
+      <div class="blog-card-slider">
+        {% for blog in blog %}
+        {% if blog.category.name == "Cinsel Sağlık" %}
+        <div class="px-2">
+          <div class="blog-card-1">
+            <div class="ratio-1">
+              <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
+                ><img
+                  src="{{blog.media.url}}"
+                  class="w-100 h-100 object-fit-cover"
+              /></a>
+            </div>
+            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
+              {{ blog.title }}
             </a>
-          </div>
-          {% endfor %}
-          
-          
-        </div>
-        <div class="hero-slider-bottom-container position-relative">
-          <div id="hero-slider-bottom">
-            {% for m in main %}
-            <div class="slider-item">
-              <span>{{m.blog.title}}</span>
-            </div>
-            {% endfor %}
-            
-          </div>
-        </div>
-      </div>
-
-      <!-- BLOG SECTION 1 -->
-      <div class="blog-section-1 py-5">
-        <div class="container d-flex flex-column gap-4">
-          <div class="blog-section-title px-2">
-            <span class="fs-m-12">Cinsel Sağlık</span>
-            <div class="blog-section-title-divider"></div>
-            <a class="home-blogs" href="{% url 'tuerny_app:category' 'cinsel-saglik' %}">Daha Fazlası</a>
-          </div>
-          <div>
-            <div class="blog-card-slider">
-              {% for blog in blog %}
-              {% if blog.category.name == "Cinsel Sağlık" %}
-              <div class="px-2">
-                <div class="blog-card-1">
-                  <div class="ratio-1">
-                    <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
-                      ><img
-                        src="{{blog.media.url}}"
-                        class="w-100 h-100 object-fit-cover"
-                    /></a>
-                  </div>
-                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
-                    {{ blog.title }}
-                  </a>
-                  <div
-                    class="blog-card-content-bottom gap-0 d-flex justify-content-end d-lg-none"
+            <div
+              class="blog-card-content-bottom gap-0 d-flex justify-content-end d-lg-none"
+            >
+              <div class="share-container">
+                <a href="#" class="share-btn">
+                  <svg
+                    width="44"
+                    height="44"
+                    viewBox="0 0 44 44"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <div class="share-container">
-                      <a href="#" class="share-btn">
-                        <svg
-                          width="44"
-                          height="44"
-                          viewBox="0 0 44 44"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
-                            stroke="#414141"
-                            stroke-width="1.16919"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
-                      </a>
-                      <div class="social-menu">
-                        <a href="#" class="social-btn facebook" data-url="#"
-                          >Facebook</a
-                        >
-                        <a href="#" class="social-btn twitter" data-url="#"
-                          >Twitter</a
-                        >
-                        <a href="#" class="social-btn linkedin" data-url="#"
-                          >LinkedIn</a
-                        >
-                      </div>
-                    </div>
-                    <a data-id="id" href="javascript:void(0)" class="saved">
-                      <i class="fa-solid fa-bookmark"></i>
-                    </a>
-                    <a data-id="id" href="javascript:void(0)" class="unsaved">
-                      <i class="fa-regular fa-bookmark"></i>
-                    </a>
-                    <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                      <i class="fa-regular fa-bookmark"></i>
-                    </a>
-                  </div>
+                    <path
+                      d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
+                      stroke="#414141"
+                      stroke-width="1.16919"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+                <div class="social-menu">
+                  <a href="#" class="social-btn facebook" data-url="#"
+                    >Facebook</a
+                  >
+                  <a href="#" class="social-btn twitter" data-url="#"
+                    >Twitter</a
+                  >
+                  <a href="#" class="social-btn linkedin" data-url="#"
+                    >LinkedIn</a
+                  >
                 </div>
               </div>
-              
-              
-              {% endif %}
-              {% endfor %}
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BLOG SECTION 2 -->
-      <div class="py-5">
-        <div class="container d-flex flex-column gap-4">
-          <div class="blog-section-title px-2">
-            <span class="fs-m-14">Dekorasyon</span>
-            <div class="blog-section-title-divider"></div>
-            <a class="home-blogs fs-m-12" href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
-          </div>
-          <div class="d-flex flex-column gap-4d px-2">
-            <div class="row">
-              {% for blog in blog %}
-              
-              {% if blog.category.name == "Dekorasyon" %}
-              <div class="col-md-6">
-                <div class="my-2">
-                  <div class="blog-card-2">
-                    <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
-                      ><img
-                        src="{{blog.media.url}}"
-                        class="blog-card-img"
-                    /></a>
-                    
-                    <div class="blog-card-content">
-                      <span class="blog-card-category">{{blog.category.name}}</span>
-                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
-                        {{blog.title}}</a
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          <div class="blog-section-more d-flex d-md-none">
-            <div class="blog-section-more-divider"></div>
-            <a href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- teurny suggestions -->
-      <div class="d-lg-none suggestions">
-        <div
-          class="w-100 position-relative pt-5 pb-lg-0 pb-5"
-          style="background: #f2f2f2"
-        >
-          <span
-            class="d-block mb-4"
-            style="
-              font-family: Playfair Display;
-              font-size: 16px;
-              font-style: italic;
-              font-weight: 400;
-              line-height: 20.8px;
-              text-align: center;
-              color: #8f4d61;
-            "
-            >Teurny Önerileri</span
-          >
-          <div class="slide-products">
-            <div class="px-2 slider suggestions-item">
-              <a href="#">
-                <img
-                  src="{% static 'tuerny_app/images/7885103.png' %}"
-                  style="height: 200px; width: 100%; object-fit: cover"
-                />
-                <span
-                  class="w-100 d-block mt-4"
-                  style="
-                    font-family: 'Playfair Display';
-                    font-size: 14px;
-                    font-weight: 500;
-                    line-height: 25.6px;
-                    text-align: center;
-                  "
-                >
-                  Title
-                </span>
+              <a data-id="id" href="javascript:void(0)" class="saved">
+                <i class="fa-solid fa-bookmark"></i>
+              </a>
+              <a data-id="id" href="javascript:void(0)" class="unsaved">
+                <i class="fa-regular fa-bookmark"></i>
+              </a>
+              <a href="{% url 'tuerny_app:register' %}" class="unsaved">
+                <i class="fa-regular fa-bookmark"></i>
               </a>
             </div>
           </div>
         </div>
-      </div>
+        
+        
+        {% endif %}
+        {% endfor %}
 
-      <!-- BLOG SECTION 3 -->
-      <div class="py-5">
-        <div class="container d-flex flex-column gap-4">
-          <div class="blog-section-title px-2">
-            <span>Kendin Yap</span>
-            <div class="blog-section-title-divider"></div>
-            <a class="home-blogs" href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
-          </div>
-          <div class="d-flex flex-column gap-4d section-3 px-2">
-            <div class="row">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG SECTION 2 -->
+<div class="py-5">
+  <div class="container d-flex flex-column gap-4">
+    <div class="blog-section-title px-2">
+      <span class="fs-m-14">Dekorasyon</span>
+      <div class="blog-section-title-divider"></div>
+      <a class="home-blogs fs-m-12" href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
+    </div>
+    <div class="d-flex flex-column gap-4d px-2">
+      <div class="row">
+        {% for blog in blog %}
+        
+        {% if blog.category.name == "Dekorasyon" %}
+        <div class="col-md-6">
+          <div class="my-2">
+            <div class="blog-card-2">
+              <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
+                ><img
+                  src="{{blog.media.url}}"
+                  class="blog-card-img"
+              /></a>
               
-              {% for blog in blog %}
-              {% if blog.category.name == "Kendin Yap" %}
-              <div class="col-6">
-                <div class="my-3">
-                  <div class="blog-card-3">
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div class="blog-card-img" style="aspect-ratio: unset">
-                          <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
-                            <img
-                              src="{{blog.media.url}}"
-                              class="w-100 object-fit-cover"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div class="col-lg-6">
-                        <div class="blog-card-content h-100">
-                          <div
-                            class="blog-card-content-top"
-                            style="margin-bottom: 30px"
+              <div class="blog-card-content">
+                <span class="blog-card-category">{{blog.category.name}}</span>
+                <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
+                  {{blog.title}}</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="blog-section-more d-flex d-md-none">
+      <div class="blog-section-more-divider"></div>
+      <a href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
+    </div>
+  </div>
+</div>
+
+<!-- teurny suggestions -->
+<div class="d-lg-none suggestions">
+  <div
+    class="w-100 position-relative pt-5 pb-lg-0 pb-5"
+    style="background: #f2f2f2"
+  >
+    <span
+      class="d-block mb-4"
+      style="
+        font-family: Playfair Display;
+        font-size: 16px;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 20.8px;
+        text-align: center;
+        color: #8f4d61;
+      "
+      >Teurny Önerileri</span
+    >
+    <div class="slide-products">
+      <div class="px-2 slider suggestions-item">
+        <a href="#">
+          <img
+            src="{% static 'tuerny_app/images/7885103.png' %}"
+            style="height: 200px; width: 100%; object-fit: cover"
+          />
+          <span
+            class="w-100 d-block mt-4"
+            style="
+              font-family: 'Playfair Display';
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 25.6px;
+              text-align: center;
+            "
+          >
+            Title
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG SECTION 3 -->
+<div class="py-5">
+  <div class="container d-flex flex-column gap-4">
+    <div class="blog-section-title px-2">
+      <span>Kendin Yap</span>
+      <div class="blog-section-title-divider"></div>
+      <a class="home-blogs" href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
+    </div>
+    <div class="d-flex flex-column gap-4d section-3 px-2">
+      <div class="row">
+        
+        {% for blog in blog %}
+        {% if blog.category.name == "Kendin Yap" %}
+        <div class="col-6">
+          <div class="my-3">
+            <div class="blog-card-3">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="blog-card-img" style="aspect-ratio: unset">
+                    <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
+                      <img
+                        src="{{blog.media.url}}"
+                        class="w-100 object-fit-cover"
+                      />
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="blog-card-content h-100">
+                    <div
+                      class="blog-card-content-top"
+                      style="margin-bottom: 30px"
+                    >
+                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
+                        {{blog.title}}</a
+                      >
+                      <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>
+                      <p class="blog-card-author mb-0">BY Blog Author</p>
+                    </div>
+                    <div class="blog-card-content-bottom gap-0">
+                      <div class="share-container">
+                        <a href="#" class="share-btn">
+                          <svg
+                            width="44"
+                            height="44"
+                            viewBox="0 0 44 44"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
                           >
-                            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
-                              {{blog.title}}</a
-                            >
-                            <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>
-                            <p class="blog-card-author mb-0">BY Blog Author</p>
-                          </div>
-                          <div class="blog-card-content-bottom gap-0">
-                            <div class="share-container">
-                              <a href="#" class="share-btn">
-                                <svg
-                                  width="44"
-                                  height="44"
-                                  viewBox="0 0 44 44"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
-                                    stroke="#414141"
-                                    stroke-width="1.16919"
-                                    stroke-linejoin="round"
-                                  />
-                                </svg>
-                              </a>
-                              <div class="social-menu">
-                                <a
-                                  href="#"
-                                  class="social-btn facebook"
-                                  data-url="#"
-                                  >Facebook</a
-                                >
-                                <a
-                                  href="#"
-                                  class="social-btn twitter"
-                                  data-url="#"
-                                  >Twitter</a
-                                >
-                                <a
-                                  href="#"
-                                  class="social-btn linkedin"
-                                  data-url="#"
-                                  >LinkedIn</a
-                                >
-                              </div>
-                            </div>
-                            <a
-                              data-id="#"
-                              href="javascript:void(0)"
-                              class="saved"
-                            >
-                              <i class="fa-solid fa-bookmark"></i>
-                            </a>
-                            
-                            <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                              <i class="fa-regular fa-bookmark"></i>
-                            </a>
-                          </div>
+                            <path
+                              d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
+                              stroke="#414141"
+                              stroke-width="1.16919"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </a>
+                        <div class="social-menu">
+                          <a
+                            href="#"
+                            class="social-btn facebook"
+                            data-url="#"
+                            >Facebook</a
+                          >
+                          <a
+                            href="#"
+                            class="social-btn twitter"
+                            data-url="#"
+                            >Twitter</a
+                          >
+                          <a
+                            href="#"
+                            class="social-btn linkedin"
+                            data-url="#"
+                            >LinkedIn</a
+                          >
                         </div>
                       </div>
+                      <a
+                        data-id="#"
+                        href="javascript:void(0)"
+                        class="saved"
+                      >
+                        <i class="fa-solid fa-bookmark"></i>
+                      </a>
+                      
+                      <a href="{% url 'tuerny_app:register' %}" class="unsaved">
+                        <i class="fa-regular fa-bookmark"></i>
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
-              {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-          <div class="blog-section-more d-flex d-md-none">
-            <div class="blog-section-more-divider"></div>
-            <a href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="blog-section-1 py-5 section-5 d-none d-lg-block">
-        <div class="container d-flex flex-column gap-4">
-          <div class="blog-section-title px-2">
-            <span>İlişkiler</span>
-            <div class="blog-section-title-divider"></div>
-          </div>
-          <div>
-            <div class="blog-card-slider-3">
-              {% for blog in blog %}
-              {% if blog.category.name == "İlişkiler" %}
-              <div class="px-2">
-                <div class="blog-card-1 mw-100">
-                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
-                    <img
-                      src="{{blog.media.url}}"
-                      class="w-100 object-fit-cover"
-                      style="height: 300px; max-height: 100%"
-                    />
-                  </a>
-                  <span class="blog-card-category">{{blog.category.name}}</span>
-                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
-                    {{blog.title}}
-                  </a>
-                </div>
-              </div>
-              {% endif %}
-              {% endfor %}
-
-            </div>
-          </div>
-          <div class="d-flex justify-content-center">
-            <a class="home-btn" href="{% url 'tuerny_app:category' 'iliskiler' %}">Daha Fazla</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- PRODUCT SECTION -->
-      <div class="py-5 d-lg-none product-section">
-        <div class="container d-flex flex-column gap-4">
-          <div class="d-flex gap-4 section-3 px-2 product-item">
-            <img
-              style="height: 250px; object-fit: cover"
-              src="{% static 'tuerny_app/images/883e06d31e2ffb8986316ca00303f43a.jpg' %}"
-            />
-            <div
-              class="blog-section-title flex-column justify-content-start align-items-start"
-            >
-              <span class="d-block text-dark p-0">Ürün Detay</span>
-              <span
-                class="d-block p-0"
-                style="
-                  font-family: Roboto;
-                  font-size: 14px;
-                  font-weight: 400;
-                  line-height: 18.2px;
-                  color: #989491;
-                "
-              >
-                Maecenas nibh libero, efficitur et interdum et, varius id
-                turpis. Pellentesque nec elit a quam mattis aliquet. Aenean id
-                nulla sed libero congue euismod.
-              </span>
             </div>
           </div>
         </div>
+        {% endif %}
+        {% endfor %}
       </div>
+    </div>
+    <div class="blog-section-more d-flex d-md-none">
+      <div class="blog-section-more-divider"></div>
+      <a href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
+    </div>
+  </div>
+</div>
 
+<div class="blog-section-1 py-5 section-5 d-none d-lg-block">
+  <div class="container d-flex flex-column gap-4">
+    <div class="blog-section-title px-2">
+      <span>İlişkiler</span>
+      <div class="blog-section-title-divider"></div>
+    </div>
+    <div>
+      <div class="blog-card-slider-3">
+        {% for blog in blog %}
+        {% if blog.category.name == "İlişkiler" %}
+        <div class="px-2">
+          <div class="blog-card-1 mw-100">
+            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
+              <img
+                src="{{blog.media.url}}"
+                class="w-100 object-fit-cover"
+                style="height: 300px; max-height: 100%"
+              />
+            </a>
+            <span class="blog-card-category">{{blog.category.name}}</span>
+            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
+              {{blog.title}}
+            </a>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <a class="home-btn" href="{% url 'tuerny_app:category' 'iliskiler' %}">Daha Fazla</a>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT SECTION -->
+<div class="py-5 d-lg-none product-section">
+  <div class="container d-flex flex-column gap-4">
+    <div class="d-flex gap-4 section-3 px-2 product-item">
+      <img
+        style="height: 250px; object-fit: cover"
+        src="{% static 'tuerny_app/images/883e06d31e2ffb8986316ca00303f43a.jpg' %}"
+      />
       <div
-        class="modal fade"
-        id="searchModal"
-        tabindex="-1"
-        aria-labelledby="searchModalLabel"
-        aria-hidden="true"
+        class="blog-section-title flex-column justify-content-start align-items-start"
       >
-        <div class="modal-dialog modal-fullscreen">
-          <div class="modal-content">
-            <div class="modal-header border-0">
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="container">
-                <div class="row justify-content-center">
-                  <div class="col-12 col-sm-8">
-                    <form method="GET" action="/search">
-                      <div>
-                        <div
-                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
-                        >
-                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
-                          <div class="flex-grow-1 ps-3">
-                            <input
-                              name="keyword"
-                              type="text"
-                              class="teurny-input border-0 w-100"
-                              placeholder="Ara..."
-                            />
-                          </div>
-                          <button
-                            type="submit"
-                            class="teurny-button-secondary w-auto"
-                          >
-                            ARA
-                          </button>
-                        </div>
-                      </div>
-                    </form>
+        <span class="d-block text-dark p-0">Ürün Detay</span>
+        <span
+          class="d-block p-0"
+          style="
+            font-family: Roboto;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 18.2px;
+            color: #989491;
+          "
+        >
+          Maecenas nibh libero, efficitur et interdum et, varius id
+          turpis. Pellentesque nec elit a quam mattis aliquet. Aenean id
+          nulla sed libero congue euismod.
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="searchModal"
+  tabindex="-1"
+  aria-labelledby="searchModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 col-sm-8">
+              <form method="GET" action="/search">
+                <div>
+                  <div
+                    class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                  >
+                    <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                    <div class="flex-grow-1 ps-3">
+                      <input
+                        name="keyword"
+                        type="text"
+                        class="teurny-input border-0 w-100"
+                        placeholder="Ara..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      class="teurny-button-secondary w-auto"
+                    >
+                      ARA
+                    </button>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
-      {% endblock content %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
