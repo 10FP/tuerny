@@ -1006,7 +1006,7 @@ p.blog-card-text.mb-0.mt-3 {
     font-size: 20px;
   }
   .blog-section-1 .slick-arrow {
-    display: none;
+    display: none !important;
   }
   .page-title {
     padding: 35px 0;
