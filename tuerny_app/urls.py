@@ -32,4 +32,5 @@ urlpatterns = [
     path("broken-link/", views.broken, name="404"),
     path('logout/', views.logout_view, name='logout'),
     path("vote/<int:question_id>/<int:option_id>/", views.vote_poll, name="vote_poll"),
+    path("save-blog/", views.save_blog, name="save_blog"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,7 +2,12 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 from django.utils.text import slugify
+from django.contrib.auth import get_user_model
+
 # Create your models here.
+
+
+
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
@@ -19,6 +24,8 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+User = get_user_model()
 class MainCategory(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
@@ -225,3 +232,14 @@ class APISettings(models.Model):
 
     def __str__(self):
         return self.name
+    
+class SavedBlog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="saved_blogs")
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="saved_by_users")
+    saved_at = models.DateTimeField(auto_now_add=True)  # Kullanıcı ne zaman kaydetti?
+
+    class Meta:
+        unique_together = ('user', 'blog')  # Aynı kullanıcı aynı blogu birden fazla kez kaydedemesin
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.blog.title}"

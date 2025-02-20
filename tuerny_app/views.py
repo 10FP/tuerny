@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -10,13 +10,23 @@ from itertools import chain
 from django.http import JsonResponse
 import random
 from django.db.models import Sum
+from django.views.decorators.csrf import csrf_exempt
+import json
 # Create your views here.
 User = get_user_model()
 def index(request):
     api = APISettings.objects.all()
     blog = Blog.objects.all()
     main = MainSuggestedBlog.objects.all()
-    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main})
+    
+    if request.user.is_authenticated:
+        saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
+    else:
+        saved_blogs = Blog.objects.none()  # Kullanıcı giriş yapmamışsa boş bir queryset döndür
+
+    
+        
+    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs})
 
 def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)
@@ -270,7 +280,15 @@ def blog_detail(request, slug):
     blog = Blog.objects.all()
     s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
-    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
+
+    if request.user.is_authenticated:
+        saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
+    else:
+        saved_blogs = Blog.objects.none() 
+
+    print(blog_ in saved_blogs)
+
+    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs, "saved_blog": saved_blogs})
 
 def category(request, slug):
     try:
@@ -367,3 +385,26 @@ def vote_poll(request, question_id, option_id):
         })
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"})
+
+
+@csrf_exempt
+@login_required
+def save_blog(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        blog_id = data.get("blog_id")
+
+        try:
+            blog = Blog.objects.get(id=blog_id)
+        except Blog.DoesNotExist:
+            return JsonResponse({"error": "Blog not found"}, status=404)
+
+        saved_blog, created = SavedBlog.objects.get_or_create(user=request.user, blog=blog)
+
+        if not created:
+            saved_blog.delete()
+            return JsonResponse({"status": "unsaved"})
+
+        return JsonResponse({"status": "saved"})
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

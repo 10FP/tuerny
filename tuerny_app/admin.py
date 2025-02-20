@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -241,6 +241,12 @@ class CategorySuggestedBlogAdmin(admin.ModelAdmin):
         queryset.update(is_active=False)
     make_inactive.short_description = "Seçili blogları pasif hale getir"
 
+@admin.register(SavedBlog)
+class SavedBlogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'blog', 'saved_at')  # Admin panelinde gösterilecek sütunlar
+    search_fields = ('user__username', 'blog__title')  # Kullanıcı adı ve blog başlığına göre arama
+    list_filter = ('saved_at',)  # Tarihe göre filtreleme
+    ordering = ('-saved_at',)  # En son kaydedilenleri üste koy
 
 @admin.register(APISettings)
 class APISettingsAdmin(admin.ModelAdmin):
