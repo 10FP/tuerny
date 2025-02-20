@@ -408,3 +408,71 @@ def save_blog(request):
         return JsonResponse({"status": "saved"})
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def like_question(request, question_id):
+    """
+    Kullanıcı bir soruyu beğenirse ekler, tekrar basarsa beğeniyi kaldırır.
+    Eğer kullanıcı daha önce beğenmediyse ve beğenmediyse, beğenme işlemi yapılır.
+    """
+    print("✅ FP: Fonksiyon çalıştı")
+    
+    if request.method == "POST":
+        print("✅ FP: POST isteği geldi")
+
+        if request.user.is_authenticated:
+            print(f"✅ FP: Kullanıcı giriş yapmış - {request.user}")
+
+            question = get_object_or_404(Question, id=question_id)
+            print(f"✅ FP: Soru bulundu - {question.title}")
+
+            if request.user in question.likes.all():
+                question.likes.remove(request.user)
+                liked = False
+                print("✅ FP: Kullanıcı beğeniyi kaldırdı")
+            else:
+                question.likes.add(request.user)
+                question.dislikes.remove(request.user)  # Beğenmediyse önceki beğenmeyi kaldır
+                liked = True
+                print("✅ FP: Kullanıcı beğendi")
+
+            print(f"✅ FP: Güncel beğeni sayısı: {question.like_count}")
+            print(f"✅ FP: Güncel beğenmeme sayısı: {question.dislike_count}")
+
+            return JsonResponse({
+                "success": True,
+                "liked": liked,
+                "like_count": question.like_count,
+                "dislike_count": question.dislike_count
+            })
+        else:
+            print("❌ FP: Kullanıcı giriş yapmamış!")
+            return JsonResponse({"success": False, "message": "Giriş yapmalısınız!"})
+    else:
+        print("❌ FP: GET isteği geldi, işlem yapılmadı!")
+        return JsonResponse({"success": False, "message": "Geçersiz istek!"})
+    
+def dislike_question(request, question_id):
+    """
+    Kullanıcı bir soruyu beğenmezse ekler, tekrar basarsa kaldırır.
+    Eğer kullanıcı daha önce beğendiyse, beğenisini kaldırır ve beğenmeyi ekler.
+    """
+    if request.method == "POST" and request.user.is_authenticated:
+        question = get_object_or_404(Question, id=question_id)
+        
+        if request.user in question.dislikes.all():
+            question.dislikes.remove(request.user)
+            disliked = False
+        else:
+            question.dislikes.add(request.user)
+            question.likes.remove(request.user)  # Önceki beğeniyi kaldır
+            disliked = True
+
+        return JsonResponse({
+            "success": True,
+            "disliked": disliked,
+            "like_count": question.like_count,
+            "dislike_count": question.dislike_count
+        })
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"})

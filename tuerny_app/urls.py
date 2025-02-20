@@ -33,4 +33,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path("vote/<int:question_id>/<int:option_id>/", views.vote_poll, name="vote_poll"),
     path("save-blog/", views.save_blog, name="save_blog"),
+    path("like/<int:question_id>/", views.like_question, name="like_question"),
+    path("dislike/<int:question_id>/", views.dislike_question, name="dislike_question"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -132,25 +132,27 @@
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center gap-3">
+                                            <!-- Beğenmeme Butonu -->
                                             <div class="question-card-button">
-                                                <i style="cursor: pointer" data-id=""
-                                                    class="fa-solid fa-heart-crack question-card-button-icon dislike-button"></i>
-                                                <span
-                                                    class="heart-crack-result-0">0</span>
+                                                <i style="cursor: pointer" data-id="{{ q.id }}"
+                                                   id="dislike-icon-{{ q.id }}"
+                                                   class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in q.dislikes.all %}active{% endif %}"></i>
+                                                <span id="dislike-count-{{ q.id }}">{{ q.dislike_count }}</span>
                                             </div>
-    
+                                        
                                             <div class="question-card-rate-line-container">
                                                 <div class="question-card-rate-line">
-                                                    <div class="rate-line-dislike" id="rate-dislike-0"></div>
-                                                    <div class="rate-line-like" id="rate-like-0"></div>
+                                                    <div class="rate-line-dislike" id="rate-dislike-{{ q.id }}"></div>
+                                                    <div class="rate-line-like" id="rate-like-{{ q.id }}"></div>
                                                 </div>
                                             </div>
-    
+                                        
+                                            <!-- Beğeni Butonu -->
                                             <div class="question-card-button">
-                                                <i style="cursor: pointer" data-id=""
-                                                    class="fa-regular fa-heart question-card-button-icon like-button"></i>
-                                                <span
-                                                    class="heart-result-0">0</span>
+                                                <i style="cursor: pointer" data-id="{{ q.id }}"
+                                                   id="like-icon-{{ q.id }}"
+                                                   class="fa-regular fa-heart question-card-button-icon like-button {% if request.user in q.likes.all %}active{% endif %}"></i>
+                                                <span id="like-count-{{ q.id }}">{{ q.like_count }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -378,6 +380,85 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Beğeni butonu
+        document.querySelectorAll(".like-button").forEach(button => {
+            button.addEventListener("click", function() {
+                let questionId = this.dataset.id;
+                
+                let csrfToken = "{{ csrf_token }}";
+    
+                fetch(`/like/${questionId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("fp")
+                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                        if (data.liked) {
+                            likeIcon.classList.add("fa-solid");
+                            likeIcon.classList.add("active");
+                        } else {
+                            likeIcon.classList.remove("fa-solid");
+                            likeIcon.classList.remove("active");
+                        }
+    
+                        // dislikeIcon.classList.remove("fa-solid");
+                        // dislikeIcon.classList.remove("active");
+                    }
+                });
+            });
+        });
+    
+        // Beğenmeme butonu
+        document.querySelectorAll(".dislike-button").forEach(button => {
+            button.addEventListener("click", function() {
+                let questionId = this.dataset.id;
+                let csrfToken = "{{ csrf_token }}";
+    
+                fetch(`/dislike/${questionId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                        if (data.disliked) {
+                            dislikeIcon.classList.add("fa-solid");
+                            dislikeIcon.classList.add("active");
+                        } else {
+                            // dislikeIcon.classList.remove("fa-solid");
+                            dislikeIcon.classList.remove("active");
+                        }
+    
+                        likeIcon.classList.remove("fa-solid");
+                        likeIcon.classList.add("fa-regular");
+                        // likeIcon.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+    </script>
 {% endblock content %}
   
