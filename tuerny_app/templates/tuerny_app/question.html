@@ -79,7 +79,7 @@
                                         <p>{{ q.created_at|date:"d-m-Y" }}</p>
                                     </div>
                                     <h3 class="question-card-title pb-2">
-                                        <a href="#"> {{q.title}} </a>
+                                        <a href="{% url 'tuerny_app:ask' %}"> {{q.title}} </a>
                                     </h3>
                                     <p class="question-card-text py-2">
                                         {{q.description}}
