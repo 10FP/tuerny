@@ -39,7 +39,7 @@ class PollAdmin(admin.ModelAdmin):
     inlines = [PollOptionInline]
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('title', 'user', 'created_at', 'like_count', 'dislike_count', 'subcategory')
+    list_display = ('title', 'user', 'created_at', 'like_count', 'dislike_count', 'subcategory',"views_count")
     list_filter = ('created_at',)
     search_fields = ('title', 'description')
     readonly_fields = ('like_count', 'dislike_count')

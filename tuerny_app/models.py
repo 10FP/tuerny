@@ -68,6 +68,7 @@ class Question(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(CustomUser, related_name="liked_questions", blank=True)
     dislikes = models.ManyToManyField(CustomUser, related_name="disliked_questions", blank=True)
+    views_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.title

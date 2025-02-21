@@ -369,35 +369,35 @@ function updateRateLine(id) {
   }
 }
 
-$(".like-button").on("click", function () {
-  const id = $(this).data("id");
-  const likeSpan = $(`.heart-result-${id}`);
-  const currentLikes = parseInt(likeSpan.text());
+// $(".like-button").on("click", function () {
+//   const id = $(this).data("id");
+//   const likeSpan = $(`.heart-result-${id}`);
+//   const currentLikes = parseInt(likeSpan.text());
 
-  $.post("/like", { id: id }, function (response) {
-    if (response.success) {
-      likeSpan.text(currentLikes + 1);
-      updateRateLine(id);
-    } else {
-      console.error("Beğenme işlemi başarısız oldu.");
-    }
-  });
-});
+//   $.post("/like", { id: id }, function (response) {
+//     if (response.success) {
+//       likeSpan.text(currentLikes + 1);
+//       updateRateLine(id);
+//     } else {
+//       console.error("Beğenme işlemi başarısız oldu.");
+//     }
+//   });
+// });
 
-$(".dislike-button").on("click", function () {
-  const id = $(this).data("id");
-  const dislikeSpan = $(`.heart-crack-result-${id}`);
-  const currentDislikes = parseInt(dislikeSpan.text());
+// $(".dislike-button").on("click", function () {
+//   const id = $(this).data("id");
+//   const dislikeSpan = $(`.heart-crack-result-${id}`);
+//   const currentDislikes = parseInt(dislikeSpan.text());
 
-  $.post("/dislike", { id: id }, function (response) {
-    if (response.success) {
-      dislikeSpan.text(currentDislikes + 1);
-      updateRateLine(id);
-    } else {
-      console.error("Beğenmeme işlemi başarısız oldu.");
-    }
-  });
-});
+//   $.post("/dislike", { id: id }, function (response) {
+//     if (response.success) {
+//       dislikeSpan.text(currentDislikes + 1);
+//       updateRateLine(id);
+//     } else {
+//       console.error("Beğenmeme işlemi başarısız oldu.");
+//     }
+//   });
+// });
 
 $(".question-card-rate-line").each(function () {
   const id = $(this).closest(".d-flex").find(".like-button").data("id");

@@ -12,6 +12,7 @@ import random
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.core.cache import cache
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -30,7 +31,33 @@ def index(request):
 
 def ask_details(request, pool_id):
     pool = Poll.objects.get(id=pool_id)
-    return render(request, 'tuerny_app/ask-details.html', {"pool": pool})
+    question = pool.question
+    question_id = question.id
+    cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
+    if not cache.get(cache_key):
+        question.views_count += 1  # Görüntülenme sayısını artır
+        question.save()  # Değişiklikleri veritabanına kaydet
+        cache.set(cache_key, True, timeout=10)  
+
+    questions = Question.objects.prefetch_related("poll__options")
+
+    poll_data = {}
+
+    for question in questions:
+        if hasattr(question, "poll"):
+            # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
+            total_votes = sum(option.vote_count for option in question.poll.options.all())
+
+            # Seçeneklerin yüzdesini hesapla
+            poll_data[question.id] = {
+                "total_votes": total_votes,
+                "percentages": {
+                    option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
+                    for option in question.poll.options.all()
+                }
+            }
+    
+    return render(request, 'tuerny_app/ask-details.html', {"pool": pool, "questions": questions, "poll_data": poll_data})
 
 def asked_details(request, asked_id):
     question = Question.objects.get(id=asked_id)
