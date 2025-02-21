@@ -291,6 +291,10 @@ def blog_detail(request, slug):
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs, "saved_blog": saved_blogs})
 
 def category(request, slug):
+    if request.user.is_authenticated:
+        saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
+    else:
+        saved_blogs = Blog.objects.none()  # Kullanıcı giriş yapmamışsa boş bir queryset döndür
     try:
         category = SubCategory.objects.get(slug=slug)
         
@@ -312,7 +316,7 @@ def category(request, slug):
             blogs = category.blogs.all()
             blogss = category.extra_blogs.all()
             merged_blogs = chain(blogs, blogss)
-            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs, "second_blogs": merged_second_blogs, "third_blogs": merged_third_blogs, "extra": extra})
+            return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs, "second_blogs": merged_second_blogs, "third_blogs": merged_third_blogs, "extra": extra, "saved_blogs": saved_blogs})
     except:
         pass
     
@@ -323,7 +327,7 @@ def category(request, slug):
             
         blogs = first_subcategory.blogs.all()
             
-        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs})
+        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs, "saved_blogs": saved_blogs})
         
 def confirm(request):
     return render(request, 'tuerny_app/confirm.html')
@@ -391,6 +395,7 @@ def vote_poll(request, question_id, option_id):
 @login_required
 def save_blog(request):
     if request.method == "POST":
+        
         data = json.loads(request.body)
         blog_id = data.get("blog_id")
 
@@ -403,8 +408,9 @@ def save_blog(request):
 
         if not created:
             saved_blog.delete()
+            print("unsaved")
             return JsonResponse({"status": "unsaved"})
-
+        print("saved")
         return JsonResponse({"status": "saved"})
 
     return JsonResponse({"error": "Invalid request"}, status=400)

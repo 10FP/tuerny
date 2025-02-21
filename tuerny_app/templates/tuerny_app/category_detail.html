@@ -65,15 +65,16 @@
                       >
                     </div>
                   </div>
-                  <a data-id="" href="javascript:void(0)" class="saved">
-                    <i class="fa-solid fa-bookmark"></i>
-                  </a>
-                  <a data-id="" href="javascript:void(0)" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
-                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
+                  {% if blog in saved_blogs %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
+                        <i class="fa-solid fa-bookmark"></i>
+                      </a>
+                    {% else %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
+                        <i class="fa-regular fa-bookmark"></i>
+                      </a>
+                    {% endif %}
+                  
                 </div>
               </div>
             </div>
@@ -186,15 +187,16 @@
                       >
                     </div>
                   </div>
-                  <a data-id="" href="javascript:void(0)" class="saved">
-                    <i class="fa-solid fa-bookmark"></i>
-                  </a>
-                  <a data-id="" href="javascript:void(0)" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
-                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
+                  {% if blog in saved_blogs %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
+                        <i class="fa-solid fa-bookmark"></i>
+                      </a>
+                    {% else %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
+                        <i class="fa-regular fa-bookmark"></i>
+                      </a>
+                    {% endif %}
+                  
                 </div>
               </div>
             </div>
@@ -357,15 +359,16 @@
                       >
                     </div>
                   </div>
-                  <a data-id="" href="javascript:void(0)" class="saved">
-                    <i class="fa-solid fa-bookmark"></i>
-                  </a>
-                  <a data-id="" href="javascript:void(0)" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
-                  <a href="{% url 'tuerny_app:register' %}" class="unsaved">
-                    <i class="fa-regular fa-bookmark"></i>
-                  </a>
+                  {% if blog in saved_blogs %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
+                        <i class="fa-solid fa-bookmark"></i>
+                      </a>
+                    {% else %}
+                      <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
+                        <i class="fa-regular fa-bookmark"></i>
+                      </a>
+                    {% endif %}
+                  
                 </div>
               </div>
             </div>
@@ -428,5 +431,39 @@
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".saved, .unsaved").forEach(button => {
+          button.addEventListener("click", function() {
+              
+              let blogId = this.getAttribute("data-id");
+              let isSaved = this.classList.contains("saved");  // Eğer kaydedilmişse kaldır, değilse kaydet
+  
+              fetch("{% url 'tuerny_app:save_blog' %}", {
+                  method: "POST",
+                  headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ blog_id: blogId })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.status === "saved") {
+                      this.classList.remove("unsaved");
+                      this.classList.add("saved");
+                      this.innerHTML = '<i class="fa-solid fa-bookmark"></i>'; // Dolgu bookmark ikonu
+                  } else if (data.status === "unsaved") {
+                      this.classList.remove("saved");
+                      this.classList.add("unsaved");
+                      this.innerHTML = '<i class="fa-regular fa-bookmark"></i>'; // Boş bookmark ikonu
+                  }
+              })
+              .catch(error => console.error("Error:", error));
+          });
+      });
+  });
+  </script>
+  
   {% endblock content %}
 </div>

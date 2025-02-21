@@ -390,9 +390,66 @@
                             {% endif %}
                                 {% endfor %}
                     </div>
+                <div style="margin-bottom: 100px; margin-top: 100px;">
+                    <div class="blog-section-title soru">
+                        <span>Manipüle</span>
+                        <div class="blog-section-title-divider"></div>
+                        <p></p>
+                    </div>
+
+                    <div class="mt-3 d-flex flex-column gap-3">
+                        <img src="{% static 'tuerny_app/images/vertical-ad.jpg' %}" alt="">
+                                </div>
+                               
+                    </div>
             </div>
+
+
+
+
+            
         </div>
+
+
+
+
+        
     </div>
+    <div class="blog-section-1 py-5 section-5 d-none d-lg-block">
+        <div class="container d-flex flex-column gap-4">
+          <div class="blog-section-title px-2">
+            <span>Öneriler</span>
+            <div class="blog-section-title-divider"></div>
+          </div>
+          <div>
+            <div class="blog-card-slider-3">
+              {% for blog in s_blog %}
+              
+              <div class="px-2">
+                <div class="blog-card-1 mw-100">
+                  <a href="{% url 'tuerny_app:blog_detail' blog.blog.slug %}">
+                    <img
+                      src="{{blog.blog.media.url}}"
+                      class="w-100 object-fit-cover"
+                      style="height: 300px; max-height: 100%"
+                    />
+                  </a>
+                  <span class="blog-card-category">{{blog.category.name}}</span>
+                  <a href="{% url 'tuerny_app:blog_detail' blog.blog.slug %}" class="blog-card-title mb-0 stretched-link">
+                    {{blog.title}}
+                  </a>
+                </div>
+              </div>
+              
+              {% endfor %}
+      
+            </div>
+          </div>
+          <div class="d-flex justify-content-center">
+            <a class="home-btn" href="{% url 'tuerny_app:category' 'iliskiler' %}">Daha Fazla</a>
+          </div>
+        </div>
+      </div>
 </div>
 
   <div
