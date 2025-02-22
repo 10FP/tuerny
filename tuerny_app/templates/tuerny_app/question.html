@@ -79,7 +79,7 @@
                                         <p>{{ q.created_at|date:"d-m-Y" }}</p>
                                     </div>
                                     <h3 class="question-card-title pb-2">
-                                        <a href="{% url 'tuerny_app:ask' %}"> {{q.title}} </a>
+                                        <a href="{% url 'tuerny_app:ask' q.id %}"> {{q.title}} </a>
                                     </h3>
                                     <p class="question-card-text py-2">
                                         {{q.description}}
@@ -123,12 +123,12 @@
                                         <div class="d-flex gap-4">
                                             <div class="question-card-button">
                                                 <i class="fa-regular fa-eye question-card-button-icon"></i>
-                                                <span class="question-card-button-text">0</span>
+                                                <span class="question-card-button-text">{{q.views_count}}</span>
                                             </div>
                                             <div class="question-card-button">
                                                 <i class="fa-regular fa-message question-card-button-icon"></i>
                                                 <span
-                                                    class="question-card-button-text">0</span>
+                                                    class="question-card-button-text">{{q.comments.count}}</span>
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center gap-3">
@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message);
+                    
 
                     // Yüzdelik oranları güncelle
                     Object.keys(data.percentages).forEach(optionId => {
