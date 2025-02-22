@@ -399,10 +399,7 @@ function updateRateLine(id) {
 //   });
 // });
 
-$(".question-card-rate-line").each(function () {
-  const id = $(this).closest(".d-flex").find(".like-button").data("id");
-  updateRateLine(id);
-});
+
 
 //profile tabs
 

@@ -19,37 +19,15 @@
                 </a>
               </h3>
               <p class="question-card-text py-2">{{question.description}}</p>
-              <form
-                method="post"
-                action="/Controller/ajax/ajax.php?process=surveyvote"
-                class="ajaxFormTrue"
-              >
+              
 
-                {% for answer in options.all %}
-                <div class="question-card-survey py-2 vCheckRequired">
-                    <input type="hidden" name="survey_id" value="0" />
-                    <div class="question-card-survey-item">
-                      <div class="question-card-survey-item-label">
-                        <input name="vote" value="0" type="radio" id="r1" />
-                        <label for="r1">{{answer.option_text}}</label>
-                      </div>
-                      <div class="question-card-survey-item-progress">
-                        <div
-                          class="question-card-survey-item-progress-rate"
-                          style="width: 4%"
-                        >
-                          0
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                {% endfor %}
+               
 
                 
                 <div class="col-md-12 vAjaxErrors"></div>
 
                 
-              </form>
+              
               <div
                 class="d-flex justify-content-between align-items-center pt-4"
               >
@@ -58,33 +36,25 @@
                     <i
                       class="fa-regular fa-eye question-card-button-icon"
                     ></i>
-                    <span class="question-card-button-text">0</span>
+                    <span class="question-card-button-text">{{question.views_count}}</span>
                   </div>
-                  <div class="question-card-button">
-                    <i
-                      class="fa-regular fa-message question-card-button-icon"
-                    ></i>
-                    <span class="question-card-button-text">0</span>
-                  </div>
+                  <div class="question-card-button"> <i class="fa-regular fa-message question-card-button-icon"></i> <span class="question-card-button-text">{{ question.comments.count }}</span> </div>
                 </div>
                 <div class="d-flex align-items-center gap-3">
                   <div class="question-card-button">
-                    <i
-                      style="cursor: pointer"
-                      data-id=""
-                      class="fa-solid fa-heart-crack question-card-button-icon"
-                    ></i>
-                    <span class="heart-crack-result-0">{{question.like_count}}</span>
-                  </div>
+                  
+                    <i style="cursor: pointer" data-id="{{ question.id }}"
+                       id="dislike-icon-{{ question.id }}"
+                       class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in question.dislikes.all %}active{% endif %}"></i>
+                    <span id="dislike-count-{{ question.id }}">{{ question.dislike_count }}</span>
+                </div>
                   <div class="question-card-rate-line"></div>
                   <div class="question-card-button">
-                    <i
-                      style="cursor: pointer"
-                      data-id=""
-                      class="fa-regular fa-heart question-card-button-icon"
-                    ></i>
-                    <span class="heart-result-0">{{question.dislike_count}}</span>
-                  </div>
+                    <i style="cursor: pointer" data-id="{{ question.id }}"
+                       id="like-icon-{{ question.id }}"
+                       class="fa-regular fa-heart question-card-button-icon like-button {% if request.user in question.likes.all %}active{% endif %}"></i>
+                    <span id="like-count-{{ question.id }}">{{ question.like_count }}</span>
+                </div>
                 </div>
               </div>
 
@@ -114,62 +84,29 @@
                 {% endfor %}
 
                 <div class="mt-4">
-                  <form
-                    method="POST"
-                    class="ajaxFormTrue"
-                    action="/Controller/ajax/ajax.php?process=add-comments"
-                  >
-                    <input type="hidden" name="type" value="ask" />
-                    <input type="hidden" name="type_id" value="0" />
+                  <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="type_id" value="{{question.id}}" />
+                    <input type="hidden" name="pool_id" value="{{id}}" />
                     <input type="hidden" name="parent" value="0" />
                     <div class="limit-counter textarea-counter">
-                      <label
-                        for="content"
-                        id="content-counter"
-                        class="counter-area"
-                        >00/360</label
-                      >
-                      <textarea
-                        name="content"
-                        class="teurny-input"
-                        id="counter-textarea"
-                        rows="8"
-                        maxlength="360"
-                        placeholder="Yorum Yap"
-                        style="resize: none"
-                      ></textarea>
+                      <label for="content" id="content-counter" class="counter-area">00/360</label>
+                      <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none" required></textarea>
                     </div>
-
                     <div class="d-flex gap-3 mt-4">
                       <div>
                         <label for="cb-1" class="teurny-checkbox">
-                          <input
-                            name="hidden_user_name"
-                            type="checkbox"
-                            id="cb-1"
-                            class="d-none"
-                          />
+                          <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
                           <div class="teurny-checkbox-inner"></div>
                         </label>
                       </div>
                       <div>
-                        <p
-                          class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"
-                        >
-                          KULLANICI ADINI GİZLE
-                        </p>
-                        <p class="font-roboto blog-comment-checkbox-text">
-                          Bu gönderi için kullanıcı adını gizlenecek
-                        </p>
+                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"> KULLANICI ADINI GİZLE </p>
+                        <p class="font-roboto blog-comment-checkbox-text"> Bu gönderi için kullanıcı adını gizlenecek </p>
                       </div>
                     </div>
                     <div class="col-md-12 vAjaxErrors"></div>
-                    <button
-                      type="submit"
-                      class="teurny-button-primary mt-4"
-                    >
-                      Gönder
-                    </button>
+                    <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
                   </form>
                 </div>
               </div>
@@ -256,4 +193,141 @@
       </div>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Beğeni butonu
+        document.querySelectorAll(".like-button").forEach(button => {
+            button.addEventListener("click", function() {
+                let questionId = this.dataset.id;
+                
+                let csrfToken = "{{ csrf_token }}";
+    
+                fetch(`/like/${questionId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log("fp")
+                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                        if (data.liked) {
+                            likeIcon.classList.add("fa-solid");
+                            likeIcon.classList.add("active");
+                        } else {
+                            likeIcon.classList.remove("fa-solid");
+                            likeIcon.classList.remove("active");
+                        }
+    
+                        // dislikeIcon.classList.remove("fa-solid");
+                        // dislikeIcon.classList.remove("active");
+                    }
+                });
+            });
+        });
+    
+        // Beğenmeme butonu
+        document.querySelectorAll(".dislike-button").forEach(button => {
+            button.addEventListener("click", function() {
+                let questionId = this.dataset.id;
+                let csrfToken = "{{ csrf_token }}";
+    
+                fetch(`/dislike/${questionId}/`, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken,
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                        if (data.disliked) {
+                            dislikeIcon.classList.add("fa-solid");
+                            dislikeIcon.classList.add("active");
+                            dislikeIcon.style.color = "#000";
+                        } else {
+                            // dislikeIcon.classList.remove("fa-solid");
+                            dislikeIcon.classList.remove("active");
+                            dislikeIcon.style.color = "#824458";
+                        }
+    
+                        likeIcon.classList.remove("fa-solid");
+                        likeIcon.classList.add("fa-regular");
+                        // likeIcon.classList.remove("active");
+                    }
+                });
+            });
+        });
+    });
+    </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const commentForm = document.querySelector(".ajaxFormTrue");
+    
+    if (commentForm) {
+        commentForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // Sayfanın yenilenmesini engelle
+
+            let formData = new FormData(commentForm); // Form verilerini al
+            let actionUrl = commentForm.getAttribute("action"); // Formun gönderileceği URL
+            
+            fetch(actionUrl, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        let commentList = document.querySelector(".comment-list"); // Yorumları içeren alan
+                        let newComment = document.createElement("div");
+                        newComment.classList.add("comment-item");
+
+                        let userName = formData.get("hidden_user_name") ? "Anonim Kullanıcı" : "{{ user.username }}";
+                        let content = formData.get("content");
+
+                        newComment.innerHTML = `
+                            <div class="comment-header">
+                                <strong>${userName}</strong> - <span>Şimdi</span>
+                            </div>
+                            <p>${content}</p>
+                        `;
+                        location.reload();
+                        // Yeni yorumu yorum listesine ekleyelim
+                        if (commentList) {
+                            commentList.prepend(newComment);
+                        }
+
+                        // Formu temizle
+                        commentForm.reset();
+                    } else {
+                        alert("Yorum eklenirken bir hata oluştu!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Hata:", error);
+                    alert("Sunucuyla bağlantı kurulamadı!");
+                });
+        });
+    }
+});
+</script>
 {% endblock content %}

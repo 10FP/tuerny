@@ -11,7 +11,11 @@
               <p>question card date</p>
             </div>
             <h3 class="question-card-title pb-2">
-              <a href="{}">{{question.title}}</a>
+              {% if question.poll %}
+              <a href="{% url 'tuerny_app:ask' question.poll.id %}">{{question.title}}</a>
+              {% else %}
+              <a href="{% url 'tuerny_app:asked' question.id %}">{{question.title}}</a>
+              {% endif %}
             </h3>
             <p class="question-card-text py-2">{{question.description}}</p>
   
@@ -20,12 +24,12 @@
                 <div class="question-card-button">
                   <i class="fa-regular fa-eye question-card-button-icon"></i>
                   <span class="question-card-button-text"
-                    >0</span
+                    >{{question.views_count}}</span
                   >
                 </div>
                 <div class="question-card-button">
                   <i class="fa-regular fa-message question-card-button-icon"></i>
-                  <span class="question-card-button-text">0</span>
+                  <span class="question-card-button-text">{{question.comments.count}}</span>
                 </div>
               </div>
               <div class="d-flex align-items-center gap-3">

@@ -29,38 +29,56 @@ def index(request):
         
     return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs})
 
-def ask_details(request, pool_id):
-    pool = Poll.objects.get(id=pool_id)
-    question = pool.question
-    question_id = question.id
-    cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
-    if not cache.get(cache_key):
-        question.views_count += 1  # Görüntülenme sayısını artır
-        question.save()  # Değişiklikleri veritabanına kaydet
-        cache.set(cache_key, True, timeout=10)  
-
-    questions = Question.objects.prefetch_related("poll__options")
-
-    poll_data = {}
-
-    for question in questions:
-        if hasattr(question, "poll"):
-            # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
-            total_votes = sum(option.vote_count for option in question.poll.options.all())
-
-            # Seçeneklerin yüzdesini hesapla
-            poll_data[question.id] = {
-                "total_votes": total_votes,
-                "percentages": {
-                    option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
-                    for option in question.poll.options.all()
-                }
-            }
+def ask_details(request, question_id):
+    question = get_object_or_404(Question, id=question_id)
     
-    return render(request, 'tuerny_app/ask-details.html', {"pool": pool, "questions": questions, "poll_data": poll_data})
+    try:
+        if question.poll:
+            pool = question.poll
+            question_id = question.id
+        cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
+        if not cache.get(cache_key):
+            question.views_count += 1  # Görüntülenme sayısını artır
+            question.save()  # Değişiklikleri veritabanına kaydet
+            cache.set(cache_key, True, timeout=10)  
+
+        questions = Question.objects.prefetch_related("poll__options")
+
+        poll_data = {}
+
+        for question in questions:
+            if hasattr(question, "poll"):
+                # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
+                total_votes = sum(option.vote_count for option in question.poll.options.all())
+
+                # Seçeneklerin yüzdesini hesapla
+                poll_data[question.id] = {
+                    "total_votes": total_votes,
+                    "percentages": {
+                        option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
+                        for option in question.poll.options.all()
+                    }
+                }
+        
+        return render(request, 'tuerny_app/ask-details.html', {"pool": pool, "questions": questions, "poll_data": poll_data})
+    except Exception as e:
+        return redirect("tuerny_app:asked", asked_id = question.id)
+    
+        
+        
+    
+    
+        
 
 def asked_details(request, asked_id):
     question = Question.objects.get(id=asked_id)
+    question_id = question.id
+    cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
+    if not cache.get(cache_key):
+            question.views_count += 1  # Görüntülenme sayısını artır
+            question.save()  # Değişiklikleri veritabanına kaydet
+            cache.set(cache_key, True, timeout=10)  
+
     return render(request, 'tuerny_app/asked-details.html', {"question": question})
 
 @login_required
@@ -98,8 +116,10 @@ def add_blog_comment(request):
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
 
 def add_comment(request):
+    
     if request.method == "POST":
         question_id = request.POST.get("type_id")  # Formdaki `type_id`, `Question` ID'sini tutuyor
+        
         content = request.POST.get("content")
         anonymous = request.POST.get("hidden_user_name") == "on"  # Checkbox "on" olarak gelir
 
@@ -113,9 +133,9 @@ def add_comment(request):
             content=content,
             anonymous=anonymous
         )
-        pool_id = request.POST.get("pool_id")
-
-        return redirect("tuerny_app:ask", pool_id=pool_id)
+        
+        
+        return redirect("tuerny_app:ask", question_id=question_id)
 
     return JsonResponse({"status": "error", "message": "Geçersiz istek!"}, status=400)
 

@@ -14,14 +14,14 @@
                               <a href="{% url 'tuerny_app:index' %}">{{vote.poll.question.title}}</a>
                           </h3>
                           <p class="question-card-text py-2">
-                            {{ vote.option_text }}
+                            {{ vote.poll.poll_question }}
                         </p>
-                              <div class="question-card-survey py-2 vCheckRequired">
-                                  <input type="hidden" name="survey_id" value="">
-                                      <div class="question-card-survey-item ">
+                          {% for vote in vote.poll.options.all %}
+                          <input type="hidden" name="survey_id" value="">
+                                      <div class="question-card-survey-item " style="margin-bottom:10px">
                                           <div class="question-card-survey-item-label">
                                               <input name="vote" value="" type="radio" id="r1" />
-                                              <label for="r1">select value</label>
+                                              <label for="r1">{{vote.option_text}}</label>
                                           </div>
                                           <div class="question-card-survey-item-progress">
                                               <div class="question-card-survey-item-progress-rate"
@@ -29,6 +29,9 @@
                                               </div>
                                           </div>
                                       </div>
+                        {% endfor %}
+                              <div class="question-card-survey py-2 vCheckRequired">
+                                  
                           <div class="d-flex justify-content-between align-items-center pt-4">
                               <div class="d-flex gap-4">
                                   <div class="question-card-button">
