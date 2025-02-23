@@ -3,6 +3,7 @@
     <div class="py-4">
       <div class="d-flex flex-column gap-4 saved-comments-list">
         {% for comment in request.user.comments.all  %}
+        {% if comment.question %}
         <div class="question-card">
           <div class="question-card-category">
             <p>{{comment.question.subcategory.name}}</p>
@@ -10,8 +11,13 @@
           <div class="question-card-date">
             <p>{{ comment.created_at|date:"d-m-Y" }}</p>
           </div>
+          
           <h3 class="question-card-title pb-2">{{comment.question.title}}</h3>
+          <p class="question-card-text py-2">
+            {{comment.question.description}}
+            <br>
 
+        </p>
           <div class="question-card-comments">
             <div class="blog-section-title">
               <span>Yorumlar</span>
@@ -83,6 +89,92 @@
             </form>
           </div>
         </div>
+        {% else %}
+        <div class="question-card">
+          <div class="question-card-category">
+            <p>{{comment.blog.category.name}}</p>
+          </div>
+          <div class="question-card-date">
+            <p>{{ comment.created_at|date:"d-m-Y" }}</p>
+          </div>
+          
+          <h3 class="question-card-title pb-2">{{comment.blog.title}}</h3>
+          <p class="question-card-text py-2">
+            {{comment.blog.short_description | safe}}
+            <br>
+        </p>
+          <div class="question-card-comments">
+            <div class="blog-section-title">
+              <span>Yorumlar</span>
+              <div class="blog-section-title-divider"></div>
+            </div>
+
+            <div class="d-flex flex-column gap-3 mt-4">
+              <div class="blog-comment-item">
+                <p class="blog-comment-item-author">{{comment.user.username}}</p>
+                <p class="blog-comment-item-text">{{comment.content}}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <form
+              method="POST"
+              class="ajaxFormTrue"
+              action="/Controller/ajax/ajax.php?process=add-comments"
+            >
+              <input type="hidden" name="type" value="ask" />
+              <input type="hidden" name="type_id" value="type_id" />
+              <input type="hidden" name="parent" value="0" />
+              <div class="limit-counter textarea-counter">
+                <label
+                  for="content"
+                  id="content-counter"
+                  class="counter-area"
+                  >00/360</label
+                >
+                <textarea
+                  name="content"
+                  class="teurny-input"
+                  id="counter-textarea"
+                  rows="4"
+                  maxlength="360"
+                  placeholder="Yorum Yap"
+                  style="resize: none"
+                ></textarea>
+              </div>
+
+              <div class="d-flex gap-3 mt-4">
+                <div>
+                  <label for="cb-1" class="teurny-checkbox">
+                    <input
+                      name="hidden_user_name"
+                      type="checkbox"
+                      id="cb-1"
+                      class="d-none"
+                    />
+                    <div class="teurny-checkbox-inner"></div>
+                  </label>
+                </div>
+                <div>
+                  <p
+                    class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"
+                  >
+                    Kullanıcı adını gizle
+                  </p>
+                  <p class="font-roboto blog-comment-checkbox-text">
+                    Bu gönderi için kullanıcı adını gizlenecek
+                  </p>
+                </div>
+              </div>
+              <div class="col-md-12 vAjaxErrors"></div>
+              <button type="submit" class="teurny-footer-btn mt-4">
+                Gönder
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endif %}
         {% endfor %}
 
       </div>

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog
-from django.contrib.auth import authenticate, login as auth_login
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser
+from django.contrib.auth import authenticate, login as auth_login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
@@ -13,6 +13,7 @@ from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.cache import cache
+
 # Create your views here.
 User = get_user_model()
 def index(request):
@@ -266,11 +267,13 @@ def login(request):
 @login_required
 def profile(request):
     tab = request.GET.get('tab', '')
-    print(tab)
+    
+    
     return render(request, 'tuerny_app/profile.html', {"active_tab": tab})
 
 def settings(request):
-    return render(request, "tuerny_app/settings.html")
+    user_settings, created = UserSettings.objects.get_or_create(user=request.user)
+    return render(request, "tuerny_app/settings.html", {"user_settings": user_settings})
 
 def saved(request):
     return render(request, "tuerny_app/saved.html")
@@ -529,3 +532,122 @@ def dislike_question(request, question_id):
         })
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"})
+
+
+@login_required
+def update_settings(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            # Debug logları ekleyelim
+            print("🔹 Gelen Veri:", data)  
+
+            setting_name = data.get("setting")  # Eğer key yoksa None döndürür
+            setting_value = data.get("value")  
+
+            if setting_name is None or setting_value is None:
+                return JsonResponse({"success": False, "message": "Eksik veri!"}, status=400)
+
+            user_settings, created = UserSettings.objects.get_or_create(user=request.user)
+
+            if hasattr(user_settings, setting_name):
+                setattr(user_settings, setting_name, setting_value)
+                user_settings.save()
+                return JsonResponse({"success": True, "message": "Ayar güncellendi!"})
+            else:
+                return JsonResponse({"success": False, "message": "Geçersiz ayar adı!"}, status=400)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "message": "Geçersiz JSON formatı!"}, status=400)
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"Hata: {str(e)}"}, status=500)
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=405)
+
+
+
+@login_required
+@csrf_exempt  # AJAX POST için CSRF korumasını esnetiyoruz (güvenlik için dikkat edilmeli)
+def change_password(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            old_password = data.get("old_pass")
+            new_password = data.get("new_pass")
+            new_password_again = data.get("new_pass_again")
+
+            user = request.user
+
+            # Eski şifre doğrulama
+            if not user.check_password(old_password):
+                return JsonResponse({"success": False, "message": "Eski şifreniz yanlış!"}, status=400)
+
+            # Yeni şifreler uyuşuyor mu?
+            if new_password != new_password_again:
+                return JsonResponse({"success": False, "message": "Yeni şifreler eşleşmiyor!"}, status=400)
+
+            # Yeni şifreyi belirle
+            user.set_password(new_password)
+            user.save()
+
+            # Kullanıcının oturumunu açık tut
+            update_session_auth_hash(request, user)
+
+            return JsonResponse({"success": True, "message": "Şifreniz başarıyla değiştirildi!"})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "message": "Geçersiz JSON formatı!"}, status=400)
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=405)
+
+
+@login_required
+@csrf_exempt  # AJAX ile POST işlemi için CSRF korumasını kaldırıyoruz (Güvenlik için dikkat edilmeli)
+def update_profile(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+
+            username = data.get("user_name")
+            email = data.get("mail")
+            phone = data.get("phone")
+            gender = data.get("gender")
+            birth_date = data.get("birth_date")
+
+            user = request.user
+
+            # Kullanıcı adı boş veya zaten başka biri tarafından alınmış mı kontrol et
+            if username and username != user.username:
+                if CustomUser.objects.filter(username=username).exclude(id=user.id).exists():
+                    return JsonResponse({"success": False, "message": "Bu kullanıcı adı zaten kullanılıyor!"}, status=400)
+                user.username = username
+
+            # Email doğrulama
+            if email and email != user.email:
+                if CustomUser.objects.filter(email=email).exclude(id=user.id).exists():
+                    return JsonResponse({"success": False, "message": "Bu e-posta adresi zaten kayıtlı!"}, status=400)
+                user.email = email
+
+            # Telefon doğrulama (Opsiyonel: Format kontrolü eklenebilir)
+            if phone:
+                user.phone = phone
+
+            # Cinsiyet güncelleme
+            if gender in ["Female", "Male"]:
+                user.gender = gender
+
+            # Doğum tarihi güncelleme
+            if birth_date:
+                user.birth_date = birth_date
+
+            user.save()
+            return JsonResponse({"success": True, "message": "Profiliniz başarıyla güncellendi!"})
+
+        except json.JSONDecodeError:
+            return JsonResponse({"success": False, "message": "Geçersiz JSON formatı!"}, status=400)
+        except Exception as e:
+            return JsonResponse({"success": False, "message": f"Hata: {str(e)}"}, status=500)
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=405)

@@ -755,4 +755,197 @@
 });
 </script>
 </body>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initSettingsScript() {
+          let inputs = document.querySelectorAll(".setting-toggle");
+          
+  
+          inputs.forEach(input => {
+              
+  
+              input.addEventListener("change", function () {
+                  let settingName = this.dataset.setting;
+                  let settingValue = this.checked;
+                  let csrfToken = "{{ csrf_token }}";
+  
+                  console.log(`🔹 Ayar Güncelleniyor: ${settingName} = ${settingValue}`);
+  
+                  fetch("/update-settings/", {
+                      method: "POST",
+                      headers: {
+                          "X-CSRFToken": csrfToken,
+                          "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify({ setting: settingName, value: settingValue })
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          
+                      } else {
+                          console.error("❌ Güncelleme Hatası:", data.message);
+                      }
+                  })
+                  .catch(error => console.error("❌ Fetch Hatası:", error));
+              });
+          });
+      }
+  
+      // Sayfa ilk yüklendiğinde script'i başlat
+      initSettingsScript();
+  
+      // **Sekme Değişimlerini Dinle**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  
+                  initSettingsScript(); // Yeni içerik yüklendiyse script'i tekrar başlat
+              }, 500); // 500ms gecikme, içeriğin yüklenmesini beklemek için
+          });
+      });
+  
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          
+          initSettingsScript();
+      });
+  
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+  </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initSettingsScript() {
+          console.log("🔄 Ayarlar ve Şifre Değiştirme Scripti Yüklendi!");
+  
+          // Şifre Değiştirme Formu
+          let passwordForm = document.querySelector("#change-password-form");
+          if (passwordForm) {
+              passwordForm.addEventListener("submit", function (event) {
+                  event.preventDefault(); // Sayfa yenilenmesini önle
+  
+                  let formData = {
+                      old_pass: document.querySelector("input[name='old_pass']").value,
+                      new_pass: document.querySelector("input[name='new_pass']").value,
+                      new_pass_again: document.querySelector("input[name='new_pass_again']").value,
+                  };
+  
+                  let csrfToken = "{{ csrf_token }}";
+  
+                  console.log("🔹 Fetch Gönderiliyor:", formData);
+  
+                  fetch("/change-password/", {
+                      method: "POST",
+                      headers: {
+                          "X-CSRFToken": csrfToken,
+                          "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify(formData)
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          alert("✅ " + data.message);
+                          window.location.reload(); // Başarılı olursa sayfayı yenile
+                      } else {
+                          alert("❌ " + data.message);
+                      }
+                  })
+                  .catch(error => console.error("❌ Fetch Hatası:", error));
+              });
+          }
+      }
+  
+      // Sayfa yüklendiğinde çalıştır
+      initSettingsScript();
+  
+      // **Sekme Değişimlerini Dinle ve Script'i Yeniden Çalıştır**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  console.log("🔄 Sekme Yüklendi, Script Yeniden Başlatılıyor...");
+                  initSettingsScript();
+              }, 500);
+          });
+      });
+  
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          console.log("🆕 Yeni İçerik Eklendi, Script Yeniden Başlatılıyor...");
+          initSettingsScript();
+      });
+  
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+  </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initSettingsScript() {
+          console.log("🔄 Kullanıcı Profil Güncelleme Scripti Yüklendi!");
+  
+          // Profil Güncelleme Formu
+          let profileForm = document.querySelector(".ajaxFormFalse");
+          if (profileForm) {
+              profileForm.addEventListener("submit", function (event) {
+                  event.preventDefault(); // Sayfa yenilenmesini önle
+  
+                  let formData = {
+                      user_name: document.querySelector("input[name='user_name']").value,
+                      mail: document.querySelector("input[name='mail']").value,
+                      phone: document.querySelector("input[name='phone']").value,
+                      gender: document.querySelector("select[name='gender']").value,
+                      birth_date: document.querySelector("input[name='birth_date']").value,
+                  };
+  
+                  let csrfToken = "{{ csrf_token }}";
+  
+                  console.log("🔹 Fetch Gönderiliyor:", formData);
+  
+                  fetch("/update-profile/", {
+                      method: "POST",
+                      headers: {
+                          "X-CSRFToken": csrfToken,
+                          "Content-Type": "application/json"
+                      },
+                      body: JSON.stringify(formData)
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          alert("✅ " + data.message);
+                          window.location.reload(); // Başarılı olursa sayfayı yenile
+                      } else {
+                          alert("❌ " + data.message);
+                      }
+                  })
+                  .catch(error => console.error("❌ Fetch Hatası:", error));
+              });
+          }
+      }
+  
+      // Sayfa yüklendiğinde çalıştır
+      initSettingsScript();
+  
+      // **Sekme Değişimlerini Dinle ve Script'i Yeniden Çalıştır**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  console.log("🔄 Sekme Yüklendi, Script Yeniden Başlatılıyor...");
+                  initSettingsScript();
+              }, 500);
+          });
+      });
+  
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          console.log("🆕 Yeni İçerik Eklendi, Script Yeniden Başlatılıyor...");
+          initSettingsScript();
+      });
+  
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+  </script>
 </html>

@@ -244,3 +244,28 @@ class SavedBlog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} saved {self.blog.title}"
+    
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="settings")
+    
+    # Email Ayarları
+    email_newsletter = models.BooleanField(default=False)
+    email_question_votes = models.BooleanField(default=True)
+    email_question_answers = models.BooleanField(default=True)
+    email_comment_replies = models.BooleanField(default=True)
+    email_security_alerts = models.BooleanField(default=True)
+    email_comment_reactions = models.BooleanField(default=True)
+    email_notifications = models.BooleanField(default=False)
+
+    # Bildirim Ayarları
+    notify_campaigns = models.BooleanField(default=True)
+    notify_trending = models.BooleanField(default=False)
+    notify_question_votes = models.BooleanField(default=True)
+    notify_question_answers = models.BooleanField(default=True)
+    notify_comment_replies = models.BooleanField(default=True)
+    notify_comment_reactions = models.BooleanField(default=True)
+    notify_security_alerts = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.user.username} Ayarları"

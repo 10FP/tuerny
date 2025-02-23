@@ -49,85 +49,48 @@
           >
             <div class="accordion-body">
               <div class="d-flex flex-column gap-3">
-                <form method="POST" class="ajaxFormFalse" action="">
+                <form method="POST" id="update-profile-form" class="ajaxFormFalse">
                   <input type="hidden" name="process" value="info" />
-                  <div
-                    class="d-flex flex-column gap-2"
-                    style="margin-bottom: 15px"
-                  >
-                    <label for="username" class="teurny-label"
-                      >Kullanıcı adı</label
-                    >
-                    <input
-                      type="text"
-                      name="user_name"
-                      placeholder="@isim"
-                      value=""
-                      class="teurny-input vRequired"
-                    />
+              
+                  <div class="d-flex flex-column gap-2" style="margin-bottom: 15px">
+                      <label for="username" class="teurny-label">Kullanıcı adı</label>
+                      <input type="text" name="user_name" placeholder="@isim"
+                             value="{{ user.username }}" class="teurny-input vRequired" />
                   </div>
-                  <div
-                    class="d-flex flex-column gap-2"
-                    style="margin-bottom: 15px"
-                  >
-                    <label for="username" class="teurny-label">Email</label>
-                    <input
-                      type="text"
-                      name="mail"
-                      placeholder="isim@gmail.com"
-                      value=""
-                      class="teurny-input vRequired"
-                    />
+              
+                  <div class="d-flex flex-column gap-2" style="margin-bottom: 15px">
+                      <label for="mail" class="teurny-label">Email</label>
+                      <input type="text" name="mail" placeholder="isim@gmail.com"
+                             value="{{ user.email }}" class="teurny-input vRequired" />
                   </div>
-                  <div
-                    class="d-flex flex-column gap-2"
-                    style="margin-bottom: 15px"
-                  >
-                    <label for="phone" class="teurny-label">Telefon</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      id="phone"
-                      placeholder="0530 000 000 00"
-                      value=""
-                      class="teurny-input vRequired"
-                    />
+              
+                  <div class="d-flex flex-column gap-2" style="margin-bottom: 15px">
+                      <label for="phone" class="teurny-label">Telefon</label>
+                      <input type="tel" name="phone" id="phone" placeholder="0530 000 000 00"
+                             value="{{ user.phone }}" class="teurny-input vRequired" />
                   </div>
-                  <div
-                    class="d-flex flex-column gap-2"
-                    style="margin-bottom: 15px"
-                  >
-                    <label for="username" class="teurny-label">Cinsiyet</label>
-                    <select
-                      name="gender"
-                      class="teurny-input teurny-text-mid vRequired"
-                    >
-                      <option value="">Cinsiyet Seç</option>
-                      <option value="">Kadın</option>
-                      <option value="">Erkek</option>
-                    </select>
+              
+                  <div class="d-flex flex-column gap-2" style="margin-bottom: 15px">
+                      <label for="gender" class="teurny-label">Cinsiyet</label>
+                      <select name="gender" class="teurny-input teurny-text-mid vRequired">
+                          <option value="">Cinsiyet Seç</option>
+                          <option value="Female" {% if user.gender == "Female" %}selected{% endif %}>Kadın</option>
+                          <option value="Male" {% if user.gender == "Male" %}selected{% endif %}>Erkek</option>
+                      </select>
                   </div>
-                  <div
-                    class="d-flex flex-column gap-2"
-                    style="margin-bottom: 15px"
-                  >
-                    <label for="username" class="teurny-label"
-                      >Doğum Tarihi</label
-                    >
-                    <input
-                      type="date"
-                      value=""
-                      name="birth_date"
-                      placeholder="@isim"
-                      class="teurny-input teurny-text-mid vRequired"
-                    />
+              
+                  <div class="d-flex flex-column gap-2" style="margin-bottom: 15px">
+                      <label for="birth_date" class="teurny-label">Doğum Tarihi</label>
+                      <input type="date" name="birth_date" placeholder="@isim"
+                             value="{{ user.birth_date|date:'Y-m-d' }}" class="teurny-input teurny-text-mid vRequired" />
                   </div>
+              
                   <div>
-                    <button type="submit" class="teurny-button-primary-outline">
-                      Kaydet
-                    </button>
+                      <button type="submit" class="teurny-button-primary-outline">
+                          Kaydet
+                      </button>
                   </div>
-                </form>
+              </form>
               </div>
             </div>
           </div>
@@ -153,87 +116,27 @@
           >
             <div class="accordion-body">
               <div class="d-flex flex-column gap-4">
-                <form method="POST" class="ajaxFormFalse" action="">
+                <form method="POST" id="change-password-form" class="ajaxFormFalse ajaxFormFalsePassword">
+                  {% csrf_token %}
                   <input type="hidden" name="process" value="pass" />
+                  
                   <div class="pb-2">
-                    <label class="teurny-label mb-2">Eski Şifreniz</label>
-                    <div class="row">
-                      <div class="col-md-12 my-1">
-                        <input
-                          name="old_pass"
-                          type="password"
-                          placeholder="**********"
-                          class="teurny-input w-100 vRequired"
-                        />
-                      </div>
-                    </div>
+                      <label class="teurny-label mb-2">Eski Şifreniz</label>
+                      <input name="old_pass" type="password" placeholder="**********" class="teurny-input w-100 vRequired" />
                   </div>
+              
                   <div class="pb-2">
-                    <label class="teurny-label mb-1">Parola Değiştir</label>
-                    <div class="mt-2 position-relative">
-                      <input
-                        name="new_pass"
-                        type="password"
-                        placeholder="Yeni Parola"
-                        class="form-control teurny-input w-100 vRequired vPassword"
-                      />
-
-                      <i
-                        class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye"
-                        style="color: #989491; display: none"
-                      ></i>
-                      <i
-                        class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye-slash"
-                        style="color: #989491"
-                      ></i>
-                    </div>
-                    <div class="mt-2 position-relative">
-                      <input
-                        name="new_pass_again"
-                        type="password"
-                        placeholder="Yeni Parola Tekrar"
-                        class="form-control teurny-input w-100 vRequired vPasswordConfirm"
-                      />
-
-                      <i
-                        class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye"
-                        style="color: #989491; display: none"
-                      ></i>
-                      <i
-                        class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye-slash"
-                        style="color: #989491"
-                      ></i>
-                    </div>
+                      <label class="teurny-label mb-1">Parola Değiştir</label>
+                      <input name="new_pass" type="password" placeholder="Yeni Parola" class="form-control teurny-input w-100 vRequired vPassword" />
+                      <input name="new_pass_again" type="password" placeholder="Yeni Parola Tekrar" class="form-control teurny-input w-100 vRequired vPasswordConfirm" />
                   </div>
-                  <div class="pb-2">
-                    <label class="teurny-label mb-1">Kurtarma Sorusu</label>
-                    <div class="mt-2">
-                      <select
-                        name="recovery-question"
-                        class="teurny-input w-100"
-                        id="recovery-question"
-                      >
-                        <option value="question1">
-                          İlk evcil hayvanının ismi?
-                        </option>
-                      </select>
-                    </div>
-                    <div class="mt-2">
-                      <input
-                        type="text"
-                        placeholder="Çapkın"
-                        id="recovery-answer"
-                        name="question1"
-                        class="teurny-input w-100 vRequired"
-                      />
-                    </div>
-                  </div>
+              
+                  
+              
                   <div class="mt-3">
-                    <button type="submit" class="teurny-button-primary-outline">
-                      Kaydet
-                    </button>
+                      <button type="submit" class="teurny-button-primary-outline">Kaydet</button>
                   </div>
-                </form>
+              </form>
               </div>
             </div>
           </div>
@@ -274,192 +177,91 @@
                 <table class="table">
                   <!-- Email Kategorisi -->
                   <thead>
-                    <tr>
-                      <th
-                        style="
-                          font-family: Roboto;
-                          font-size: 16px;
-                          font-weight: 400;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Email
-                      </th>
-                      <th style="text-align: right"></th>
-                    </tr>
+                      <tr>
+                          <th style="font-family: Roboto; font-size: 16px; font-weight: 400; line-height: 20.8px; text-align: left;">
+                              Email
+                          </th>
+                          <th style="text-align: right"></th>
+                      </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Teurny Bülten
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Soru Oylamaları
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption2"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Soru Cevapları
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption3"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Yorum Cevapları ve ...
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption4"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Hesap Güvenliği
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption5"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Yorum Tepkileri
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption6"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Bildiri ve Kampanyalar
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="emailOption7"
-                          />
-                        </div>
-                      </td>
-                    </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">
+                              Teurny Bülten
+                          </td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                id="email_newsletter" data-setting="email_newsletter"
+                                {% if user_settings.email_newsletter %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Oylamaları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_question_votes" data-setting="email_question_votes"
+                                         {% if user_settings.email_question_votes %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Cevapları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_question_answers" data-setting="email_question_answers"
+                                         {% if user_settings.email_question_answers %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Cevapları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_comment_replies" data-setting="email_comment_replies"
+                                         {% if user_settings.email_comment_replies %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Hesap Güvenliği</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_security_alerts" data-setting="email_security_alerts"
+                                         {% if user_settings.email_security_alerts %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Tepkileri</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_comment_reactions" data-setting="email_comment_reactions"
+                                         {% if user_settings.email_comment_reactions %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Bildiri ve Kampanyalar</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_notifications" data-setting="email_notifications"
+                                         {% if user_settings.email_notifications %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
                   </tbody>
-                </table>
+              </table>
 
-                <table class="table">
+                <!-- <table class="table">
                   <thead>
                     <tr>
                       <th
@@ -525,194 +327,90 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table> -->
 
                 <table class="table">
                   <thead>
-                    <tr>
-                      <th
-                        style="
-                          font-family: Roboto;
-                          font-size: 16px;
-                          font-weight: 400;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Bildirimler
-                      </th>
-                      <th style="text-align: right"></th>
-                    </tr>
+                      <tr>
+                          <th style="font-family: Roboto; font-size: 16px; font-weight: 400; line-height: 20.8px; text-align: left;">
+                              Bildirimler
+                          </th>
+                          <th style="text-align: right"></th>
+                      </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Bildiri ve Kampanyalar
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption1"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Gündemdekiler
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption2"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Soru Oylamaları
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption3"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Soru Cevapları
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption4"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Yorum Cevapları ve ...
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption5"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Yorum Tepkileri
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption6"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Hesap Güvenliği
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="notificationOption7"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Bildiri ve Kampanyalar</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_campaigns" data-setting="notify_campaigns"
+                                         {% if user_settings.notify_campaigns %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Gündemdekiler</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_trending" data-setting="notify_trending"
+                                         {% if user_settings.notify_trending %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Oylamaları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_question_votes" data-setting="notify_question_votes"
+                                         {% if user_settings.notify_question_votes %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Cevapları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_question_answers" data-setting="notify_question_answers"
+                                         {% if user_settings.notify_question_answers %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Cevapları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_comment_replies" data-setting="notify_comment_replies"
+                                         {% if user_settings.notify_comment_replies %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Tepkileri</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_comment_reactions" data-setting="notify_comment_reactions"
+                                         {% if user_settings.notify_comment_reactions %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Hesap Güvenliği</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="notify_security_alerts" data-setting="notify_security_alerts"
+                                         {% if user_settings.notify_security_alerts %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
                   </tbody>
-                </table>
+              </table>
               </div>
             </div>
           </div>
@@ -847,3 +545,4 @@
     eyeSlashIcon.addEventListener("click", togglePasswordVisibility);
   });
 </script>
+

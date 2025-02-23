@@ -134,7 +134,7 @@
                                         <div class="d-flex align-items-center gap-3">
                                             <!-- Beğenmeme Butonu -->
                                             <div class="question-card-button">
-                                                <i style="cursor: pointer" data-id="{{ q.id }}"
+                                                <i {% if request.user in q.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ q.id }}"
                                                    id="dislike-icon-{{ q.id }}"
                                                    class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in q.dislikes.all %}active{% endif %}"></i>
                                                 <span id="dislike-count-{{ q.id }}">{{ q.dislike_count }}</span>
@@ -151,7 +151,7 @@
                                             <div class="question-card-button">
                                                 <i style="cursor: pointer" data-id="{{ q.id }}"
                                                    id="like-icon-{{ q.id }}"
-                                                   class="fa-regular fa-heart question-card-button-icon like-button {% if request.user in q.likes.all %}active{% endif %}"></i>
+                                                   class="{% if request.user in q.likes.all %}fa-solid {% else %} fa-regular{% endif %} fa-heart question-card-button-icon like-button {% if request.user in q.likes.all %}active{% endif %}"></i>
                                                 <span id="like-count-{{ q.id }}">{{ q.like_count }}</span>
                                             </div>
                                         </div>
@@ -186,35 +186,29 @@
                                                    
                                         </div>
                                         <div class="mt-4">
-                                            <form method="POST" class="ajaxFormTrue"
-                                                action="/Controller/ajax/ajax.php?process=add-comments">
-                                                <input type="hidden" name="type" value="ask">
-                                                <input type="hidden" name="type_id" value="type_id">
-                                                <input type="hidden" name="parent" value="0">
-                                                    
-                                                <input type="text" name="content" class="teurny-input w-100"
-                                                    placeholder="Yorum Yap">
-    
+                                            <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="type_id" value="{{q.id}}" />
+                                                <input type="hidden" name="pool_id" value="{{q.poll.id}}" />
+                                                <input type="hidden" name="parent" value="0" />
+                                                <div class="limit-counter textarea-counter">
+                                                    <label for="content" id="content-counter" class="counter-area">00/360</label>
+                                                    <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none" required></textarea>
+                                                </div>
                                                 <div class="d-flex gap-3 mt-4">
                                                     <div>
                                                         <label for="cb-1" class="teurny-checkbox">
-                                                            <input name="hidden_user_name" type="checkbox" id="cb-1"
-                                                                class="d-none" />
+                                                            <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
                                                             <div class="teurny-checkbox-inner"></div>
                                                         </label>
                                                     </div>
                                                     <div>
-                                                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
-                                                            Kullanıcı adını gizle
-                                                        </p>
-                                                        <p class="font-roboto blog-comment-checkbox-text">
-                                                            Bu gönderi için kullanıcı adını gizlenecek
-                                                        </p>
+                                                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"> KULLANICI ADINI GİZLE </p>
+                                                        <p class="font-roboto blog-comment-checkbox-text"> Bu gönderi için kullanıcı adını gizlenecek </p>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-12 vAjaxErrors"></div>
-                                                <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
-    
+                                                <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
                                             </form>
     
                                         </div>
@@ -409,8 +403,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (data.liked) {
                             likeIcon.classList.add("fa-solid");
                             likeIcon.classList.add("active");
+                            dislikeIcon.style.color = "rgb(0, 0, 0)";
+
                         } else {
                             likeIcon.classList.remove("fa-solid");
+                            likeIcon.classList.add("fa-regular");
+
                             likeIcon.classList.remove("active");
                         }
     
@@ -444,15 +442,28 @@ document.addEventListener("DOMContentLoaded", function() {
                         let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
     
                         if (data.disliked) {
-                            dislikeIcon.classList.add("fa-solid");
+                            console.log("a")
+                            
                             dislikeIcon.classList.add("active");
+                            dislikeIcon.style.color = "rgb(130, 68, 88)";
+                            likeIcon.classList.remove("fa-solid");
+                            likeIcon.classList.add("fa-regular");
+
+                            likeIcon.classList.remove("active");
+                            
                         } else {
                             // dislikeIcon.classList.remove("fa-solid");
                             dislikeIcon.classList.remove("active");
+                            dislikeIcon.style.color = "rgb(0, 0, 0)";
+                            console.log("b")
+
                         }
-    
-                        likeIcon.classList.remove("fa-solid");
-                        likeIcon.classList.add("fa-regular");
+                        console.log("c")
+                        
+                        
+                        
+
+
                         // likeIcon.classList.remove("active");
                     }
                 });
@@ -460,5 +471,60 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const commentForm = document.querySelector(".ajaxFormTrue");
+  
+      if (commentForm) {
+          commentForm.addEventListener("submit", function (e) {
+              e.preventDefault(); // Sayfanın yenilenmesini engelle
+  
+              let formData = new FormData(commentForm); // Form verilerini al
+              let actionUrl = commentForm.getAttribute("action"); // Formun gönderileceği URL
+  
+              fetch(actionUrl, {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                      "X-Requested-With": "XMLHttpRequest",
+                  },
+              })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.status === "success") {
+                          let commentList = document.querySelector(".comment-list"); // Yorumları içeren alan
+                          let newComment = document.createElement("div");
+                          newComment.classList.add("comment-item");
+  
+                          let userName = formData.get("hidden_user_name") ? "Anonim Kullanıcı" : "{{ user.username }}";
+                          let content = formData.get("content");
+  
+                          newComment.innerHTML = `
+                              <div class="comment-header">
+                                  <strong>${userName}</strong> - <span>Şimdi</span>
+                              </div>
+                              <p>${content}</p>
+                          `;
+                          location.reload();
+                          // Yeni yorumu yorum listesine ekleyelim
+                          if (commentList) {
+                              commentList.prepend(newComment);
+                          }
+  
+                          // Formu temizle
+                          commentForm.reset();
+                      } else {
+                          alert("Yorum eklenirken bir hata oluştu!");
+                      }
+                  })
+                  .catch(error => {
+                      console.error("Hata:", error);
+                      alert("Sunucuyla bağlantı kurulamadı!");
+                  });
+          });
+      }
+  });
+  </script>
 {% endblock content %}
   

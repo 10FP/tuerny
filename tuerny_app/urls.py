@@ -35,4 +35,7 @@ urlpatterns = [
     path("save-blog/", views.save_blog, name="save_blog"),
     path("like/<int:question_id>/", views.like_question, name="like_question"),
     path("dislike/<int:question_id>/", views.dislike_question, name="dislike_question"),
+    path("update-settings/", views.update_settings, name="settings_page"),
+    path("change-password/", views.change_password, name="change_password"),
+    path("update-profile/", views.update_profile, name="update_profile"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
