@@ -319,8 +319,24 @@ def y(request):
     return render(request, "tuerny_app/asked.html")
 
 def v(request):
-    
-    return render(request, "tuerny_app/votes.html")
+    questions = Question.objects.prefetch_related("poll__options")
+
+    poll_data = {}
+
+    for question in questions:
+        if hasattr(question, "poll"):
+            # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
+            total_votes = sum(option.vote_count for option in question.poll.options.all())
+
+            # Seçeneklerin yüzdesini hesapla
+            poll_data[question.id] = {
+                "total_votes": total_votes,
+                "percentages": {
+                    option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
+                    for option in question.poll.options.all()
+                }
+            }
+    return render(request, "tuerny_app/votes.html", {"poll_data": poll_data})
 
 def z(request):
     

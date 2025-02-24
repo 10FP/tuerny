@@ -33,60 +33,30 @@
           </div>
 
           <div class="mt-4">
-            <form
-              method="POST"
-              class="ajaxFormTrue"
-              action="/Controller/ajax/ajax.php?process=add-comments"
-            >
-              <input type="hidden" name="type" value="ask" />
-              <input type="hidden" name="type_id" value="type_id" />
+            <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
+              {% csrf_token %}
+              <input type="hidden" name="type_id" value="{{comment.question.id}}" />
+              <input type="hidden" name="pool_id" value="{{comment.question.poll.id}}" />
               <input type="hidden" name="parent" value="0" />
               <div class="limit-counter textarea-counter">
-                <label
-                  for="content"
-                  id="content-counter"
-                  class="counter-area"
-                  >00/360</label
-                >
-                <textarea
-                  name="content"
-                  class="teurny-input"
-                  id="counter-textarea"
-                  rows="4"
-                  maxlength="360"
-                  placeholder="Yorum Yap"
-                  style="resize: none"
-                ></textarea>
+                  <label for="content" id="content-counter" class="counter-area">00/360</label>
+                  <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none" required></textarea>
               </div>
-
               <div class="d-flex gap-3 mt-4">
-                <div>
-                  <label for="cb-1" class="teurny-checkbox">
-                    <input
-                      name="hidden_user_name"
-                      type="checkbox"
-                      id="cb-1"
-                      class="d-none"
-                    />
-                    <div class="teurny-checkbox-inner"></div>
-                  </label>
-                </div>
-                <div>
-                  <p
-                    class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"
-                  >
-                    Kullanıcı adını gizle
-                  </p>
-                  <p class="font-roboto blog-comment-checkbox-text">
-                    Bu gönderi için kullanıcı adını gizlenecek
-                  </p>
-                </div>
+                  <div>
+                      <label for="cb-1" class="teurny-checkbox">
+                          <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
+                          <div class="teurny-checkbox-inner"></div>
+                      </label>
+                  </div>
+                  <div>
+                      <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"> KULLANICI ADINI GİZLE </p>
+                      <p class="font-roboto blog-comment-checkbox-text"> Bu gönderi için kullanıcı adını gizlenecek </p>
+                  </div>
               </div>
               <div class="col-md-12 vAjaxErrors"></div>
-              <button type="submit" class="teurny-footer-btn mt-4">
-                Gönder
-              </button>
-            </form>
+              <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
+          </form>
           </div>
         </div>
         {% else %}

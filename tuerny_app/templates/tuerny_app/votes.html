@@ -1,3 +1,5 @@
+{% load math_filters %}
+
 <div class="row justify-content-center">
   <div class="col-12 col-xl-8">
       <div class="py-4">
@@ -16,46 +18,78 @@
                           <p class="question-card-text py-2">
                             {{ vote.poll.poll_question }}
                         </p>
-                          {% for vote in vote.poll.options.all %}
-                          <input type="hidden" name="survey_id" value="">
-                                      <div class="question-card-survey-item " style="margin-bottom:10px">
-                                          <div class="question-card-survey-item-label">
-                                              <input name="vote" value="" type="radio" id="r1" />
-                                              <label for="r1">{{vote.option_text}}</label>
-                                          </div>
-                                          <div class="question-card-survey-item-progress">
-                                              <div class="question-card-survey-item-progress-rate"
-                                                  style="width: 4%">
-                                              </div>
-                                          </div>
-                                      </div>
-                        {% endfor %}
+                        {% if vote.poll.question.poll %}
+                                {% with poll=poll_data|get_item:vote.poll.question.id %}
+                                {% with total_votes=poll.total_votes|default:0 %}
+                                
+                                    {% for option in vote.poll.question.poll.options.all %}
+                                        <div class="question-card-survey py-2 vCheckRequired">
+                                            <div class="question-card-survey-item" style="margin-bottom: 10px">
+                                                
+                                                <div class="question-card-survey-item-label">
+                                                    <input name="vote_{{ vote.poll.question.id }}" value="{{ option.id }}" type="radio" id="r{{ option.id }}"
+                                                    {% if request.user in option.voted_users.all %} checked {% endif %}>
+                                                    <label for="r{{ option.id }}">{{ option.option_text }}</label>
+                                                </div>
+                                                
+                                                <div class="question-card-survey-item-progress">
+                                                    <div class="question-card-survey-item-progress-rate"
+                                                        id="progress-{{ option.id }}"
+                                                        style="width: {% if total_votes > 0 %}{{ poll.percentages|get_item:option.id|floatformat:1 }}{% else %}0{% endif %}%">
+                                                        <span id="percentage-{{ option.id }}">
+                                                            {% if total_votes > 0 %}
+                                                                {{ poll.percentages|get_item:option.id|floatformat:1 }}%
+                                                            {% else %}
+                                                                0%
+                                                            {% endif %}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                {% endwith %}
+                                {% endwith %}
+                            {% endif %}
                               <div class="question-card-survey py-2 vCheckRequired">
                                   
                           <div class="d-flex justify-content-between align-items-center pt-4">
                               <div class="d-flex gap-4">
                                   <div class="question-card-button">
                                       <i class="fa-regular fa-eye question-card-button-icon"></i>
-                                      <span class="question-card-button-text">0</span>
+                                      <span class="question-card-button-text">{{vote.poll.question.views_count}}</span>
                                   </div>
                                   <div class="question-card-button">
                                       <i class="fa-regular fa-message question-card-button-icon"></i>
                                       <span
-                                          class="question-card-button-text">0ı</span>
+                                          class="question-card-button-text">{{vote.poll.question.comments.count}}</span>
                                   </div>
                               </div>
                               <div class="d-flex align-items-center gap-3">
-                                  <div class="question-card-button">
-                                      <i style="cursor: pointer" data-id=""
-                                          class="fa-solid fa-heart-crack question-card-button-icon"></i> <span
-                                          class="heart-crack-result-0">0</span>
-                                  </div>
-                                  <div class="question-card-rate-line"></div>
-                                  <div class="question-card-button">
-                                      <i style="cursor: pointer" data-id=""
-                                          class="fa-regular fa-heart question-card-button-icon"></i> <span
-                                          class="heart-result-0">0</span>
-                                  </div>
+                                <div class="question-card-button">
+                                    <i {% if request.user in vote.poll.question.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ vote.poll.question.id }}"
+                                       id="dislike-icon-{{ vote.poll.question.id }}"
+                                       class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in vote.poll.question.dislikes.all %}active{% endif %}"></i>
+                                    <span id="dislike-count-{{ vote.poll.question.id }}">{{ vote.poll.question.dislike_count }}</span>
+                                </div>
+                            
+                                <div class="question-card-rate-line-container">
+                                    <div class="question-card-rate-line">
+                                        <div class="rate-line-dislike" id="rate-dislike-{{ q.id }}"></div>
+                                        <div class="rate-line-like" id="rate-like-{{ q.id }}"></div>
+                                    </div>
+                                </div>
+                            
+                                <!-- Beğeni Butonu -->
+                                <div class="question-card-button">
+                                    <i style="cursor: pointer" data-id="{{ vote.poll.question.id }}"
+                                       id="like-icon-{{ vote.poll.question.id }}"
+                                       class="{% if request.user in vote.poll.question.likes.all %}fa-solid {% else %} fa-regular{% endif %} fa-heart question-card-button-icon like-button {% if request.user in vote.poll.question.likes.all %}active{% endif %}"></i>
+                                    <span id="like-count-{{ vote.poll.question.id }}">{{ vote.poll.question.like_count }}</span>
+                                </div>
+                                  
+                                  
                               </div>
                           </div>
                       </div>

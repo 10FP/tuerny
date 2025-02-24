@@ -34,16 +34,26 @@
               </div>
               <div class="d-flex align-items-center gap-3">
                 <div class="question-card-button">
-                  <i
-                    class="fa-solid fa-heart-crack question-card-button-icon"
-                  ></i>
-                  {{question.dislike_count}}
-                </div>
-                <div class="question-card-rate-line"></div>
-                <div class="question-card-button">
-                  <i class="fa-regular fa-heart question-card-button-icon"></i>
-                  {{question.like_count}}
-                </div>
+                  <i {% if request.user in question.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ question.id }}"
+                     id="dislike-icon-{{ question.id }}"
+                     class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in question.dislikes.all %}active{% endif %}"></i>
+                  <span id="dislike-count-{{ question.id }}">{{ question.dislike_count }}</span>
+              </div>
+          
+              <div class="question-card-rate-line-container">
+                  <div class="question-card-rate-line">
+                      <div class="rate-line-dislike" id="rate-dislike-{{ question.id }}"></div>
+                      <div class="rate-line-like" id="rate-like-{{ question.id }}"></div>
+                  </div>
+              </div>
+          
+              <!-- Beğeni Butonu -->
+              <div class="question-card-button">
+                  <i style="cursor: pointer" data-id="{{ question.id }}"
+                     id="like-icon-{{ question.id }}"
+                     class="{% if request.user in question.likes.all %}fa-solid {% else %} fa-regular{% endif %} fa-heart question-card-button-icon like-button {% if request.user in question.likes.all %}active{% endif %}"></i>
+                  <span id="like-count-{{ question.id }}">{{ question.like_count }}</span>
+              </div>
               </div>
             </div>
           </div>
