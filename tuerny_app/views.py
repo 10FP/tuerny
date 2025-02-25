@@ -667,3 +667,27 @@ def update_profile(request):
             return JsonResponse({"success": False, "message": f"Hata: {str(e)}"}, status=500)
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=405)
+
+@csrf_exempt  # AJAX ile CSRF hatasını önlemek için
+def toggle_favorite_subcategory(request, subcategory_id):
+    print("fp10")
+    if not request.user.is_authenticated:
+        return JsonResponse({"success": False, "message": "Giriş yapmalısınız!"}, status=401)
+
+    subcategory = get_object_or_404(SubCategory, id=subcategory_id)
+
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            status = data.get("status", False)
+
+            if status:
+                subcategory.saved_users.add(request.user)
+            else:
+                subcategory.saved_users.remove(request.user)
+
+            return JsonResponse({"success": True, "message": "Favori güncellendi!"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)}, status=400)
+
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=400)

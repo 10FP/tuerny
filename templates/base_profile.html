@@ -1320,4 +1320,71 @@
       observer.observe(document.body, { childList: true, subtree: true });
   });
   </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initSubcategoryToggle() {
+          console.log("🔄 Kategori Favori Scripti Yüklendi!");
+  
+          document.querySelectorAll(".subcategory-toggle").forEach(checkbox => {
+              if (!checkbox.dataset.listener) {  // Eğer event eklenmemişse ekle
+                  checkbox.dataset.listener = "true";  // Event eklenmiş olarak işaretle
+  
+                  checkbox.addEventListener("change", function () {
+                      let subcategoryId = this.dataset.subcategoryId;
+                      let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]")?.value;
+                      let isChecked = this.checked;
+  
+                      console.log(`📌 SubCategory ID: ${subcategoryId}, Durum: ${isChecked ? "Favoriye Eklendi" : "Favoriden Kaldırıldı"}`);
+  
+                      fetch(`/toggle-favorite/${subcategoryId}/`, {
+                          method: "POST",
+                          headers: {
+                              "X-CSRFToken": csrfToken,
+                              "Content-Type": "application/json"
+                          },
+                          body: JSON.stringify({ "status": isChecked })
+                      })
+                      .then(response => {
+                          if (!response.ok) {
+                              throw new Error(`❌ Sunucu Hatası: ${response.status}`);
+                          }
+                          return response.json();
+                      })
+                      .then(data => {
+                          if (data.success) {
+                              console.log("✅ Kategori Güncellendi!");
+                          } else {
+                              console.error("⚠ Hata:", data.message);
+                          }
+                      })
+                      .catch(error => console.error("❌ Fetch Hatası:", error));
+                  });
+              }
+          });
+      }
+  
+      // **Sayfa yüklendiğinde çalıştır**
+      initSubcategoryToggle();
+  
+      // **Sekme Değişimlerini Dinle ve Script'i Yeniden Çalıştır**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  console.log("🔄 Sekme Yüklendi, Kategori Scripti Yeniden Başlatılıyor...");
+                  initSubcategoryToggle();
+              }, 500);
+          });
+      });
+  
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          console.log("🆕 Yeni İçerik Eklendi, Kategori Scripti Yeniden Başlatılıyor...");
+          observer.disconnect();  // Sonsuz döngüyü engelle
+          initSubcategoryToggle();
+          observer.observe(document.body, { childList: true, subtree: true });
+      });
+  
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+  </script>
 </html>

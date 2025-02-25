@@ -38,4 +38,5 @@ urlpatterns = [
     path("update-settings/", views.update_settings, name="settings_page"),
     path("change-password/", views.change_password, name="change_password"),
     path("update-profile/", views.update_profile, name="update_profile"),
+    path("toggle-favorite/<int:subcategory_id>/", views.toggle_favorite_subcategory, name="toggle_favorite_subcategory"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

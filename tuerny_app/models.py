@@ -43,7 +43,7 @@ class SubCategory(models.Model):
     main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="subcategories")
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, blank=True, null=True)
-
+    saved_users = models.ManyToManyField(CustomUser, related_name="saved_categories", blank=True)
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
