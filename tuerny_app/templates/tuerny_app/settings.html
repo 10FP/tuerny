@@ -438,6 +438,8 @@
               <div class="d-flex flex-column gap-4">
                 <table class="table">
                   <tbody>
+                    {% for category in categories %}
+                    {% for c in category.subcategories.all %}
                     <tr>
                       <td
                         style="
@@ -462,55 +464,9 @@
                         </div>
                       </td>
                     </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Kategori 2
-                      </td>
-                      <td class="text-end">
-                        <div class="input-box">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="kategori"
-                            id="radioOption2"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Kategori 3
-                      </td>
-                      <td class="text-end">
-                        <div class="input-box">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="kategori"
-                            id="radioOption3"
-                          />
-                        </div>
-                      </td>
-                    </tr>
+                    {% endfor %}
+                    {% endfor %}
+
                   </tbody>
                 </table>
               </div>
