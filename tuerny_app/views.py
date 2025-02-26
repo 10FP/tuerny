@@ -78,7 +78,7 @@ def asked_details(request, asked_id):
     if not cache.get(cache_key):
             question.views_count += 1  # Görüntülenme sayısını artır
             question.save()  # Değişiklikleri veritabanına kaydet
-            cache.set(cache_key, True, timeout=10)  
+            cache.set(cache_key, True, timeout=1)  
 
     return render(request, 'tuerny_app/asked-details.html', {"question": question})
 
@@ -670,7 +670,7 @@ def update_profile(request):
 
 @csrf_exempt  # AJAX ile CSRF hatasını önlemek için
 def toggle_favorite_subcategory(request, subcategory_id):
-    print("fp10")
+    
     if not request.user.is_authenticated:
         return JsonResponse({"success": False, "message": "Giriş yapmalısınız!"}, status=401)
 
