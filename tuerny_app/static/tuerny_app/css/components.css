@@ -1155,4 +1155,7 @@ p.blog-card-text.mb-0.mt-3 {
   outline: none;  /* Tıklama efekti gelmesin */
   cursor: pointer;  /* El simgesi çıksın */
 }
+.dropdown-menu[data-bs-popper] {
+  left: auto;
+}
 /*# sourceMappingURL=components.css.map */

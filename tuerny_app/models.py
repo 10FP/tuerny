@@ -161,6 +161,17 @@ class SuggestedBlog(models.Model):
     def __str__(self):
         return f"Önerilen: {self.blog.title}"
     
+class SuggestedQuestion(models.Model):
+    question = models.OneToOneField(
+        Question,
+        on_delete=models.CASCADE,
+        related_name="suggested_question"
+    )
+    is_active = models.BooleanField(default=True) 
+
+    def __str__(self):
+        return f"Önerilen: {self.question.title}"
+    
 class MainSuggestedBlog(models.Model):
     blog = models.OneToOneField(
         Blog,
