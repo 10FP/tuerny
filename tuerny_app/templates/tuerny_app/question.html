@@ -28,6 +28,7 @@
                               type="button"
                               data-bs-toggle="dropdown"
                               aria-expanded="false"
+                              id="sortDropdown"
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -41,22 +42,24 @@
                                   fill="#414141"
                                 />
                               </svg>
+                              {% if selected_sort == "latest" %}
+            
+        {% elif selected_sort == "oldest" %}
+           
+        {% elif selected_sort == "most_commented" %}
+            
+        {% elif selected_sort == "most_liked" %}
+            
+        {% else %}
+            Sırala
+        {% endif %}
                             </button>
                             <ul class="dropdown-menu">
-                              <li>
-                                <a class="dropdown-item" href="#">En son eklenenler</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href="#">İlk eklenenler</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href="#">En çok yorum alanlar</a>
-                              </li>
-                              <li>
-                                <a class="dropdown-item" href="#"
-                                  >En çok yorum beğenilenler</a
-                                >
-                              </li>
+                                <li><a class="dropdown-item sort-option" data-sort="latest" href="#">En son eklenenler</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="oldest" href="#">İlk eklenenler</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="most_commented" href="#">En çok yorum alanlar</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="most_liked" href="#">En çok yorum beğenilenler</a></li>
+                            
                             </ul>
                           </div>
                     </div>
@@ -265,19 +268,24 @@
                                     <div class="blog-section-title-divider"></div>
                                     <p></p>
                                 </div>
-    
+                                {% for q in s_q %}
                                 <div class="mt-3 d-flex flex-column gap-3">
                                     <div>
                                         <p>
                                             <span><img src="{% static 'tuerny_app/images/icons/question2.png' %}" alt=""></span>
-                                            Lorem ipsum dolor sit amet, ipsum dolor consectetur adipiscing elit.
+                                            {{q.question.title}}
                                         </p>
                                     </div>
+                                    {% if q.question.poll %}
+                                    {% for o in q.question.poll.options.all %}
                                     <div class="argument-card-item-label">
                                         <input name="argument" value="select_id" type="radio" id="select_id" />
-                                        <label for="select_id" class="text-nowrap">Select Value</label>
+                                        <label for="select_id" class="text-nowrap">{{o.option_text}}</label>
                                     </div>
+                                    {% endfor %}
+                                    {% endif %}
                                 </div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -338,197 +346,151 @@
         </div>
       </div>
 
-
-    <script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll("input[type=radio]").forEach(radio => {
-        radio.addEventListener("change", function() {
-            let questionId = this.name.split("_")[1]; // "vote_3" -> "3"
-            let optionId = this.value;
-            let csrfToken = "{{ csrf_token }}";
-
-            fetch(`/vote/${questionId}/${optionId}/`, {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": csrfToken,
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    
-
-                    // Yüzdelik oranları güncelle
-                    Object.keys(data.percentages).forEach(optionId => {
-                        let progressBar = document.querySelector(`#progress-${optionId}`);
-                        let percentageText = document.querySelector(`#percentage-${optionId}`);
-
-                        if (progressBar && percentageText) {
-                            progressBar.style.width = data.percentages[optionId] + "%";
-                            percentageText.innerText = data.percentages[optionId] + "%";
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔄 Sıralama Scripti Yüklendi!");
+    
+        function initLikeAndVoteScripts() {
+            console.log("♻️ Beğeni ve Oylama Scripti Yeniden Yüklendi!");
+    
+            // Beğeni Butonu
+            document.querySelectorAll(".like-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    let questionId = this.dataset.id;
+                    let csrfToken = "{{ csrf_token }}";
+    
+                    fetch(`/like/${questionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                            document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                            let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                            let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                            if (data.liked) {
+                                likeIcon.classList.add("fa-solid", "active");
+                                dislikeIcon.style.color = "rgb(0, 0, 0)";
+                            } else {
+                                likeIcon.classList.remove("fa-solid", "active");
+                                likeIcon.classList.add("fa-regular");
+                            }
                         }
                     });
-                } else {
-                    alert(data.message);
-                }
-            })
-            .catch(error => console.error("Hata:", error));
-        });
-    });
-});
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Beğeni butonu
-        document.querySelectorAll(".like-button").forEach(button => {
-            button.addEventListener("click", function() {
-                let questionId = this.dataset.id;
-                
-                let csrfToken = "{{ csrf_token }}";
-    
-                fetch(`/like/${questionId}/`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": csrfToken,
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        console.log("fp")
-                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
-                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
-    
-                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
-                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
-    
-                        if (data.liked) {
-                            likeIcon.classList.add("fa-solid");
-                            likeIcon.classList.add("active");
-                            dislikeIcon.style.color = "rgb(0, 0, 0)";
-
-                        } else {
-                            likeIcon.classList.remove("fa-solid");
-                            likeIcon.classList.add("fa-regular");
-
-                            likeIcon.classList.remove("active");
-                        }
-    
-                        // dislikeIcon.classList.remove("fa-solid");
-                        // dislikeIcon.classList.remove("active");
-                    }
                 });
             });
-        });
     
-        // Beğenmeme butonu
-        document.querySelectorAll(".dislike-button").forEach(button => {
-            button.addEventListener("click", function() {
-                let questionId = this.dataset.id;
-                let csrfToken = "{{ csrf_token }}";
+            // Beğenmeme Butonu
+            document.querySelectorAll(".dislike-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    let questionId = this.dataset.id;
+                    let csrfToken = "{{ csrf_token }}";
     
-                fetch(`/dislike/${questionId}/`, {
-                    method: "POST",
-                    headers: {
-                        "X-CSRFToken": csrfToken,
-                        "Content-Type": "application/json"
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
-                        document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
-    
-                        let likeIcon = document.getElementById(`like-icon-${questionId}`);
-                        let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
-    
-                        if (data.disliked) {
-                            console.log("a")
-                            
-                            dislikeIcon.classList.add("active");
-                            dislikeIcon.style.color = "rgb(130, 68, 88)";
-                            likeIcon.classList.remove("fa-solid");
-                            likeIcon.classList.add("fa-regular");
-
-                            likeIcon.classList.remove("active");
-                            
-                        } else {
-                            // dislikeIcon.classList.remove("fa-solid");
-                            dislikeIcon.classList.remove("active");
-                            dislikeIcon.style.color = "rgb(0, 0, 0)";
-                            console.log("b")
-
+                    fetch(`/dislike/${questionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
                         }
-                        console.log("c")
-                        
-                        
-                        
-
-
-                        // likeIcon.classList.remove("active");
-                    }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                            document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                            let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                            let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                            if (data.disliked) {
+                                dislikeIcon.classList.add("active");
+                                dislikeIcon.style.color = "rgb(130, 68, 88)";
+                                likeIcon.classList.remove("fa-solid", "active");
+                                likeIcon.classList.add("fa-regular");
+                            } else {
+                                dislikeIcon.classList.remove("active");
+                                dislikeIcon.style.color = "rgb(0, 0, 0)";
+                            }
+                        }
+                    });
                 });
+            });
+    
+            // Oylama Butonu (Anket için)
+            document.querySelectorAll("input[type=radio]").forEach(radio => {
+                radio.addEventListener("change", function () {
+                    let questionId = this.name.split("_")[1]; // "vote_3" -> "3"
+                    let optionId = this.value;
+                    let csrfToken = "{{ csrf_token }}";
+    
+                    fetch(`/vote/${questionId}/${optionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log("✅ Anket Güncellendi!");
+    
+                            Object.keys(data.percentages).forEach(optionId => {
+                                let progressBar = document.querySelector(`#progress-${optionId}`);
+                                let percentageText = document.querySelector(`#percentage-${optionId}`);
+    
+                                if (progressBar && percentageText) {
+                                    progressBar.style.width = data.percentages[optionId] + "%";
+                                    percentageText.innerText = data.percentages[optionId] + "%";
+                                }
+                            });
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => console.error("❌ Hata:", error));
+                });
+            });
+        }
+    
+        // İlk Yüklemede Çalıştır
+        initLikeAndVoteScripts();
+    
+        // **Sıralama Değişince Yeni İçeriği Yükle ve Script'i Yeniden Çalıştır**
+        document.querySelectorAll(".sort-option").forEach(option => {
+            option.addEventListener("click", function (event) {
+                event.preventDefault();
+                let selectedSort = this.dataset.sort;
+    
+                console.log("📌 Seçilen Filtre:", selectedSort);
+    
+                fetch(`/questions/?sort=${selectedSort}`, {
+                    method: "GET",
+                })
+                .then(response => response.text())
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, "text/html");
+                    let newContent = doc.getElementsByClassName("quest-listdiv")[0].innerHTML;
+                    let newDropdownText = this.textContent.trim();
+    
+                    document.getElementsByClassName("quest-listdiv")[0].innerHTML = newContent;
+                    document.getElementById("sortDropdown").textContent = newDropdownText;
+    
+                    console.log("✅ Sıralama Güncellendi! Event'ler Yeniden Yükleniyor...");
+                    initLikeAndVoteScripts(); // **YENİ BUTONLARA EVENT EKLE**
+                })
+                .catch(error => console.error("❌ Hata:", error));
             });
         });
     });
     </script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const commentForm = document.querySelector(".ajaxFormTrue");
-  
-      if (commentForm) {
-          commentForm.addEventListener("submit", function (e) {
-              e.preventDefault(); // Sayfanın yenilenmesini engelle
-  
-              let formData = new FormData(commentForm); // Form verilerini al
-              let actionUrl = commentForm.getAttribute("action"); // Formun gönderileceği URL
-  
-              fetch(actionUrl, {
-                  method: "POST",
-                  body: formData,
-                  headers: {
-                      "X-Requested-With": "XMLHttpRequest",
-                  },
-              })
-                  .then(response => response.json())
-                  .then(data => {
-                      if (data.status === "success") {
-                          let commentList = document.querySelector(".comment-list"); // Yorumları içeren alan
-                          let newComment = document.createElement("div");
-                          newComment.classList.add("comment-item");
-  
-                          let userName = formData.get("hidden_user_name") ? "Anonim Kullanıcı" : "{{ user.username }}";
-                          let content = formData.get("content");
-  
-                          newComment.innerHTML = `
-                              <div class="comment-header">
-                                  <strong>${userName}</strong> - <span>Şimdi</span>
-                              </div>
-                              <p>${content}</p>
-                          `;
-                          location.reload();
-                          // Yeni yorumu yorum listesine ekleyelim
-                          if (commentList) {
-                              commentList.prepend(newComment);
-                          }
-  
-                          // Formu temizle
-                          commentForm.reset();
-                      } else {
-                          alert("Yorum eklenirken bir hata oluştu!");
-                      }
-                  })
-                  .catch(error => {
-                      console.error("Hata:", error);
-                      alert("Sunucuyla bağlantı kurulamadı!");
-                  });
-          });
-      }
-  });
-  </script>
 {% endblock content %}
   

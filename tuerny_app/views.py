@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion
 from django.contrib.auth import authenticate, login as auth_login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -13,6 +13,7 @@ from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.cache import cache
+from django.db.models import Count
 
 # Create your views here.
 User = get_user_model()
@@ -288,16 +289,27 @@ def questions(request):
     return render(request, "tuerny_app/questions.html")
 
 def question(request):
-    questions = Question.objects.prefetch_related("poll__options")
+    sort_option = request.GET.get("sort", "latest")  # Varsayılan: "En son eklenenler"
 
+    # **Sıralama Seçenekleri**
+    if sort_option == "latest":
+        questions = Question.objects.prefetch_related("poll__options").order_by("-created_at")
+    elif sort_option == "oldest":
+        questions = Question.objects.prefetch_related("poll__options").order_by("created_at")
+    elif sort_option == "most_commented":
+        questions = Question.objects.prefetch_related("poll__options").annotate(comment_count=Count("comments")).order_by("-comment_count")
+    elif sort_option == "most_liked":
+        questions = Question.objects.prefetch_related("poll__options") \
+    .annotate(like_count_annotated=Count("likes", distinct=True)) \
+    .order_by("-like_count_annotated")
+    else:
+        questions = Question.objects.prefetch_related("poll__options")
+
+    # **Anket Verilerini Hazırla**
     poll_data = {}
-
     for question in questions:
         if hasattr(question, "poll"):
-            # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
             total_votes = sum(option.vote_count for option in question.poll.options.all())
-
-            # Seçeneklerin yüzdesini hesapla
             poll_data[question.id] = {
                 "total_votes": total_votes,
                 "percentages": {
@@ -305,9 +317,13 @@ def question(request):
                     for option in question.poll.options.all()
                 }
             }
+
+    s_questions = SuggestedQuestion.objects.all()
     return render(request, "tuerny_app/question.html", {
         "questions": questions,
-        "poll_data": poll_data  # Template'e sadece yüzde verileri gönderiliyor
+        "poll_data": poll_data,
+        "s_q": s_questions,
+        "selected_sort": sort_option  # Seçili sıralama bilgisini gönderiyoruz
     })
 
 def save(request):

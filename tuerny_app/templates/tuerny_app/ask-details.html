@@ -129,14 +129,19 @@
 						<p></p>
 					</div>
 					<div class="mt-3 d-flex flex-column gap-3">
-						<div class="question-card-2">
-							<div> <i class="fa-regular fa-circle-question fs-4"></i> </div>
-							<p class="question-card-2-title"> <a href="{% url 'tuerny_app:ask'  %}">
-                    Beğenilen sorular</a
-                  >
-                </p>
-              </div>
-            </div>
+            {% for like in request.user.liked_questions.all %}
+                    <div class="question-card-2">
+                        <div>
+                            <img src="{% static 'tuerny_app/images/icons/question1.png' %}" alt="">
+                        </div>
+                        
+                        <p class="question-card-2-title">
+                            <a href="{% url 'tuerny_app:ask' like.id %}"> {{like.title}} </a>
+                        </p>
+                       
+                    </div>
+                    {% endfor %}
+        </div>
           </div>
 				<div>
 					<div class="blog-section-title soru"> <span>Reklam</span>
