@@ -584,6 +584,7 @@ footer .copyright-text {
   font-family: "Playfair Display";
   font-size: 32px;
   font-weight: 400;
+  margin-top: -50px;
   line-height: 41.6px;
   text-align: center;
 }
