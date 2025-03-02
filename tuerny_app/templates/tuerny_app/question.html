@@ -278,9 +278,10 @@
                                     </div>
                                     {% if q.question.poll %}
                                     {% for o in q.question.poll.options.all %}
+                                    
                                     <div class="argument-card-item-label">
                                         <input name="argument" value="select_id" type="radio" id="select_id" />
-                                        <label for="select_id" class="text-nowrap">{{o.option_text}}</label>
+                                        <label for="select_id" class="text-nowrap option">{{o.option_text}}</label>
                                     </div>
                                     {% endfor %}
                                     {% endif %}

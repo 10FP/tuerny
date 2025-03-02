@@ -419,10 +419,17 @@ footer .copyright-text {
   color: #fff !important;
 }
 
+
 .teurny-button-primary-outline {
   background-color: white;
-  border: 2px solid var(--teurny-black);
-  padding: 8px 12px;
+  border: 1px solid #000;
+  font-family: "Roboto" !important;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  padding: 8px 0;
+  color: #000000;
+  text-transform: uppercase;
   display: block;
   width: 100%;
   transition: all 0.3s;
@@ -1158,5 +1165,19 @@ p.blog-card-text.mb-0.mt-3 {
 }
 .dropdown-menu[data-bs-popper] {
   left: auto;
+}
+.question-card-2-title a {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20.8px;
+  color: #989491;
+}
+.argument-card-item-label .option {
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20.8px;
+  color: #989491;
 }
 /*# sourceMappingURL=components.css.map */
