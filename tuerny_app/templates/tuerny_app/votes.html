@@ -13,9 +13,9 @@
                               <p>{{ vote.poll.question.created_at|date:"d-m-Y" }}</p>
                           </div>
                           <h3 class="question-card-title pb-2">
-                              <a href="{% url 'tuerny_app:index' %}">{{vote.poll.question.title}}</a>
+                              <a href="{% url 'tuerny_app:asked' vote.poll.question.id %}">{{vote.poll.question.title}}</a>
                           </h3>
-                          <p class="question-card-text py-2">
+                          <p class="question-card-text py-2" style="margin-bottom: 10px;">
                             {{ vote.poll.poll_question }}
                         </p>
                         {% if vote.poll.question.poll %}
@@ -23,7 +23,7 @@
                                 {% with total_votes=poll.total_votes|default:0 %}
                                 
                                     {% for option in vote.poll.question.poll.options.all %}
-                                        <div class="question-card-survey py-2 vCheckRequired">
+                                        <div class="question-card-survey vCheckRequired" style="padding: 0;">
                                             <div class="question-card-survey-item" style="margin-bottom: 10px">
                                                 
                                                 <div class="question-card-survey-item-label">
@@ -94,20 +94,20 @@
                           </div>
                       </div>
 
-              <div class="row justify-content-center">
-                  <div class="col-12 col-lg-8">
-                    <div class="hstack justify-content-center mt-5">
-                        <button data-start="9" class="teurny-button-primary-outline saved-more-ask"
-                            style="width: 383px;height: 39px;">
-                            DAHA FAZLA
-                        </button>
-                      </div>
-                  </div>
-              </div>
+              
 
           </div>
           {% endfor %}
-
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+              <div class="hstack justify-content-center mt-5">
+                  <button data-start="9" class="teurny-button-primary-outline saved-more-ask"
+                      style="width: 383px;height: 39px;">
+                      DAHA FAZLA
+                  </button>
+                </div>
+            </div>
+        </div>
       </div>
   </div>
 </div>

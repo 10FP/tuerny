@@ -11,11 +11,10 @@
               <p>question card date</p>
             </div>
             <h3 class="question-card-title pb-2">
-              {% if question.poll %}
-              <a href="{% url 'tuerny_app:ask' question.poll.id %}">{{question.title}}</a>
-              {% else %}
+              
+              
               <a href="{% url 'tuerny_app:asked' question.id %}">{{question.title}}</a>
-              {% endif %}
+              
             </h3>
             <p class="question-card-text py-2">{{question.description}}</p>
   
