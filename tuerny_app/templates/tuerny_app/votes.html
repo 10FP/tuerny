@@ -10,7 +10,7 @@
                               <p>{{vote.poll.question.subcategory.name}}</p>
                           </div>
                           <div class="question-card-date">
-                              <p>question card date</p>
+                              <p>{{ vote.poll.question.created_at|date:"d-m-Y" }}</p>
                           </div>
                           <h3 class="question-card-title pb-2">
                               <a href="{% url 'tuerny_app:index' %}">{{vote.poll.question.title}}</a>
@@ -29,7 +29,7 @@
                                                 <div class="question-card-survey-item-label">
                                                     <input name="vote_{{ vote.poll.question.id }}" value="{{ option.id }}" type="radio" id="r{{ option.id }}"
                                                     {% if request.user in option.voted_users.all %} checked {% endif %}>
-                                                    <label for="r{{ option.id }}">{{ option.option_text }}</label>
+                                                    <label for="r{{ option.id }}" class="vote-option">{{ option.option_text }}</label>
                                                 </div>
                                                 
                                                 <div class="question-card-survey-item-progress">

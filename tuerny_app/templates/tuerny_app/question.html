@@ -269,8 +269,8 @@
                                     <p></p>
                                 </div>
                                 {% for q in s_q %}
-                                <div class="mt-3 d-flex flex-column gap-3">
-                                    <div>
+                                <div class="mt-3 d-flex flex-column gap-special">
+                                    <div style="margin-bottom: 20px;">
                                         <p>
                                             <span><img src="{% static 'tuerny_app/images/icons/question2.png' %}" alt=""></span>
                                             {{q.question.title}}
@@ -281,7 +281,7 @@
                                     
                                     <div class="argument-card-item-label">
                                         <input name="argument" value="select_id" type="radio" id="select_id" />
-                                        <label for="select_id" class="text-nowrap option">{{o.option_text}}</label>
+                                        <label for="select_id" class="text-nowrap option wrap">{{o.option_text}}</label>
                                     </div>
                                     {% endfor %}
                                     {% endif %}

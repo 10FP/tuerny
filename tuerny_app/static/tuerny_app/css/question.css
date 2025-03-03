@@ -96,6 +96,7 @@
 }
 .question-card-survey-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 30px;
 }
@@ -103,6 +104,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  max-width: 60%;
 }
 @media screen and (max-width: 768px) {
   .question-card-survey-item-label {
@@ -110,7 +112,8 @@
   }
 }
 .question-card-survey-item-progress {
-  width: 50%;
+  min-width: 33%;
+  max-width: 33%;
   height: 25px;
   border: 1px solid var(--teurny-lighter);
   display: flex;
@@ -191,5 +194,7 @@
     font-size: 14px;
   }
 }
-
+.gap-special {
+  gap: 0.1rem;
+}
 /*# sourceMappingURL=question.css.map */

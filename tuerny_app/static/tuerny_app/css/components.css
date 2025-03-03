@@ -1179,5 +1179,10 @@ p.blog-card-text.mb-0.mt-3 {
   font-size: 16px;
   line-height: 20.8px;
   color: #989491;
+  margin-left: 10px;
+}
+.vote-option {
+  word-wrap: break-word;
+  max-width: 100%;
 }
 /*# sourceMappingURL=components.css.map */
