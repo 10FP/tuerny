@@ -323,5 +323,72 @@
           </div>
         </div>
       </div>
-      
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function initShowMoreComments() {
+                console.log("🔄 Yorum Gösterme Scripti Yüklendi!");
+        
+                setTimeout(() => { // **Tab içeriği yüklendikten sonra çalıştır**
+                    let comments = document.querySelectorAll(".saved-comments-list .question-card"); // Yorumları seç
+                    let showMoreBtn = document.querySelector(".saved-more-ask"); // "Daha Fazla" butonu
+                    let visibleCount = 3; // **Başlangıçta sadece 3 yorum görünür**
+        
+                    if (!showMoreBtn) {
+                        console.warn("⚠️ 'Daha Fazla' butonu bulunamadı! Tab içeriği henüz yüklenmemiş olabilir.");
+                        return;
+                    }
+        
+                    function updateCommentsVisibility() {
+                        comments.forEach((comment, index) => {
+                            if (index < visibleCount) {
+                                comment.style.display = "block"; // **İlk 3 yorum görünür**
+                            } else {
+                                comment.style.display = "none"; // **Diğer yorumlar gizlenir**
+                            }
+                        });
+        
+                        // **Eğer buton yoksa hata almamak için kontrol et**
+                        if (showMoreBtn) {
+                            if (visibleCount >= comments.length) {
+                                showMoreBtn.style.display = "none"; // **Tüm yorumlar gösterildiyse butonu gizle**
+                            } else {
+                                showMoreBtn.style.display = "block";
+                            }
+                        }
+                    }
+        
+                    // **İlk yüklemede güncelle**
+                    updateCommentsVisibility();
+        
+                    // **"Daha Fazla" butonuna tıklanınca**
+                    showMoreBtn.addEventListener("click", function() {
+                        visibleCount += 3; // **3 tane daha göster**
+                        updateCommentsVisibility();
+                    });
+        
+                }, 500); // **Tab içeriğinin yüklenmesini bekle**
+            }
+        
+            // **Sayfa yüklendiğinde script başlat**
+            initShowMoreComments();
+        
+            // **Sekme değişimlerini dinle ve script'i tekrar başlat**
+            document.querySelectorAll(".profile-tab").forEach(tab => {
+                tab.addEventListener("click", function () {
+                    setTimeout(() => {
+                        console.log("🔄 Sekme Yüklendi, Yorum Gösterme Scripti Yeniden Başlatılıyor...");
+                        initShowMoreComments();
+                    }, 500);
+                });
+            });
+        
+            // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+            let observer = new MutationObserver(() => {
+                console.log("🆕 Yeni İçerik Eklendi, Yorum Gösterme Scripti Yeniden Başlatılıyor...");
+                initShowMoreComments();
+            });
+        
+            observer.observe(document.body, { childList: true, subtree: true });
+        });
+        </script>   
 {% endblock content %}
