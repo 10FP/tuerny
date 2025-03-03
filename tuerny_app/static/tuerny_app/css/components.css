@@ -1185,4 +1185,20 @@ p.blog-card-text.mb-0.mt-3 {
   word-wrap: break-word;
   max-width: 100%;
 }
+.special-que {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 85%;
+}
+.special-cards {
+  display: block;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+.about-div {
+  width: 90%;
+  margin-left: 5%;
+}
 /*# sourceMappingURL=components.css.map */

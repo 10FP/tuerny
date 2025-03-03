@@ -14,6 +14,7 @@ urlpatterns = [
     path("ask/", views.ask, name="ask"),
     path("add-comment/", views.add_comment, name="add-comment"),
     path("add-blog-comment/", views.add_blog_comment, name="add_blog_comment"),
+    path("hakkimizda/", views.about, name="about"),
     path("answer/", views.answer, name="answer"),   
     path("questions/", views.question, name="question"),
     path("contact/", views.contact, name="contact"),

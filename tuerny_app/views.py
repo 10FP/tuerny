@@ -31,6 +31,10 @@ def index(request):
         
     return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs})
 
+def about(request):
+    s_blogs = SuggestedBlog.objects.all()
+    return render(request, 'tuerny_app/about.html', {"extra": s_blogs})
+
 def ask_details(request, question_id):
     question = get_object_or_404(Question, id=question_id)
     

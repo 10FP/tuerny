@@ -67,7 +67,7 @@
                         <p class="mb-0 text-teurny-mid">Filtrelere göre 'Gündemdeki sorular vs.'</p>
                     </div>
                     <div>
-                        <a href="/assets/src/views/ask.html" class="teurny-button-secondary">SOR</a>
+                        <a href="{% url 'tuerny_app:ask' %}" class="teurny-button-secondary">SOR</a>
                     </div>
                 </div>
     
@@ -98,7 +98,7 @@
                                                     <div class="question-card-survey-item-label">
                                                         <input name="vote_{{ q.id }}" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
                                                         {% if request.user in vote.voted_users.all %} checked {% endif %}>
-                                                        <label for="r{{ vote.id }}">{{ vote.option_text }}</label>
+                                                        <label class="vote-option" for="r{{ vote.id }}">{{ vote.option_text }}</label>
                                                     </div>
                                                     
                                                     <div class="question-card-survey-item-progress">
@@ -183,7 +183,14 @@
                                         </div>
                                         <div class="teurny-divider"></div>
                                             {% endfor %}
-                                                
+                                            <button
+              data-start="9"
+              class="teurny-button-primary-outline saved-more-ask"
+              id="saved-more-ask"
+              style="height: 39px"
+            >
+              DAHA FAZLA
+            </button>
                                                 
                                                     
                                                    
@@ -251,8 +258,8 @@
                                             <img src="{% static 'tuerny_app/images/icons/question1.png' %}" alt="">
                                         </div>
                                         
-                                        <p class="question-card-2-title">
-                                            <a href="{% url 'tuerny_app:ask' like.id %}"> {{like.title}} </a>
+                                        <p class="question-card-2-title special-que text-nowrap">
+                                            <a href="{% url 'tuerny_app:ask' like.id %}" class="special-que text-nowrap" style="display: block; width: 100%; height: 20px;"> {{like.title}} </a>
                                         </p>
                                        
                                     </div>
@@ -281,7 +288,7 @@
                                     
                                     <div class="argument-card-item-label">
                                         <input name="argument" value="select_id" type="radio" id="select_id" />
-                                        <label for="select_id" class="text-nowrap option wrap">{{o.option_text}}</label>
+                                        <label for="select_id" class="text-nowrap option wrap special-que">{{o.option_text}}</label>
                                     </div>
                                     {% endfor %}
                                     {% endif %}
@@ -489,6 +496,49 @@
                     initLikeAndVoteScripts(); // **YENİ BUTONLARA EVENT EKLE**
                 })
                 .catch(error => console.error("❌ Hata:", error));
+            });
+        });
+    });
+    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔄 İç İçe Yorum ve Divider Gösterme Scripti Yüklendi!");
+    
+        document.querySelectorAll(".question-card").forEach((questionCard) => {
+            let comments = questionCard.querySelectorAll(".blog-comment-item"); // **Yorumları Seç**
+            let dividers = questionCard.querySelectorAll(".teurny-divider"); // **Dividerları Seç**
+            let showMoreBtn = questionCard.querySelector(".saved-more-ask"); // **Statik Butonu Seç**
+    
+            if (!showMoreBtn || comments.length <= 3) {
+                if (showMoreBtn) showMoreBtn.style.display = "none"; // **Eğer buton varsa ve yorum azsa gizle**
+                return;
+            }
+    
+            let visibleCount = 3; // **Başlangıçta sadece 3 yorum görünür**
+    
+            function updateCommentsVisibility() {
+                comments.forEach((comment, index) => {
+                    let divider = dividers[index] || null; // **Her yorumun altında bir divider olabilir**
+                    let isVisible = index < visibleCount;
+    
+                    comment.style.display = isVisible ? "block" : "none";
+                    if (divider) {
+                        divider.style.display = isVisible ? "block" : "none";
+                    }
+                });
+    
+                if (visibleCount >= comments.length) {
+                    showMoreBtn.style.display = "none"; // **Tüm yorumlar gösterildiyse butonu gizle**
+                }
+            }
+    
+            // **İlk yüklemede güncelle**
+            updateCommentsVisibility();
+    
+            // **"Daha Fazla" butonuna tıklanınca**
+            showMoreBtn.addEventListener("click", function () {
+                visibleCount += 3; // **3 tane daha göster**
+                updateCommentsVisibility();
             });
         });
     });

@@ -52,11 +52,19 @@
 .blog-content p {
   font-size: 18px;
   text-indent: 30px;
+  font-weight: 400;
+  font-family: 'Poppins';
+  line-height: 27px;
   
 }
 .blog-content h1 {
-  border-left: 5px solid red;
+  border-left: 3px solid rgb(134, 80, 97);
   text-indent: 10px;
+  font-family: 'Poppins';
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  margin-top: 24px;
 }
 .blog-content h2 {
   border-left: 5px solid blue;
