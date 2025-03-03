@@ -403,32 +403,7 @@ function updateRateLine(id) {
 
 //profile tabs
 
-function loadContent(url) {
-  $("#nav-bookmarks").html("<p>Loading...</p>");
-  $.ajax({
-    url: url,
-    method: "GET",
-    success: function (data) {
-      $("#nav-bookmarks").html(data);
-    },
-    error: function () {
-      $("#nav-bookmarks").html(
-        "<p>Error loading content. Please try again later.</p>"
-      );
-    },
-  });
-}
 
-const initialUrl = $(".nav-link.profile-tab.active").data("url");
-loadContent(initialUrl);
-
-$(".nav-link.profile-tab").on("click", function () {
-  $(".nav-link.profile-tab").removeClass("active");
-  $(this).addClass("active");
-
-  const url = $(this).data("url");
-  loadContent(url);
-});
 
 $(".header-link-container.open-header-link").hover(function() {
   $(".header-menu").addClass("show-before");

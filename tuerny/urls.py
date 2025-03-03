@@ -19,5 +19,6 @@ from tuerny_app.admin import custom_admin_site
 
 urlpatterns = [
     path('admin/', custom_admin_site.urls),
-    path('', include("tuerny_app.urls"))
+    path('', include("tuerny_app.urls")),
+    path('accounts/', include('allauth.urls')),
 ]

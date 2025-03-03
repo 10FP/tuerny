@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 {% block content %}
 
       <div class="container-fluid login">
@@ -26,7 +27,7 @@
                         </div>
                         <div class="col-md-12 vAjaxErrors"></div>
                         <button type="submit" class="btn btn-default loginbtn">Giriş Yap</button>
-                        <a href="javascript:;" class="btn btn-default google">
+                        <a href="{% provider_login_url 'google' %}" class="btn btn-default google">
                             <img src="{% static 'tuerny_app/images/icons/image 2.svg' %}">
                             Google ile Giriş Yap
                         </a>

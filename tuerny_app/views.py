@@ -14,10 +14,25 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.core.cache import cache
 from django.db.models import Count
+from django.core.mail import send_mail
 
 # Create your views here.
 User = get_user_model()
+
+
+
+
 def index(request):
+    
+    send_mail(
+        'Subject here',
+        'Here is the message.',
+        'furkanp2002@gmail.com',
+        [f'{request.user.email}'],
+        fail_silently=False,
+    )
+        
+        
     api = APISettings.objects.all()
     blog = Blog.objects.all()
     main = MainSuggestedBlog.objects.all()
@@ -258,7 +273,7 @@ def login(request):
             user = None
 
         if user and user.check_password(password):
-            auth_login(request, user)  # Kullanıcıyı giriş yaptır
+            auth_login(request, user,backend='allauth.account.auth_backends.AuthenticationBackend')  # Kullanıcıyı giriş yaptır
             messages.success(request, "Başarıyla giriş yaptınız.")
             return redirect('tuerny_app:index')  # Giriş sonrası yönlendirme
         else:
