@@ -28,7 +28,7 @@
                   <div class="form-check vCheckRequired hstack gap-2 align-items-stretch">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                       <label class="form-check-label" for="flexCheckDefault">
-                          <a href="/page/teurny-uyelik-ve-gizlilik-sozlesmesi" target="_blank"> Üyelik sözleşmesi &
+                          <a href="{% url 'tuerny_app:contract' %}" target="_blank"> Üyelik sözleşmesi &
                               gizlilik politikasını </a> okudum ve kabul ediyorum.
                       </label>
                       <!-- <div>
@@ -55,7 +55,7 @@
 
                   <div class="hstack gap-2 justify-content-center mt-4 text-roboto fw-light">
                       <span>Zaten Hesabın Var Mı?</span>
-                      <a class="text-decoration-underline" href="login.html">Giriş Yap</a>
+                      <a class="text-decoration-underline" href="{% url 'tuerny_app:login' %}">Giriş Yap</a>
                   </div>
 
               </div>
