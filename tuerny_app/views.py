@@ -376,7 +376,9 @@ def blog_detail(request, slug):
     blog = Blog.objects.all()
     s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
-
+    for i in blog_.contents.all():
+        print(i.type)
+        print(i.text)
     if request.user.is_authenticated:
         saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
     else:

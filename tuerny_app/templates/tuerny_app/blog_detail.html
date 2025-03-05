@@ -8,7 +8,7 @@
         <div class="col-lg-6 p-0">
             <div class="d-flex flex-column gap-4">
                 <div class="text-center d-flex flex-column gap-2">
-                    <p class="blog-category">{{blog_.blogs.name}}</p>
+                    <p class="blog-category">{{blog_.category.name}}</p>
                     <h1 class="blog-title fw-normal">
                         {{blog_.title}}
                     </h1>
@@ -112,7 +112,48 @@
 
                 </div>
                 <div class="blog-content d-flex flex-column gap-3">
-                    {{blog_.content | safe}}
+                    {% for content in blog_.contents.all %}
+        {% if content.type == "header" %}
+        
+            <h1>{{ content.text }}</h1>
+        {% elif content.type == "subheader" %}
+            <h2>{{ content.text}}</h2>
+        {% elif content.type == "paragraph" %}
+            <p>{{ content.text }}</p>
+        {% elif content.type == "image" %}
+            <img src="{{ content.image.url }}" alt="Blog Image" style="max-width: 100%; height: auto;">
+        {% elif content.type == "video" %}
+            <iframe width="560" height="315" src="{{ content.video }}" frameborder="0" allowfullscreen></iframe>
+        {% elif content.type == "product" %}
+        <div class="py-5">
+            <div class="blog-card-3 product-detail">
+                <div class="row edit-special">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="blog-card-img">
+                            <img src="{{content.product.image.url}}" class="w-100 object-fit-cover" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="blog-card-content">
+                            <div class="blog-card-content-top">
+                                <a href="#" class="blog-card-title stretched-link">{{content.product.title}}</a>
+                                <p class="blog-card-text mb-0">
+                                    {{content.product.description}}
+                                </p>
+                            </div>
+                            <div class="blog-card-content-bottom justify-content-start">
+                                <a href="{{content.product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+                                    style="width: 207px;">
+                                    DETAYLAR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
                 </div>
                 {% if blog_.products.all %}
                 {% for product in blog_.products.all %}

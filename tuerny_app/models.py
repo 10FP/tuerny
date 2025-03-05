@@ -107,22 +107,25 @@ class PollOption(models.Model):
     def vote_count(self):
         """Toplam oy sayısını döndürür."""
         return self.voted_users.count()
+    
+class Product(models.Model):
+    
+    image = models.ImageField(upload_to="product_images/", null=True, blank=True)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    link = models.URLField(max_length=500, help_text="Ürün bağlantısını ekleyin.")
+
+    def __str__(self):
+        return self.title
 
 class Blog(models.Model):
-    category = models.ForeignKey(
-        'SubCategory', 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        related_name="blogs"
-    )
-    extra_categories = models.ManyToManyField(  # Yeni çoklu kategori desteği
-        'SubCategory', 
-        related_name="extra_blogs", 
-        blank=True
-    )
+    category = models.ForeignKey('SubCategory', on_delete=models.SET_NULL, null=True, related_name="blogs")
+    extra_categories = models.ManyToManyField('SubCategory', related_name="extra_blogs", blank=True)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="product_blog")
+    extra_product = models.ManyToManyField(Product, related_name="extra_product_blog", blank=True)
     title = models.CharField(max_length=255)
     short_description = RichTextField(default="", null=True, blank=True)
-    content = RichTextField()  # CKEditor entegrasyonu için
+    
     media = models.ImageField(upload_to='blog_media/', null=True, blank=True)
     media_extra = models.FileField(
         upload_to='blog_media/',
@@ -150,6 +153,19 @@ class Blog(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+class CategorySuggestedBlog(models.Model):
+    blog = models.OneToOneField(
+        Blog,
+        on_delete=models.CASCADE,
+        related_name="category_suggested_blog"
+    )
+    is_active = models.BooleanField(default=True)  # Blog önerilerini yönetmek için
+
+    def __str__(self):
+        return f"Önerilen: {self.blog.title}"
+
+
 
 class SuggestedBlog(models.Model):
     blog = models.OneToOneField(
@@ -184,26 +200,7 @@ class MainSuggestedBlog(models.Model):
     def __str__(self):
         return f"Önerilen: {self.blog.title}"
 
-class CategorySuggestedBlog(models.Model):
-    blog = models.OneToOneField(
-        Blog,
-        on_delete=models.CASCADE,
-        related_name="category_suggested_blog"
-    )
-    is_active = models.BooleanField(default=True)  # Blog önerilerini yönetmek için
 
-    def __str__(self):
-        return f"Önerilen: {self.blog.title}"
-
-class Product(models.Model):
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="products")
-    image = models.ImageField(upload_to="product_images/", null=True, blank=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    link = models.URLField(max_length=500, help_text="Ürün bağlantısını ekleyin.")
-
-    def __str__(self):
-        return self.title
     
 class Comment(models.Model):
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True, blank=True, related_name="comments")
@@ -281,3 +278,35 @@ class UserSettings(models.Model):
 
     def __str__(self):
         return f"{self.user.username} Ayarları"
+    
+
+class BlogContent(models.Model):
+    class ContentType(models.TextChoices):
+        HEADER = "header", "Başlık"
+        SUBHEADER = "subheader", "Alt Başlık"
+        PARAGRAPH = "paragraph", "Paragraf"
+        IMAGE = "image", "Resim"
+        VIDEO = "video", "Video"
+        PRODUCT = "product", "Ürün"
+
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name="contents")
+    type = models.CharField(max_length=20, choices=ContentType.choices)
+    order = models.PositiveIntegerField()  # İçerik sırasını belirlemek için
+
+    # İçerik alanları
+    text = models.TextField(blank=True, null=True)  # Başlık, alt başlık, paragraf için
+    image = models.ImageField(upload_to="blog_images/", blank=True, null=True)  # Resimler
+    video = models.URLField(blank=True, null=True)  # Video linki
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)  # Ürün ekleme
+
+    class Meta:
+        ordering = ["order"]
+
+    def save(self, *args, **kwargs):
+        if self.order is None:  # Eğer order girilmemişse
+            last_content = BlogContent.objects.filter(blog=self.blog).order_by("-order").first()
+            self.order = (last_content.order + 1) if last_content else 1  # Eğer içerik varsa +1 yap, yoksa 1 ata
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.blog.title} - {self.get_type_display()} (Sıra: {self.order})"

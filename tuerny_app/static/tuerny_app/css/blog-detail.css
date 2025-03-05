@@ -67,9 +67,12 @@
   margin-top: 24px;
 }
 .blog-content h2 {
-  border-left: 5px solid blue;
+  border-left: 3px solid rgb(191, 114, 121);
   text-indent: 10px;
-  
+  font-family: 'Poppins';
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 36px;
 }
 .blog-content p.source-text {
   text-indent: 0;

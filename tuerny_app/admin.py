@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion, BlogContent
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -68,23 +68,39 @@ class BlogPostForm(forms.ModelForm):
         model = Blog
         fields = '__all__'
 
+
+class BlogContentInline(admin.TabularInline):
+    model = BlogContent
+    extra = 1  # Show one extra empty form
+    ordering = ["order"]
+    fields = ("order", "type", "text", "image", "video", "product", "preview")
+    readonly_fields = ("preview",)
+
+    def get_changeform_initial_data(self, request):
+        """Pre-fill the order field when adding new content"""
+        blog_id = request.GET.get('blog')  # Get blog ID from URL params
+        if blog_id:
+            last_content = BlogContent.objects.filter(blog_id=blog_id).order_by("-order").first()
+            return {"order": (last_content.order + 1) if last_content else 1}
+        return {"order": 1}
+
+    def preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" style="max-width: 100px; max-height: 100px;" />', obj.image.url)
+        return "-"
+
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    form = BlogPostForm
+    
 
-    def get_form(self, request, obj=None, **kwargs):
-        kwargs['form'] = type(
-            'CustomBlogPostForm',
-            (BlogPostForm,),
-            {'__init__': lambda self, *args, **kw: BlogPostForm.__init__(self, *args, user=request.user, **kw)}
-        )
-        return super().get_form(request, obj, **kwargs)
+    
 
 
     list_display = ('title', 'category', 'user', 'created_at', 'copy_blog_link')
-    search_fields = ('title', 'content')
+    search_fields = ('title',)
     list_filter = ('category', 'created_at')
     prepopulated_fields = {'slug': ('title',)} 
+    inlines = [BlogContentInline]
     
     def copy_blog(self, request, queryset):
         """
@@ -115,9 +131,9 @@ class BlogAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('title', 'blog', 'link')
+    list_display = ('title', 'link')
     search_fields = ('title', 'description')
-    list_filter = ('blog',)
+
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -254,6 +270,27 @@ class SavedBlogAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'blog__title')  # Kullanıcı adı ve blog başlığına göre arama
     list_filter = ('saved_at',)  # Tarihe göre filtreleme
     ordering = ('-saved_at',)  # En son kaydedilenleri üste koy
+
+    
+@admin.register(BlogContent)
+class BlogContentAdmin(admin.ModelAdmin):
+    list_display = ("blog", "type", "order", "short_text", "preview")
+    list_filter = ("type",)
+    ordering = ["blog", "order"]
+    search_fields = ("blog__title", "text")
+
+    def short_text(self, obj):
+        """Paragrafın ilk 50 karakterini gösterir"""
+        return obj.text[:50] + "..." if obj.text else "-"
+
+    def preview(self, obj):
+        """Resimler için önizleme gösterir"""
+        if obj.image:
+            return format_html('<img src="{}" style="max-width: 100px; max-height: 100px;" />', obj.image.url)
+        return "-"
+
+    preview.allow_tags = True
+    short_text.short_description = "İçerik"
 
 @admin.register(APISettings)
 class APISettingsAdmin(admin.ModelAdmin):
