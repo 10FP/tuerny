@@ -12,6 +12,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=15, unique=True, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    is_email_verified = models.BooleanField(default=False)
     gender = models.CharField(
         max_length=10,
         choices=[('Male', 'Erkek'), ('Female', 'Kadın'), ('Other', 'Diğer')],

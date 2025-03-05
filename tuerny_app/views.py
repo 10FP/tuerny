@@ -15,6 +15,7 @@ import json
 from django.core.cache import cache
 from django.db.models import Count
 from django.core.mail import send_mail
+from .utils import verify_email_token
 
 # Create your views here.
 User = get_user_model()
@@ -24,13 +25,7 @@ User = get_user_model()
 
 def index(request):
     
-    send_mail(
-        'Subject here',
-        'Here is the message.',
-        'furkanp2002@gmail.com',
-        [f'{request.user.email}'],
-        fail_silently=False,
-    )
+    
         
         
     api = APISettings.objects.all()
@@ -275,7 +270,7 @@ def login(request):
         if user and user.check_password(password):
             auth_login(request, user,backend='allauth.account.auth_backends.AuthenticationBackend')  # Kullanıcıyı giriş yaptır
             messages.success(request, "Başarıyla giriş yaptınız.")
-            return redirect('tuerny_app:index')  # Giriş sonrası yönlendirme
+            return redirect('tuerny_app:index')  
         else:
             messages.error(request, "Geçersiz e-posta veya şifre!")  # Hata mesajı ekle
         
@@ -726,3 +721,18 @@ def toggle_favorite_subcategory(request, subcategory_id):
             return JsonResponse({"success": False, "message": str(e)}, status=400)
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=400)
+
+
+
+def verify_email(request, token):
+    email = verify_email_token(token)
+    if email is None:
+        return JsonResponse({"message": "Geçersiz veya süresi dolmuş token!"}, status=400)
+
+    try:
+        user = User.objects.get(email=email)
+        user.is_email_verified = True
+        user.save()
+        return JsonResponse({"message": "E-posta doğrulandı!"}, status=200)
+    except User.DoesNotExist:
+        return JsonResponse({"message": "Kullanıcı bulunamadı!"}, status=404)
