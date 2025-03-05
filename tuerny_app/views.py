@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion, Product, BlogContent
 from django.contrib.auth import authenticate, login as auth_login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -16,6 +16,8 @@ from django.core.cache import cache
 from django.db.models import Count
 from django.core.mail import send_mail
 from .utils import verify_email_token
+from django.utils.text import slugify
+
 
 # Create your views here.
 User = get_user_model()
@@ -738,3 +740,66 @@ def verify_email(request, token):
         return JsonResponse({"message": "E-posta doğrulandı!"}, status=200)
     except User.DoesNotExist:
         return JsonResponse({"message": "Kullanıcı bulunamadı!"}, status=404)
+
+
+
+@login_required
+def create_blog(request):
+    if request.method == "POST":
+        # Blog temel bilgileri
+        title = request.POST.get("title")
+        category_id = request.POST.get("category")
+        short_description = request.POST.get("short_description", "")
+        media = request.FILES.get("media", None)
+        media_extra = request.FILES.get("media_extra", None)
+        product_id = request.POST.get("product", None)
+        extra_product_ids = request.POST.getlist("extra_product")
+
+        # Blog oluştur
+        blog = Blog.objects.create(
+            title=title,
+            category_id=category_id,
+            short_description=short_description,
+            media=media,
+            media_extra=media_extra,
+            user=request.user,
+            slug=slugify(title),
+            product_id=product_id if product_id else None
+        )
+
+        # Ekstra ürünleri ManyToMany olarak ekle
+        if extra_product_ids:
+            blog.extra_product.set(Product.objects.filter(id__in=extra_product_ids))
+
+        # Blog içeriğini işle
+        content_types = request.POST.getlist("content_type[]")
+        content_texts = request.POST.getlist("content_text[]")
+        content_images = request.FILES.getlist("content_image[]")
+        content_videos = request.POST.getlist("content_video[]")
+        content_products = request.POST.getlist("content_product[]")
+
+        order = 1
+        for i in range(len(content_types)):
+            content_type = content_types[i]
+            text = content_texts[i] if content_texts else None
+            image = content_images[i] if len(content_images) > i else None
+            video = content_videos[i] if len(content_videos) > i else None
+            product_id = content_products[i] if len(content_products) > i and content_products[i] else None
+            product = Product.objects.get(id=product_id) if product_id else None
+
+            BlogContent.objects.create(
+                blog=blog,
+                type=content_type,
+                order=order,
+                text=text,
+                image=image,
+                video=video,
+                product=product
+            )
+            order += 1
+
+        return redirect("blog_detail", slug=blog.slug)
+
+    return render(request, "tuerny_app/blog_create.html", {
+        "products": Product.objects.all()
+    })
