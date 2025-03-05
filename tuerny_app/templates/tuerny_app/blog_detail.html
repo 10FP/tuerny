@@ -155,27 +155,27 @@
         {% endif %}
     {% endfor %}
                 </div>
-                {% if blog_.products.all %}
-                {% for product in blog_.products.all %}
+                {% if blog_.product %}
+                
                 <div class="blog-content d-flex flex-column gap-3">
                         <div class="py-5">
                             <div class="blog-card-3 product-detail">
                                 <div class="row edit-special">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="blog-card-img">
-                                            <img src="{{product.image.url}}" class="w-100 object-fit-cover" />
+                                            <img src="{{blog_.product.image.url}}" class="w-100 object-fit-cover" />
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="blog-card-content">
                                             <div class="blog-card-content-top">
-                                                <a href="#" class="blog-card-title stretched-link">{{product.title}}</a>
+                                                <a href="#" class="blog-card-title stretched-link">{{blog_.product.title}}</a>
                                                 <p class="blog-card-text mb-0">
-                                                    {{product.description}}
+                                                    {{blog_.product.description}}
                                                 </p>
                                             </div>
                                             <div class="blog-card-content-bottom justify-content-start">
-                                                <a href="{{product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+                                                <a href="{{blog_.product.link}}" class="teurny-footer-btn blog-detail-product-btn"
                                                     style="width: 207px;">
                                                     DETAYLAR
                                                 </a>
@@ -186,12 +186,12 @@
                             </div>
                         </div>
                 </div>
-                {% endfor %}
+                
                 {% else %}
         
     {% endif %}
-    {% if blog_.products.all %}
-                {% for product in blog_.products.all %}
+    {% if blog_.extra_product %}
+                {% for product in blog_.extra_product.all %}
                     <div class="d-flex flex-column gap-4 py-5">
                         <div class="">
                             <span style="    font-family: Playfair Display;
