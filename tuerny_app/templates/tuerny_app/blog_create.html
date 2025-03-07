@@ -1,85 +1,97 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yeni Blog Yaz</title>
-    <script>
-        function addContentField() {
-            var container = document.getElementById("content-container");
-            var html = `
-                <div class="content-block">
-                    <select name="content_type[]" required>
-                        <option value="header">Başlık</option>
-                        <option value="subheader">Alt Başlık</option>
-                        <option value="paragraph">Paragraf</option>
-                        <option value="image">Resim</option>
-                        <option value="video">Video</option>
-                        <option value="product">Ürün</option>
-                    </select>
-                    <input type="text" name="content_text[]" placeholder="Metin (Başlık/Paragraf)">
-                    <input type="file" name="content_image[]" accept="image/*">
-                    <input type="url" name="content_video[]" placeholder="Video URL">
-                    <select name="content_product[]">
-                        <option value="">Ürün Seç</option>
-                        {% for product in products %}
-                            <option value="{{ product.id }}">{{ product.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <button type="button" onclick="this.parentElement.remove()">Sil</button>
-                </div>
-            `;
-            container.insertAdjacentHTML('beforeend', html);
-        }
-    </script>
-</head>
-<body>
-    <h1>Yeni Blog Yaz</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script>
+    function addContentField() {
+        var container = document.getElementById("content-container");
+        var html = `
+            <div class="content-block d-flex flex-column gap-3">
+                <select name="content_type[]" class="teurny-input w-100 vRequired">
+                    <option value="header">Başlık</option>
+                    <option value="subheader">Alt Başlık</option>
+                    <option value="paragraph">Paragraf</option>
+                    <option value="image">Resim</option>
+                    <option value="video">Video</option>
+                    <option value="product">Ürün</option>
+                </select>
+                <input type="text" name="content_text[]" placeholder="Metin (Başlık/Paragraf)" class="teurny-input w-100">
+                <input type="file" name="content_image[]" class="teurny-input w-100" accept="image/*">
+                <input type="url" name="content_video[]" placeholder="Video URL" class="teurny-input w-100">
+                <select name="content_product[]" class="teurny-input w-100">
+                    <option value="">Ürün Seç</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}">{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" onclick="this.parentElement.remove()" class="teurny-footer-btn">Sil</button>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+</script>
 
-    <form method="post" enctype="multipart/form-data">
+    
+
+    <form method="POST" action="{% url 'tuerny_app:create_blog' %}" enctype="multipart/form-data" class="ajaxFormFalse" style="width: 60%; margin-left: 20%;">
         {% csrf_token %}
-        
-        <label>Başlık:</label>
-        <input type="text" name="title" required>
+        <div>
+            <p class="ask-title">Yeni Blog Yaz</p>
+            <div class="mt-4 d-flex flex-column gap-3">
+                {% if user.is_authenticated %}
+                
+                <!-- Kategori Seçimi -->
+                <select name="category" class="teurny-input w-100 vRequired">
+                    <option value="">Kategori</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
 
-        <label>Kategori:</label>
-        <select name="category" required>
-            <option value="">Seçiniz</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
+                <!-- Blog Başlığı -->
+                <div class="limit-counter">
+                    <label for="title" id="title-counter" class="counter-area">00/90</label>
+                    <input name="title" type="text" placeholder="Blog Başlığı" class="teurny-input vRequired"
+                        id="counter-input" maxlength="90" />
+                </div>
 
-        <label>Kısa Açıklama:</label>
-        <textarea name="short_description"></textarea>
+                <!-- Kısa Açıklama -->
+                <div class="limit-counter textarea-counter">
+                    <label for="short_description" id="content-counter" class="counter-area">00/360</label>
+                    <textarea name="short_description" class="teurny-input" id="counter-textarea" rows="8" maxlength="360"
+                        placeholder="Kısa Açıklama" style="resize: none"></textarea>
+                </div>
+                                    <!-- Ana Blog Resmi -->
+                    <label>Ana Blog Resmi (Fotoğraf):</label>
+                    <input type="file" name="media" class="teurny-input w-100" accept="image/*">
 
-        <label>Ana Resim:</label>
-        <input type="file" name="media" accept="image/*">
+                    <!-- Ekstra Medya (MP3, Video, Diğer Dosyalar) -->
+                    <label>Ekstra Medya (MP3, Video vb.):</label>
+                    <input type="file" name="media_extra" class="teurny-input w-100">
+                <!-- Blog İçeriği -->
+                <h2 class="ask-title">Blog İçeriği</h2>
+                <div id="content-container"></div>
+                <button type="button" onclick="addContentField()" class="teurny-footer-btn">+ Yeni İçerik Ekle</button>
 
-        <label>Ekstra Medya:</label>
-        <input type="file" name="media_extra">
+                
 
-        <label>Ana Ürün Seç:</label>
-        <select name="product">
-            <option value="">Ürün Seç</option>
-            {% for product in products %}
-                <option value="{{ product.id }}">{{ product.title }}</option>
-            {% endfor %}
-        </select>
+                <!-- Blog Yayınlama Butonu -->
+                <div>
+                    <button class="teurny-footer-btn">YAYINLA</button>
+                </div>
 
-        <label>Ekstra Ürünler Seç:</label>
-        <select name="extra_product" multiple>
-            {% for product in products %}
-                <option value="{{ product.id }}">{{ product.title }}</option>
-            {% endfor %}
-        </select>
-
-        <h2>Blog İçeriği</h2>
-        <div id="content-container"></div>
-        <button type="button" onclick="addContentField()">Yeni İçerik Ekle</button>
-
-        <br><br>
-        <button type="submit">Blogu Yayınla</button>
+                {% else %}
+                <div>
+                    <div>
+                        <span>Blog yazabilmek için üye olmanız gerekmektedir;</span>
+                        <a href="/register/" class="teurny-button-primary" style="text-align: center">Üye Ol</a>
+                    </div>
+                    <div>
+                        <span>Zaten üye iseniz;</span>
+                        <a href="/login/" class="teurny-button-primary" style="text-align: center">Giriş Yap</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </form>
-</body>
-</html>
+    {% endblock content %}
