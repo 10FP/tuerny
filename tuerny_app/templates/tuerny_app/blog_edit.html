@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Sıralama desteği ekleyelim
+        var sortable = new Sortable(document.getElementById("content-container"), {
+            animation: 150,
+            onEnd: function () {
+                updateOrder();
+            }
+        });
+
+        function updateOrder() {
+            var items = document.querySelectorAll(".content-block");
+            items.forEach((item, index) => {
+                item.querySelector("input[name='content_order[]']").value = index + 1;
+            });
+        }
+
+        // Mevcut içerikleri kontrol edelim
+        document.querySelectorAll(".content-block select[name='content_type[]']").forEach(select => {
+            toggleFields(select);
+        });
+    });
+
+    function toggleFields(selectElement) {
+        var contentBlock = selectElement.closest(".content-block");
+        var type = selectElement.value;
+
+        // İçerik türüne göre ilgili alanları aç/kapat
+        contentBlock.querySelectorAll(".content-field").forEach(field => field.style.display = "none");
+
+        if (type === "header" || type === "subheader" || type === "paragraph") {
+            contentBlock.querySelector(".text-field").style.display = "block";
+        } else if (type === "image") {
+            contentBlock.querySelector(".image-field").style.display = "block";
+        } else if (type === "video") {
+            contentBlock.querySelector(".video-field").style.display = "block";
+        } else if (type === "product") {
+            contentBlock.querySelector(".product-field").style.display = "block";
+        }
+    }
+
+    function addContentField() {
+        var container = document.getElementById("content-container");
+        var index = container.children.length + 1;
+        var html = `
+            <div class="content-block d-flex flex-column gap-3">
+                <input type="hidden" name="content_id[]" value="new">
+
+                <label>İçerik Türü:</label>
+                <select name="content_type[]" class="teurny-input w-100 vRequired" onchange="toggleFields(this)">
+                    <option value="header">Başlık</option>
+                    <option value="subheader">Alt Başlık</option>
+                    <option value="paragraph">Paragraf</option>
+                    <option value="image">Resim</option>
+                    <option value="video">Video</option>
+                    <option value="product">Ürün</option>
+                </select>
+
+                <label>Sıra Numarası:</label>
+                <input type="number" name="content_order[]" class="teurny-input w-100" value="${index}" readonly>
+
+                <div class="text-field content-field">
+                    <label>Metin:</label>
+                    <input type="text" name="content_text[]" class="teurny-input w-100">
+                </div>
+
+                <div class="image-field content-field" style="display: none;">
+                    <label>Resim Yükle:</label>
+                    <input type="file" name="content_image[]" class="teurny-input w-100" accept="image/*">
+                </div>
+
+                <div class="video-field content-field" style="display: none;">
+                    <label>Video URL:</label>
+                    <input type="url" name="content_video[]" class="teurny-input w-100">
+                </div>
+
+                <div class="product-field content-field" style="display: none;">
+                    <label>Ürün Seç:</label>
+                    <select name="content_product[]" class="teurny-input w-100">
+                        <option value="">Ürün Seç</option>
+                        {% for product in products %}
+                            <option value="{{ product.id }}">{{ product.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="button" onclick="markForDeletion(this)" class="teurny-footer-btn">Sil</button>
+                <input type="hidden" name="delete_content[]" class="delete-input">
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        updateOrder();
+    }
+
+    function markForDeletion(button) {
+        var contentBlock = button.parentElement;
+        contentBlock.remove();
+        updateOrder();
+    }
+</script>
+
+<div class="container mt-5">
+    <h1 class="text-center">Blog Düzenle</h1>
+
+    <form method="post" enctype="multipart/form-data" class="ajaxFormFalse">
+        {% csrf_token %}
+        <div class="mt-4 d-flex flex-column gap-3">
+            
+            <label>Başlık:</label>
+            <input type="text" name="title" value="{{ blog_.title }}" class="teurny-input w-100">
+
+            <label>Kategori:</label>
+            <select name="category" class="teurny-input w-100">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if blog_.category.id == category.id %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <h2 class="ask-title">İçerik Düzenle</h2>
+            <div id="content-container">
+                {% for content in contents %}
+                    <div class="content-block">
+                        <input type="hidden" name="content_id[]" value="{{ content.id }}">
+                        
+                        <label>İçerik Türü:</label>
+                        <select name="content_type[]" class="teurny-input w-100" onchange="toggleFields(this)">
+                            <option value="header" {% if content.type == "header" %}selected{% endif %}>Başlık</option>
+                            <option value="subheader" {% if content.type == "subheader" %}selected{% endif %}>Alt Başlık</option>
+                            <option value="paragraph" {% if content.type == "paragraph" %}selected{% endif %}>Paragraf</option>
+                            <option value="image" {% if content.type == "image" %}selected{% endif %}>Resim</option>
+                            <option value="video" {% if content.type == "video" %}selected{% endif %}>Video</option>
+                            <option value="product" {% if content.type == "product" %}selected{% endif %}>Ürün</option>
+                        </select>
+
+                        <label>Sıra Numarası:</label>
+                        <input type="number" name="content_order[]" value="{{ content.order }}" class="teurny-input w-100" readonly>
+
+                        <div class="text-field content-field" {% if content.type not in "header subheader paragraph" %}style="display: none;"{% endif %}>
+                            <label>Metin:</label>
+                            <input type="text" name="content_text[]" value="{{ content.text }}" class="teurny-input w-100">
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" onclick="addContentField()" class="teurny-footer-btn">+ Yeni İçerik Ekle</button>
+            <button type="submit" class="teurny-footer-btn">Güncelle</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

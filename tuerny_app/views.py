@@ -378,15 +378,13 @@ def blog_detail(request, slug):
     blog = Blog.objects.all()
     s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
-    for i in blog_.contents.all():
-        print(i.type)
-        print(i.text)
+
     if request.user.is_authenticated:
         saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
     else:
         saved_blogs = Blog.objects.none() 
 
-    print(blog_ in saved_blogs)
+    
 
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs, "saved_blog": saved_blogs})
 
@@ -803,3 +801,54 @@ def create_blog(request):
     return render(request, "tuerny_app/blog_create.html", {
         "products": Product.objects.all()
     })
+
+@login_required
+def edit_blog(request, slug):
+    blog_ = get_object_or_404(Blog, slug=slug)
+
+    if request.method == "POST":
+        blog_.title = request.POST.get("title")
+        blog_.category_id = request.POST.get("category")
+        blog_.short_description = request.POST.get("short_description", "")
+
+        if "media" in request.FILES:
+            blog_.media = request.FILES["media"]
+        if "media_extra" in request.FILES:
+            blog_.media_extra = request.FILES["media_extra"]
+
+        blog_.slug = slugify(blog_.title)
+        blog_.save()
+
+        # **1️⃣ Önce Bu Bloga Ait Tüm İçerikleri Siliyoruz**
+        BlogContent.objects.filter(blog=blog_).delete()
+
+        # **2️⃣ Formdan Gelen Yeni İçerikleri Kaydediyoruz**
+        content_types = request.POST.getlist("content_type[]")
+        content_texts = request.POST.getlist("content_text[]")
+        content_images = request.FILES.getlist("content_image[]")
+        content_videos = request.POST.getlist("content_video[]")
+        content_products = request.POST.getlist("content_product[]")
+        order = 1
+        for i in range(len(content_types)):
+            content_type = content_types[i]
+            text = content_texts[i] if content_texts else None
+            image = content_images[i] if len(content_images) > i else None
+            video = content_videos[i] if len(content_videos) > i else None
+            product_id = content_products[i] if len(content_products) > i and content_products[i] else None
+            product = Product.objects.get(id=product_id) if product_id else None
+
+            BlogContent.objects.create(
+                blog=blog_,
+                type=content_type,
+                order=order,
+                text=text,
+                image=image,
+                video=video,
+                product=product
+            )
+            order += 1
+
+
+        return redirect("tuerny_app:blog_detail", slug=blog_.slug)
+
+    return render(request, "tuerny_app/blog_edit.html", {"blog_": blog_, "contents": blog_.contents.all(), "products": Product.objects.all()})
