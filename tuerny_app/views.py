@@ -5,7 +5,10 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import logout
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from itertools import chain
 from django.http import JsonResponse
 import random
@@ -655,6 +658,31 @@ def change_password(request):
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=405)
 
+def password_reset(request):
+    if request.method == "POST":
+        email = request.POST.get("mail")  # Formdan gelen email'i al
+        try:
+            user = User.objects.get(email=email)  # Kullanıcıyı bul
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            reset_link = request.build_absolute_uri(f"/reset-password/{uid}/{token}/")
+
+            # **Kullanıcıya Şifre Sıfırlama Maili Gönder**
+            send_mail(
+                "Şifre Sıfırlama Talebi",
+                f"Şifreni sıfırlamak için aşağıdaki bağlantıya tıkla:\n{reset_link}",
+                "furkanp2002@gmail.com",
+                [email],
+                fail_silently=False,
+            )
+
+            messages.success(request, "Şifre sıfırlama bağlantısı e-posta adresine gönderildi.")
+            return redirect("tuerny_app:password-reset")
+
+        except User.DoesNotExist:
+            messages.error(request, "Bu e-posta adresi sistemde kayıtlı değil!")
+    return render(request, "tuerny_app/password_reset.html")
+
 
 @login_required
 @csrf_exempt  # AJAX ile POST işlemi için CSRF korumasını kaldırıyoruz (Güvenlik için dikkat edilmeli)
@@ -815,6 +843,7 @@ def edit_blog(request, slug):
         blog_.title = request.POST.get("title")
         blog_.category_id = request.POST.get("category")
         blog_.short_description = request.POST.get("short_description", "")
+        blog_.author = request.POST.get("author", "")
 
         if "media" in request.FILES:
             blog_.media = request.FILES["media"]
@@ -825,6 +854,16 @@ def edit_blog(request, slug):
 
         extra_category_ids = request.POST.getlist("extra_categories[]")
         blog_.extra_categories.set(extra_category_ids)
+
+        # **Product Güncelleme**
+        product_id = request.POST.get("product")
+        blog_.product = Product.objects.get(id=product_id) if product_id else None
+
+        # **Extra Product Güncelleme**
+        extra_product_ids = request.POST.getlist("extra_product[]")
+        blog_.extra_product.set(extra_product_ids)
+
+
         blog_.save()
 
         # **1️⃣ Önce Bu Bloga Ait Tüm İçerikleri Siliyoruz**
@@ -860,3 +899,26 @@ def edit_blog(request, slug):
         return redirect("tuerny_app:blog_detail", slug=blog_.slug)
     s_category = SubCategory.objects.all()
     return render(request, "tuerny_app/blog_edit.html", {"blog_": blog_,"s_cat": s_category, "contents": blog_.contents.all(), "products": Product.objects.all()})
+
+
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+
+        if not default_token_generator.check_token(user, token):
+            messages.error(request, "Geçersiz veya süresi dolmuş bağlantı.")
+            return redirect("tuerny_app:password-reset")
+
+    except (User.DoesNotExist, ValueError, TypeError):
+        messages.error(request, "Geçersiz bağlantı!")
+        return redirect("tuerny_app:password-reset")
+
+    if request.method == "POST":
+        new_password = request.POST.get("password")
+        user.set_password(new_password)
+        user.save()
+        messages.success(request, "Şifre başarıyla değiştirildi. Giriş yapabilirsiniz.")
+        return redirect("tuerny_app:login")
+
+    return render(request, "tuerny_app/password_reset_confirm.html", {"uidb64": uidb64, "token": token})

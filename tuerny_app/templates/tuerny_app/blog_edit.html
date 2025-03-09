@@ -121,6 +121,9 @@
             <label>Başlık:</label>
             <input type="text" name="title" value="{{ blog_.title }}" class="teurny-input w-100">
 
+            <label>Yazar:</label>
+            <input type="text" name="author" value="{{ blog_.author }}" class="teurny-input w-100">
+
             <div class="limit-counter textarea-counter">
                 <label for="short_description" id="content-counter" class="counter-area">00/360</label>
                 <textarea name="short_description" class="teurny-input" id="counter-textarea" rows="8" maxlength="360"
@@ -149,6 +152,25 @@
                     {% for category in s_cat %}
                         <option value="{{ category.id }}" {% if category in blog_.extra_categories.all %}selected{% endif %}>
                             {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <label>Ürün Seç:</label>
+                <select name="product" class="teurny-input w-100">
+                    <option value="">Ürün Seç</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}" {% if blog_.product and blog_.product.id == product.id %}selected{% endif %}>
+                            {{ product.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+                
+                <label>Ekstra Ürünler:</label>
+                <select name="extra_product[]" class="teurny-input w-100" multiple>
+                    {% for product in products %}
+                        <option value="{{ product.id }}" {% if product in blog_.extra_product.all %}selected{% endif %}>
+                            {{ product.title }}
                         </option>
                     {% endfor %}
                 </select>
