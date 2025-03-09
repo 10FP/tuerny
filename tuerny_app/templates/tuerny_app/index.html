@@ -418,6 +418,14 @@
   document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".saved, .unsaved").forEach(button => {
         button.addEventListener("click", function() {
+
+          let isAuthenticated = {{ request.user.is_authenticated|lower }};  // True veya False döner
+
+            if (!isAuthenticated) {
+                window.location.href = "{% url 'tuerny_app:login' %}"; // Giriş sayfasına yönlendir
+                return;
+            }
+            
             let blogId = this.getAttribute("data-id");
             let isSaved = this.classList.contains("saved");  // Eğer kaydedilmişse kaldır, değilse kaydet
 
@@ -430,7 +438,7 @@
                 body: JSON.stringify({ blog_id: blogId })
             })
             .then(response => response.json())
-            .then(data => {
+            .then(data => {              
                 if (data.status === "saved") {
                     this.classList.remove("unsaved");
                     this.classList.add("saved");

@@ -258,6 +258,8 @@ def register(request):
     return render(request, 'tuerny_app/register.html') 
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect("tuerny_app:index")
     if request.method == 'POST':
         email = request.POST.get('mail')  # Formdaki "mail" alanını al
         password = request.POST.get('password')  # Formdaki "password" alanını al
@@ -493,7 +495,10 @@ def vote_poll(request, question_id, option_id):
 @login_required
 def save_blog(request):
     if request.method == "POST":
-        
+        print("fp1")
+        if not request.user.is_authenticated:
+            print("fp2")
+            return JsonResponse({"redirect": "/login"})
         data = json.loads(request.body)
         blog_id = data.get("blog_id")
 
