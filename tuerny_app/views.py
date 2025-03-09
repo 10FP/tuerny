@@ -817,6 +817,9 @@ def edit_blog(request, slug):
             blog_.media_extra = request.FILES["media_extra"]
 
         blog_.slug = slugify(blog_.title)
+
+        extra_category_ids = request.POST.getlist("extra_categories[]")
+        blog_.extra_categories.set(extra_category_ids)
         blog_.save()
 
         # **1️⃣ Önce Bu Bloga Ait Tüm İçerikleri Siliyoruz**
