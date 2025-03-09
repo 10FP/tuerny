@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<style>
+button, input, optgroup, select, textarea{
+  font-family: "Roboto";
+}
 
+</style>
       <div class="container py-5">
         <div class="row justify-content-center askform">
           <div class="col-12 col-xl-6">
             <form method="POST" action="{% url 'tuerny_app:ask' %}" class="ajaxFormFalse">
               {% csrf_token %}
               <div>
-                <p class="ask-title">Merak Ettiklerini Sor</p>
+                <p class="ask-title" style="font-weight: 400; margin-bottom: 60px;">Merak Ettiklerini Sor</p>
                 <div class="mt-4 d-flex flex-column gap-3">
                     {% if user.is_authenticated %}
-                    <select name="subcategory" class="teurny-input w-100 vRequired">
-                      <option value="">Kategori</option>
+                    <select name="subcategory" class="teurny-input w-100 vRequired"  style="color: #989491;">
+                      <option value="" style="color: #989491;">Kategori</option>
                       {% for sub in subs %}
-                      <option value="{{ sub.id }}">{{ sub.name }}</option>
+                      <option value="{{ sub.id }}" style="color: #989491;">{{ sub.name }}</option>
                       {% endfor %}
                   </select>
                   <select
                     name="topic"
                     class="teurny-input w-100 vRequired"
+                    style="color: #989491;"
                   >
+                  
                     <option value="">Konu</option>
                     <option value="destek">Destek Talebi</option>
                     <option value="oneri">Öneri</option>
@@ -79,7 +86,7 @@
                     </div>
                   </div>
 
-                  <div>
+                  <div class="opacity-check" style="opacity: 0.3;">
                     <div class="limit-counter">
                       <label for="title" id="title-counter" class="counter-area"
                         >00/90</label
@@ -92,6 +99,7 @@
                         id="counter-input"
                         maxlength="90"
                         disabled
+                        style="background: white;"
                       />
                     </div>
 
@@ -104,6 +112,7 @@
                             placeholder="1. Şık"
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
+                            style="background: white;"
                           />
                         </div>
                       </div>
@@ -115,6 +124,7 @@
                             placeholder="2. Şık"
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
+                            style="background: white;"
                           />
                         </div>
                       </div>
@@ -126,6 +136,7 @@
                             placeholder="3. Şık"
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
+                            style="background: white;"
                           />
                         </div>
                       </div>
@@ -137,6 +148,7 @@
                             placeholder="4. Şık"
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
+                            style="background: white;"
                           />
                         </div>
                       </div>

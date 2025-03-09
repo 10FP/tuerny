@@ -1,7 +1,8 @@
+
 <div class="row justify-content-center">
     <div class="col-12 col-xl-8">
       <div class="py-4">
-        <div class="d-flex flex-column gap-4 asked-listing">
+        <div class="d-flex flex-column gap-4 asked-listing" style="gap: 2.5rem !important;">
           {% for question in request.user.questions.all %}    
           <div class="question-card">
             <div class="question-card-category">

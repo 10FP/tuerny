@@ -263,6 +263,14 @@ $(".addsurver_check").click(function () {
     $(".survey-select").addClass("vRequired");
   }
 });
+$(".blog-comment-checkbox-label").click(function () {
+  if (!$(this).is(":checked")) {
+    $(".opacity-check").style.opacity = 1;
+    
+  } else {
+    $(".opacity-check").style.opacity = 0.3;
+  }
+});
 
 $(".survey-btn").click(function () {
   var id = $(this).attr("data-id");
