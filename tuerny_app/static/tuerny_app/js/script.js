@@ -434,16 +434,35 @@ $(".header-link-container.open-header-link").hover(function() {
 //   }
 // });
 
-$(document).ready(function () {
-  // İlk başta sadece ilk kategorinin bloglarını göster, diğerlerini gizle
-  $(".menu-load-div .col-md-2").hide(); // Önce tüm blogları gizle
-  let firstCategory = $(".menu-loader").first().data("category"); // İlk menü kategorisini al
-  
-  $(".menu-load-div .col-md-2").each(function () {
-    if ($(this).data("category") === firstCategory) {
-      $(this).show(); // İlk kategoriye ait blogları göster
-    }
+$(document).ready(function() {
+  // Belirtilen kategoriye ait blog öğelerini filtreleyen fonksiyon
+  function filterBlogs(category) {
+    $(".menu-load-div .col-md-2")
+      .hide() // Tüm blogları gizle
+      .filter(function() {
+        return $(this).data("category") == category;
+      })
+      .show(); // Seçilen kategoriye ait blogları göster
+  }
+
+  // Sayfa yüklendiğinde, global olarak ilk bulunan menü-loader'ın kategorisine göre blogları göster
+  let firstCategory = $(".menu-loader").first().data("category");
+  filterBlogs(firstCategory);
+
+  // Menü içindeki kategori öğesi üzerine gelindiğinde ilgili blogları göster
+  $(".menu-loader").on("mouseenter", function() {
+    let selectedCategory = $(this).data("category");
+    filterBlogs(selectedCategory);
   });
+
+  // Her ana dropdown (header-link-container) üzerine gelindiğinde, o menüye ait default (ilk) kategori aktif hale gelsin
+  $(".header-link-container").on("mouseenter", function() {
+    let defaultCategory = $(this).find(".menu-loader").first().data("category");
+    filterBlogs(defaultCategory);
+  });
+
+
+
 
   // Hover olayı için
   $(".menu-loader").hover(
@@ -460,16 +479,9 @@ $(document).ready(function () {
           $(this).hide(); // Eşleşmiyorsa gizle
         }
       });
+      
     },
-    function () {
-      // Hover'dan çıkınca tekrar ilk kategorinin bloglarını göster
-      $(".menu-load-div .col-md-2").hide();
-      $(".menu-load-div .col-md-2").each(function () {
-        if ($(this).data("category") === firstCategory) {
-          $(this).show();
-        }
-      });
-    }
+    
   );
 });
 

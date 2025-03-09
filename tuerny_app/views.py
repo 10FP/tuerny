@@ -850,5 +850,5 @@ def edit_blog(request, slug):
 
 
         return redirect("tuerny_app:blog_detail", slug=blog_.slug)
-
-    return render(request, "tuerny_app/blog_edit.html", {"blog_": blog_, "contents": blog_.contents.all(), "products": Product.objects.all()})
+    s_category = SubCategory.objects.all()
+    return render(request, "tuerny_app/blog_edit.html", {"blog_": blog_,"s_cat": s_category, "contents": blog_.contents.all(), "products": Product.objects.all()})

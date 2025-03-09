@@ -85,7 +85,7 @@
                     <select name="content_product[]" class="teurny-input w-100">
                         <option value="">Ürün Seç</option>
                         {% for product in products %}
-                            <option value="{{ product.id }}">{{ product.name }}</option>
+                            <option value="{{ product.id }}">{{ product.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -104,8 +104,14 @@
         updateOrder();
     }
 </script>
-
-<div class="container mt-5">
+<style>
+    .content-block{
+        padding: 20px;
+        border: 2px solid black;
+        margin-bottom: 20px;
+    }
+</style>
+<div class="container mt-5" style="width: 60%;">
     <h1 class="text-center">Blog Düzenle</h1>
 
     <form method="post" enctype="multipart/form-data" class="ajaxFormFalse">
@@ -115,9 +121,23 @@
             <label>Başlık:</label>
             <input type="text" name="title" value="{{ blog_.title }}" class="teurny-input w-100">
 
+            <div class="limit-counter textarea-counter">
+                <label for="short_description" id="content-counter" class="counter-area">00/360</label>
+                <textarea name="short_description" class="teurny-input" id="counter-textarea" rows="8" maxlength="360"
+                    placeholder="{{blog_.short_description}}" style="resize: none">{{blog_.short_description}}</textarea>
+            </div>
+
+            <div>
+            <label>Ana Blog Resmi (Fotoğraf):</label>
+            <input type="file" name="media" class="teurny-input w-100" accept="image/*">
+            <img width="100%" src="{{blog_.media.url}}" alt="">
+        </div>
+        <label>Ekstra Medya (MP3, Video vb.):</label>
+                    <input type="file" name="media_extra" class="teurny-input w-100">
+
             <label>Kategori:</label>
             <select name="category" class="teurny-input w-100">
-                {% for category in categories %}
+                {% for category in s_cat %}
                     <option value="{{ category.id }}" {% if blog_.category.id == category.id %}selected{% endif %}>
                         {{ category.name }}
                     </option>
@@ -139,17 +159,50 @@
                             <option value="video" {% if content.type == "video" %}selected{% endif %}>Video</option>
                             <option value="product" {% if content.type == "product" %}selected{% endif %}>Ürün</option>
                         </select>
-
+            
                         <label>Sıra Numarası:</label>
                         <input type="number" name="content_order[]" value="{{ content.order }}" class="teurny-input w-100" readonly>
-
+            
                         <div class="text-field content-field" {% if content.type not in "header subheader paragraph" %}style="display: none;"{% endif %}>
                             <label>Metin:</label>
                             <input type="text" name="content_text[]" value="{{ content.text }}" class="teurny-input w-100">
                         </div>
+            
+                        <div class="image-field content-field" {% if content.type != "image" %}style="display: none;"{% endif %}>
+                            <label>Resim Yükle:</label>
+                            <input type="file" name="content_image[]" class="teurny-input w-100" accept="image/*">
+                        </div>
+            
+                        <div class="video-field content-field" {% if content.type != "video" %}style="display: none;"{% endif %}>
+                            <label>Video URL:</label>
+                            <input type="url" name="content_video[]" class="teurny-input w-100" value="{% if content.video %}{{ content.video }}{% endif %}">
+                        </div>
+            
+                        <div class="product-field content-field" {% if content.type != "product" %}style="display: none;"{% endif %}>
+                            <label>Ürün Seç:</label>
+                            <select name="content_product[]" class="teurny-input w-100">
+                                <option value="">Ürün Seç</option>
+                                {% for product in products %}
+                                    <option value="{{ product.id }}" {% if content.product and content.product.id == product.id %}selected{% endif %}>
+                                        {{ product.title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+            
+                        <!-- Silme işlemi sadece istemci tarafında -->
+                        <button type="button" onclick="removeContentBlock(this)" class="teurny-footer-btn">Sil</button>
                     </div>
+                    
                 {% endfor %}
             </div>
+            
+            <script>
+                function removeContentBlock(button) {
+                    var contentBlock = button.parentElement;
+                    contentBlock.remove();  // İçeriği DOM'dan kaldır
+                }
+            </script>
 
             <button type="button" onclick="addContentField()" class="teurny-footer-btn">+ Yeni İçerik Ekle</button>
             <button type="submit" class="teurny-footer-btn">Güncelle</button>
