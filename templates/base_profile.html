@@ -1419,4 +1419,43 @@ $(".nav-link.profile-tab").on("click", function () {
   loadContent(url);
 });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initBlogCommentForm() {
+          console.log("🔄 Blog Yorum Gönderme Scripti Yüklendi!");
+  
+          const commentForm = document.querySelector(".ajaxFormTrueComment");
+  
+          if (!commentForm) return; // **Eğer form yoksa işlem yapma**
+
+          commentForm.addEventListener("submit", function (e) {
+              e.preventDefault(); // **Sayfanın yenilenmesini engelle**
+              console.log("fp")
+              let formData = new FormData(commentForm); // **Form verilerini al**
+              let actionUrl = "{% url 'tuerny_app:add_blog_comment' %}"; // **Django `urls.py` içindeki endpoint**
+  
+              fetch(actionUrl, {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                      "X-Requested-With": "XMLHttpRequest",
+                  },
+              })
+              .then(response => response.text())
+              .then(data => {
+                  console.log("✅ Yorum başarıyla eklendi!");
+                  
+              })
+              .catch(error => {
+                  console.error("❌ Bağlantı Hatası:", error);
+                  alert("Sunucuyla bağlantı kurulamadı!");
+              });
+          });
+      }
+  
+      // **Sayfa yüklendiğinde çağır**
+      initBlogCommentForm();
+  });
+  </script>
 </html>

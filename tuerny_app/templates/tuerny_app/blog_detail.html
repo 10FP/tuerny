@@ -61,8 +61,8 @@
                         }
 
                         .playing circle {
-                            fill: #d63384;
-                            /* Oynatıldığında yeşil renk */
+                            fill: #ca7c83;
+                            
                         }
                     </style>
                     {% if blog_.media_extra %}
@@ -81,7 +81,7 @@
                    
                     
                     
-
+                    {% if user.is_authenticated %}
                     <script>
                         const playerIcon = document.getElementById('player-icon');
                         const audioPlayer = document.getElementById('audio-player');
@@ -108,7 +108,7 @@
                             iconPath.setAttribute('d', 'M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z');
                         });
                     </script>
-
+                    {% endif %}
 
                 </div>
                 <div class="blog-content d-flex flex-column gap-3">
@@ -263,8 +263,8 @@
     {% endif %}
                 <!-- BLOG SECTION 1 -->
                 <div class="blog-comment">
-                  <div class="blog-section-title soru">
-                    <span>Yorumlar</span>
+                  <div class="blog-section-title soru" style="margin-bottom: 24px;">
+                    <span style="color: #989491; ;">Yorumlar</span>
                     <div class="blog-section-title-divider"></div>
                     <p></p>
                   </div>

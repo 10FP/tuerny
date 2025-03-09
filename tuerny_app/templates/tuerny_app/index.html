@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+  .fa-bookmark::hover {
+  color: #ca7c83;
+}
+.blog-section-title span{
+  font-weight: 400 !important;
+}
+</style>
 <div id="hero-slider" class="w-100 position-relative">
   <div id="hero-slider-top">
     {% for m in main %}
@@ -128,7 +135,7 @@
               /></a>
               
               <div class="blog-card-content">
-                <span class="blog-card-category">{{blog.category.name}}</span>
+                <span class="blog-card-category" style="font-weight: 100;">{{blog.category.name}}</span>
                 <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
                   {{blog.title}}</a
                 >
@@ -224,7 +231,7 @@
                       class="blog-card-content-top"
                       style="margin-bottom: 30px"
                     >
-                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
+                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link" style="color: #202020;">
                         {{blog.title}}</a
                       >
                       <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>

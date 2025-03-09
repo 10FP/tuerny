@@ -91,11 +91,14 @@
           <div class="mt-4">
             <form
               method="POST"
-              class="ajaxFormTrue"
-              action="/Controller/ajax/ajax.php?process=add-comments"
+              class="ajaxFormTrueComment"
+              class="{% url 'tuerny_app:add_blog_comment' %}"
+              [data-blog='true']
             >
+          {% csrf_token %}
               <input type="hidden" name="type" value="ask" />
               <input type="hidden" name="type_id" value="type_id" />
+              <input type="hidden" name="blog_id" value="comment.blog.id" />
               <input type="hidden" name="parent" value="0" />
               <div class="limit-counter textarea-counter">
                 <label

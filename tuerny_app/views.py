@@ -127,6 +127,7 @@ def add_blog_comment(request):
                 content=content,
                 anonymous=anonymous
         )
+            
         except Exception as e:
             print(e)
 

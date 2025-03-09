@@ -295,6 +295,8 @@ footer .copyright-text {
 .feature-box .feature-box-text {
   font-size: 11px;
   font-weight: 300;
+  color: var(--teurny-dark);
+  font-family: "Roboto";
 }
 .feature-box .feature-box-gallery {
   display: grid;
@@ -342,7 +344,7 @@ footer .copyright-text {
   /* font-weight: 200; */
   letter-spacing: 1.69px;
   font-family: 'Roboto';
-  font-weight: 400;
+  font-weight: 200;
   font-size: 14px;
 }
 .teurny-footer-btn * {
@@ -650,7 +652,7 @@ p.blog-card-text.mb-0.mt-3 {
   border: 1px solid #000;
   font-family: "Roboto" !important;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 400;
   /* line-height: 20.8px; */
   letter-spacing: 0.15em;
   text-align: center;
@@ -1200,5 +1202,8 @@ p.blog-card-text.mb-0.mt-3 {
 .about-div {
   width: 90%;
   margin-left: 5%;
+}
+.gap-2 {
+  gap: 0.4rem !important;
 }
 /*# sourceMappingURL=components.css.map */
