@@ -8,8 +8,8 @@ app_name="tuerny_app"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("ask/<int:question_id>", views.ask_details, name="ask"),
-    path("asked/<int:asked_id>", views.asked_details, name="asked"),
+    path("ask/<int:question_id>/", views.ask_details, name="ask"),
+    path("asked/<int:asked_id>/", views.asked_details, name="asked"),
     path("login/", views.login, name="login"),
     path("ask/", views.ask, name="ask"),
     path("add-comment/", views.add_comment, name="add-comment"),

@@ -972,6 +972,9 @@
                         })
                         .then(response => response.json())
                         .then(data => {
+                          if (data.redirect_url) {
+        window.location.href = data.redirect_url;  // Django’dan gelen URL'ye yönlendir
+    }
                             if (data.status === "success") {
                                 let commentList = document.querySelector(".comment-list"); // Yorumları içeren alan
                                 let newComment = document.createElement("div");
