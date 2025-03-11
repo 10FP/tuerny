@@ -8,6 +8,17 @@
 .blog-section-title span{
   font-weight: 400 !important;
 }
+@media screen and (max-width: 768px) {
+.blog-card-slider .slick-slide > div {
+  margin: 0 !important;
+}
+#hero-slider-bottom .slider-item span {
+  margin-top: 0px;
+}
+ .blog-card-content span{
+  font-weight: 400 !important;
+}
+}
 </style>
 <div id="hero-slider" class="w-100 position-relative">
   <div id="hero-slider-top">
@@ -54,7 +65,7 @@
                   class="w-100 h-100 object-fit-cover"
               /></a>
             </div>
-            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link">
+            <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link max-line">
               {{ blog.title }}
             </a>
             <div
@@ -174,11 +185,12 @@
       >Teurny Önerileri</span
     >
     <div class="slide-products">
+      {% for p in products %}
       <div class="px-2 slider suggestions-item">
         <a href="#">
           <img
-            src="{% static 'tuerny_app/images/7885103.png' %}"
-            style="height: 200px; width: 100%; object-fit: cover"
+            src="{{p.image.url}}"
+            style="height: 200px; width: auto; object-fit: cover; margin: 0 auto;"
           />
           <span
             class="w-100 d-block mt-4"
@@ -190,10 +202,11 @@
               text-align: center;
             "
           >
-            Title
+            {{p.title}}
           </span>
         </a>
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>
@@ -231,7 +244,7 @@
                       class="blog-card-content-top"
                       style="margin-bottom: 30px"
                     >
-                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link" style="color: #202020;">
+                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link max-line" style="color: #202020;">
                         {{blog.title}}</a
                       >
                       <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>

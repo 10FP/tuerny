@@ -8,7 +8,7 @@
         <div class="col-lg-6 p-0">
             <div class="d-flex flex-column gap-4">
                 <div class="text-center d-flex flex-column gap-2">
-                    <p class="blog-category">{{blog_.category.name}}</p>
+                    <p class="blog-category" style="margin-bottom: 12px;">{{blog_.category.name}}</p>
                     <h1 class="blog-title fw-normal">
                         {{blog_.title}}
                     </h1>
@@ -37,7 +37,7 @@
                                 <a href="#" class="social-btn facebook"
                                     data-url="/blog-detail/<?= $row->slug ?>">Facebook</a>
                                 <a href="#" class="social-btn twitter"
-                                    data-url="/blog-detail/<?= $row->slug ?>">Twitter</a>
+                                    data-url="/blog-detail/{{blog_.slug}}">Twitter</a>
                                 <a href="#" class="social-btn linkedin"
                                     data-url="/blog-detail/<?= $row->slug ?>">LinkedIn</a>
                             </div>
@@ -190,135 +190,9 @@
                 {% else %}
         
     {% endif %}
-    {% if blog_.extra_product %}
-                {% for product in blog_.extra_product.all %}
-                    <div class="d-flex flex-column gap-4 py-5">
-                        <div class="">
-                            <span style="    font-family: Playfair Display;
-    font-size: 16px;
-    font-style: italic;
-    font-weight: 400;
-    line-height: 20.8px;
-    color: #8F4D61;">Teurny Önerileri</span>
-                            <p></p>
-                        </div>
-                        <div>
-                            <div class="blog-card-slider">
-                                    <div class="">
-                                        <div class="blog-card-1">
-                                            <div class="ratio-1">
-                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                            </div>
-                                            <a href="#" class="blog-card-title mb-0 stretched-link">
-                                                {{product.title}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="blog-card-1">
-                                            <div class="ratio-1">
-                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                            </div>
-                                            <a href="#" class="blog-card-title mb-0 stretched-link">
-                                                {{product.title}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="blog-card-1">
-                                            <div class="ratio-1">
-                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                            </div>
-                                            <a href="#" class="blog-card-title mb-0 stretched-link">
-                                                {{product.title}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="blog-card-1">
-                                            <div class="ratio-1">
-                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                            </div>
-                                            <a href="#" class="blog-card-title mb-0 stretched-link">
-                                                {{product.title}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="blog-card-1">
-                                            <div class="ratio-1">
-                                                <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                            </div>
-                                            <a href="#" class="blog-card-title mb-0 stretched-link">
-                                                {{product.title}}
-                                            </a>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                {% else %}
-       
-    {% endif %}
+    
                 <!-- BLOG SECTION 1 -->
-                <div class="blog-comment">
-                  <div class="blog-section-title soru" style="margin-bottom: 24px;">
-                    <span style="color: #989491; ;">Yorumlar</span>
-                    <div class="blog-section-title-divider"></div>
-                    <p></p>
-                  </div>
-
-                  
-                  {% for comment in blog_.comments.all %}
-                  <div class="mt-5 d-flex flex-column gap-3">
-                              <div class="blog-comment-item">
-                                  {% if comment.anonymous %}
-                                  <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
-                                  {% else %}
-                                  <p class="blog-comment-item-author">@{{comment.user.username}}</p>
-                                  {% endif %}
-                                      
-                                      
-                                  <p class="blog-comment-item-text">
-                                      {{comment.content}}
-                                  </p>
-                              </div>
-                              <div class="teurny-divider"></div>
-                  </div>
-                  {% endfor %}
-                  
-                    <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add_blog_comment' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="type" value="blog">
-                        <input type="hidden" name="blog_id" value="{{ blog_.id }}">
-                        <input type="hidden" name="parent" value="0">
-                        <textarea name="content" class="teurny-input w-100 vRequired" rows="10"
-                            placeholder="Yorum" required></textarea>
-
-
-                        <div class="d-flex gap-3 mt-4">
-                            <div>
-                                <label for="cb-1" class="teurny-checkbox">
-                                    <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
-                                    <div class="teurny-checkbox-inner"></div>
-                                </label>
-                            </div>
-                            <div>
-                                <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
-                                    KULLANICI ADINI GİZLE
-                                </p>
-                                <p class="font-roboto blog-comment-checkbox-text">
-                                    Bu gönderi için kullanıcı adını gizlenecek
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-12 vAjaxErrors"></div>
-                        <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
-
-                    </form>
-
-                </div>
+               
             </div>
         </div>
         <div class="col-lg-4">
@@ -457,6 +331,139 @@
         
     </div>
     </div>
+    {% if blog_.extra_product %}
+    {% for product in blog_.extra_product.all %}
+        <div class="d-flex flex-column gap-4 py-5">
+            <div class="">
+                <span style="    font-family: Playfair Display;
+font-size: 16px;
+font-style: italic;
+font-weight: 400;
+line-height: 20.8px;
+color: #8F4D61;">Teurny Önerileri</span>
+                <p></p>
+            </div>
+            <div>
+                <div class="blog-card-slider">
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+
+
+       
+    {% endif %}
+
+    <div class="blog-comment">
+        <div class="blog-section-title soru" style="margin-bottom: 24px;">
+          <span style="color: #989491; ;">Yorumlar</span>
+          <div class="blog-section-title-divider"></div>
+          <p></p>
+        </div>
+
+        
+        {% for comment in blog_.comments.all %}
+        <div class="mt-5 d-flex flex-column gap-3" style="margin-top: 24px !important;">
+                    <div class="blog-comment-item">
+                        {% if comment.anonymous %}
+                        <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
+                        {% else %}
+                        <p class="blog-comment-item-author">@{{comment.user.username}}</p>
+                        {% endif %}
+                            
+                            
+                        <p class="blog-comment-item-text">
+                            {{comment.content}}
+                        </p>
+                    </div>
+                    <div class="teurny-divider"></div>
+
+                   
+        </div>
+        {% endfor %}
+        <a href=""><h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 24px;">Devamını Gör</h1></a>
+          <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add_blog_comment' %}">
+              {% csrf_token %}
+              <input type="hidden" name="type" value="blog">
+              <input type="hidden" name="blog_id" value="{{ blog_.id }}">
+              <input type="hidden" name="parent" value="0">
+              <textarea name="content" class="teurny-input w-100 vRequired" rows="10"
+                  placeholder="Yorum" required></textarea>
+
+
+              <div class="d-flex gap-3 mt-4">
+                  <div>
+                      <label for="cb-1" class="teurny-checkbox">
+                          <input name="hidden_user_name" type="checkbox" id="cb-1" class="d-none" />
+                          <div class="teurny-checkbox-inner"></div>
+                      </label>
+                  </div>
+                  <div>
+                      <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1">
+                          KULLANICI ADINI GİZLE
+                      </p>
+                      <p class="font-roboto blog-comment-checkbox-text">
+                          Bu gönderi için kullanıcı adını gizlenecek
+                      </p>
+                  </div>
+              </div>
+              <div class="col-md-12 vAjaxErrors"></div>
+              <button type="submit" class="teurny-footer-btn mt-4">Gönder</button>
+
+          </form>
+
+      </div>
     <div class="blog-section-1 py-5 section-5 d-none d-lg-block">
         <div class="container d-flex flex-column gap-4">
           <div class="blog-section-title px-2">

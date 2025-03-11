@@ -29,10 +29,7 @@ User = get_user_model()
 
 
 def index(request):
-    
-    
-        
-        
+    products = Product.objects.all()
     api = APISettings.objects.all()
     blog = Blog.objects.all()
     main = MainSuggestedBlog.objects.all()
@@ -42,9 +39,7 @@ def index(request):
     else:
         saved_blogs = Blog.objects.none()  # Kullanıcı giriş yapmamışsa boş bir queryset döndür
 
-    
-        
-    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs})
+    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs, "products": products})
 
 def about(request):
     s_blogs = SuggestedBlog.objects.all()

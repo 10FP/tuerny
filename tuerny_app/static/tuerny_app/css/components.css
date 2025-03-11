@@ -1158,6 +1158,35 @@ p.blog-card-text.mb-0.mt-3 {
     height: 15px !important;
   }
 }
+@media screen and (max-width: 380px) {
+  .slick-next {
+    right: 0 !important;
+  }
+  .slick-prev {
+    left: 0 !important;
+    z-index: 999;
+  }
+  
+}
+@media screen and (max-width: 330px) {
+  #hero-slider-bottom {
+    max-width: 80%;
+  }
+  #hero-slider-bottom .slider-item {
+    width: 100% !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .max-line {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4.5em;
+    line-height: 1.5em !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+}
 .icon-button {
   background: none;  /* Arkaplanı kaldır */
   border: none;  /* Border kaldır */
@@ -1206,4 +1235,5 @@ p.blog-card-text.mb-0.mt-3 {
 .gap-2 {
   gap: 0.4rem !important;
 }
+
 /*# sourceMappingURL=components.css.map */
