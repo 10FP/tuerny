@@ -18,8 +18,10 @@
                                 </svg>
                             </button>
                             <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item disabled" href="#">Title</a></li>
-                                            <li><a class="dropdown-item" href="#"> Category Titles</a></li>
+                                    <li><a class="dropdown-item disabled" href="#">Kategori</a></li>
+                                            {% for s in subcategories %}
+                                            <li><a class="dropdown-item" href="#"> {{s.name}}</a></li>
+                                            {% endfor %}
                             </ul>
                         </div>
                         <div class="dropdown">
@@ -543,6 +545,31 @@
             });
         });
     });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Tüm radio inputlarını seç
+    const radioButtons = document.querySelectorAll("input[type='radio'][name^='vote_']");
+
+    radioButtons.forEach((radio) => {
+        radio.addEventListener("change", function () {
+            // Aynı name'e sahip tüm labelları gri yap
+            const groupName = this.name;
+            const labels = document.querySelectorAll(`input[name='${groupName}'] + label`);
+
+            labels.forEach(label => {
+                label.style.color = "#989491"; // Varsayılan rengi uygula (gri)
+            });
+
+            // Seçili olan radio'nun label'ını koyu renk yap
+            const selectedLabel = document.querySelector(`label[for='${this.id}']`);
+            if (selectedLabel) {
+                selectedLabel.style.color = "#414141"; // Seçili olan koyu renk
+            }
+        });
+    });
+});
     </script>
 {% endblock content %}
   
