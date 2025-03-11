@@ -16,7 +16,7 @@ button, input, optgroup, select, textarea{
                 <p class="ask-title" style="font-weight: 400; margin-bottom: 60px;">Merak Ettiklerini Sor</p>
                 <div class="mt-4 d-flex flex-column gap-3">
                     {% if user.is_authenticated %}
-                    <select name="subcategory" class="teurny-input w-100 vRequired"  style="color: #989491;">
+                    <select name="subcategory" class="teurny-input w-100 vRequired"  style="color: #989491;" required>
                       <option value="" style="color: #989491;">Kategori</option>
                       {% for sub in subs %}
                       <option value="{{ sub.id }}" style="color: #989491;">{{ sub.name }}</option>
@@ -26,6 +26,7 @@ button, input, optgroup, select, textarea{
                     name="topic"
                     class="teurny-input w-100 vRequired"
                     style="color: #989491;"
+                    required
                   >
                   
                     <option value="">Konu</option>
@@ -37,13 +38,13 @@ button, input, optgroup, select, textarea{
                   <div class="limit-counter">
                     <label for="title" id="title-counter" class="counter-area">00/90</label>
                     <input name="title" type="text" placeholder="Soru Başlığı" class="teurny-input vRequired"
-                        id="counter-input" maxlength="90" />
+                        id="counter-input" maxlength="90" required/>
                 </div>
 
                 <div class="limit-counter textarea-counter">
                   <label for="description" id="content-counter" class="counter-area">00/360</label>
                   <textarea name="description" class="teurny-input" id="counter-textarea" rows="8" maxlength="360"
-                      placeholder="Detaylar (İsteğe Bağlı)" style="resize: none"></textarea>
+                      placeholder="Detaylar (İsteğe Bağlı)" style="resize: none" required></textarea>
               </div>
                   <div class="d-flex gap-3 mt-4">
                     <div>
@@ -113,6 +114,7 @@ button, input, optgroup, select, textarea{
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
                             style="background: white;"
+                            required
                           />
                         </div>
                       </div>
@@ -125,6 +127,7 @@ button, input, optgroup, select, textarea{
                             class="teurny-input w-100 survey-select vRequired"
                             disabled
                             style="background: white;"
+                            required
                           />
                         </div>
                       </div>
@@ -166,7 +169,8 @@ button, input, optgroup, select, textarea{
                       <p
                         class="fs-6 fw-light font-roboto blog-comment-checkbox-label mb-1"
                       >
-                        Şartları okudum ve kabul ediyorum
+                      <a href="{% url 'tuerny_app:contract' %}" target="_blank"> Şartları </a>
+                         okudum ve kabul ediyorum
                       </p>
                     </div>
                   </div>
@@ -292,6 +296,13 @@ button, input, optgroup, select, textarea{
   
         setInitialState();
       </script>
-      
+      <script>
+        document.querySelector(".addsurvey_check").addEventListener("click", function () {
+  const opacityDiv = document.querySelector(".opacity-check");
+  if (opacityDiv) {
+    opacityDiv.style.opacity = opacityDiv.style.opacity === "0.3" ? "1" : "0.3";
+  }
+});
+      </script>
 {% endblock content %}
  
