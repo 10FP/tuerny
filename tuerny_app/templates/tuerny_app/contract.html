@@ -6,7 +6,11 @@
           <ul class="nav nav-tabs nav-fill" id="contractsTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button
+              {% if active_tab == "1" %}
                 class="nav-link active"
+                {% else %}
+                class="nav-link"
+              {% endif %}
                 id="tab1-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#tab1"
@@ -20,7 +24,11 @@
             </li>
             <li class="nav-item" role="presentation">
               <button
-                class="nav-link"
+              {% if active_tab == "2" %}
+              class="nav-link active"
+              {% else %}
+              class="nav-link"
+            {% endif %}
                 id="tab2-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#tab2"
@@ -34,7 +42,11 @@
             </li>
             <li class="nav-item" role="presentation">
               <button
-                class="nav-link"
+              {% if active_tab == "3" %}
+              class="nav-link active"
+              {% else %}
+              class="nav-link"
+            {% endif %}
                 id="tab3-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#tab3"
@@ -48,7 +60,11 @@
             </li>
             <li class="nav-item" role="presentation">
               <button
-                class="nav-link"
+              {% if active_tab == "4" %}
+              class="nav-link active"
+              {% else %}
+              class="nav-link"
+            {% endif %}
                 id="tab4-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#tab4"

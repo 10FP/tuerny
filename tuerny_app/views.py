@@ -429,8 +429,14 @@ def category(request, slug):
         else:
             random_subcategories = all_subcategories
         blogs = first_subcategory.blogs.all()
-            
-        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs, "saved_blogs": saved_blogs})
+        second = random_subcategories[0].blogs.all()
+        seconds = random_subcategories[0].extra_blogs.all()
+        merged_second_blogs = chain(second, seconds)
+        third = random_subcategories[1].blogs.all()
+        thirds = random_subcategories[1].extra_blogs.all()
+        merged_third_blogs = chain(third, thirds)
+        extra = CategorySuggestedBlog.objects.all()
+        return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs,"second_blogs":merged_second_blogs, "third_blogs": merged_third_blogs,"extra": extra,"saved_blogs": saved_blogs})
         
 def confirm(request):
     return render(request, 'tuerny_app/confirm.html')
@@ -445,7 +451,10 @@ def contact(request):
     return render(request, "tuerny_app/contact.html")
 
 def contract(request):
-    return render(request, 'tuerny_app/contract.html')
+    tab = request.GET.get('tab', '')
+    
+    
+    return render(request, 'tuerny_app/contract.html', {"active_tab": tab})
 
 def linkinbio(request):
     return render(request, 'tuerny_app/linkinbio.html')
