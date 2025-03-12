@@ -29,7 +29,7 @@
                                                 <div class="question-card-survey-item-label">
                                                     <input name="vote_{{ vote.poll.question.id }}" value="{{ option.id }}" type="radio" id="r{{ option.id }}"
                                                     {% if request.user in option.voted_users.all %} checked {% endif %}>
-                                                    <label for="r{{ option.id }}" class="vote-option">{{ option.option_text }}</label>
+                                                    <label for="r{{ option.id }}" style="{% if request.user in option.voted_users.all %}color: #414141;{% else %}color: #989491; {% endif %}" class="vote-option">{{ option.option_text }}</label>
                                                 </div>
                                                 
                                                 <div class="question-card-survey-item-progress">

@@ -55,6 +55,20 @@
   #hero-slider-top .slick-slide.slick-active .px-2 a{
     max-width: fit-content;
   }
+  body > div.container.py-5.profile-container > div > div:nth-child(2) {
+    margin-top: 40px;
+  }
+  @media screen and (max-width: 450px) {
+  div.d-flex.justify-content-between.align-items-center.pt-4 > div.d-flex.gap-4 {
+    gap: 0.5rem !important;
+  }
+  div.d-flex.justify-content-between.align-items-center.pt-4 > div.d-flex.align-items-center.gap-3 {
+    gap: 0.25rem !important;
+  }
+  .vote-option {
+    transition: color 0.3s ease-in-out;
+}
+}
   </style>
   <body>
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
@@ -1179,7 +1193,7 @@
               }
           });
   
-          // **Beğenmeme butonu**
+
           document.querySelectorAll(".dislike-button").forEach(button => {
               if (!button.dataset.listener) {  // Eğer event eklenmemişse ekle
                   button.dataset.listener = "true";  // Event eklenmiş olarak işaretle
@@ -1458,4 +1472,56 @@ $(".nav-link.profile-tab").on("click", function () {
       initBlogCommentForm();
   });
   </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initVoteSelection() {
+          console.log("🔄 Oylama Renk Değişim Scripti Yüklendi!");
+
+          let radioButtons = document.querySelectorAll("input[type='radio'][name^='vote_']");
+
+          radioButtons.forEach(radio => {
+              // Önceki event listener'ları temizle
+              radio.removeEventListener("change", handleVoteSelection);
+              radio.addEventListener("change", handleVoteSelection);
+          });
+      }
+
+      function handleVoteSelection(event) {
+          let groupName = this.name; // Örn: "vote_3"
+          let labels = document.querySelectorAll(`input[name='${groupName}'] + label`);
+
+          // **Tüm seçeneklerin rengini varsayılan gri yap**
+          labels.forEach(label => {
+              label.style.color = "#989491";
+          });
+
+          // **Seçili olanın rengini koyu yap**
+          let selectedLabel = document.querySelector(`label[for='${this.id}']`);
+          if (selectedLabel) {
+              selectedLabel.style.color = "#414141"; // Seçili olanı koyu yap
+          }
+      }
+
+      // **Sayfa yüklendiğinde başlat**
+      initVoteSelection();
+
+      // **Sekme Değişimlerini Dinle**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  console.log("🔄 Sekme değişti, script tekrar başlatılıyor...");
+                  initVoteSelection();
+              }, 500); // İçeriğin yüklenmesini beklemek için 500ms gecikme
+          });
+      });
+
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          console.log("🆕 Yeni içerik yüklendi, script tekrar başlatılıyor...");
+          initVoteSelection();
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
 </html>
