@@ -66,7 +66,7 @@
                           </div>
                     </div>
                     <div class="flex-grow-1 text-center">
-                        <p class="mb-0 text-teurny-mid">Filtrelere göre 'Gündemdeki sorular vs.'</p>
+                        <p class="mb-0 text-teurny-mid">Filtreler</p>
                     </div>
                     <div>
                         <a href="{% url 'tuerny_app:ask' %}" class="teurny-button-secondary">SOR</a>
@@ -248,11 +248,13 @@
             <div class="col-lg-3">
                 <div class="d-flex flex-column gap-5 mt-5 mt-lg-0 question-sidebar">
                     <div>
+                        {% if request.user.liked_questions.all %}
                         <div class="blog-section-title soru">
                             <span style="font-weight: 400;font-family: 'Roboto';">Beğenilen Sorular</span>
                             <div class="blog-section-title-divider"></div>
                             <p></p>
                         </div>
+                        {% endif %}
     
                         <div class="mt-3 d-flex flex-column gap-3">
                             {% for like in request.user.liked_questions.all %}
@@ -272,6 +274,7 @@
     
                     <div>
                         <div class="d-flex flex-column gap-5 mt-5 mt-lg-0 question-sidebar">
+
                             <div>
                                 <div class="blog-section-title soru">
                                     <span style="font-weight: 400;">Tartışalım</span>
@@ -279,6 +282,7 @@
                                     <p></p>
                                 </div>
                                 {% for q in s_q %}
+                                <a href="{% url 'tuerny_app:ask' q.question.id %}" style="z-index: 999999;">
                                 <div class="mt-3 d-flex flex-column gap-special">
                                     <div style="margin-bottom: 20px;">
                                         <p style="font-family: 'Roboto';">
@@ -288,14 +292,16 @@
                                     </div>
                                     {% if q.question.poll %}
                                     {% for o in q.question.poll.options.all %}
-                                    
+                                    <a hhref="{% url 'tuerny_app:ask' q.question.id %}">
                                     <div class="argument-card-item-label">
                                         <input name="argument" value="select_id" type="radio" id="select_id" />
                                         <label for="select_id" class="text-nowrap option wrap special-que">{{o.option_text}}</label>
                                     </div>
+                                </a>
                                     {% endfor %}
                                     {% endif %}
                                 </div>
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>

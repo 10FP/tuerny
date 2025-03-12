@@ -50,83 +50,97 @@
       margin-left: 15px;
       margin-right: 15px;
   }
-  
-  
-  #hero-slider-top .slick-slide.slick-active .px-2 a{
-    max-width: fit-content;
-  }
-  body > div.container.py-5.profile-container > div > div:nth-child(2) {
-    margin-top: 40px;
-  }
-  @media screen and (max-width: 450px) {
-  div.d-flex.justify-content-between.align-items-center.pt-4 > div.d-flex.gap-4 {
-    gap: 0.5rem !important;
-  }
-  div.d-flex.justify-content-between.align-items-center.pt-4 > div.d-flex.align-items-center.gap-3 {
-    gap: 0.25rem !important;
-  }
   .vote-option {
     transition: color 0.3s ease-in-out;
 }
-
+  
+  #hero-slider-top .slick-slide.slick-active .px-2 a{
+    max-width: 100%;
+  }
+  @media screen and (min-width: 1400px) {
+    .xa {
+      padding-left: 0 !important;
+    }
+    .xb {
+      margin-right: 50px;
+    }
+}
+.no-icon-btn::before {
+  display: none;
 }
   </style>
   <body>
-    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Teurny</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
+    <div style="margin-top: 111px; width: 100%; z-index: 100;" class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+      
       <div class="offcanvas-body">
        
       
-    <div class="flex-shrink-0 p-3" style="width: 280px;">
-      <a href="/" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
-        <svg class="bi pe-none me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
-        <span class="fs-5 fw-semibold">Menü</span>
-      </a>
+    <div class="flex-shrink-0 p-3" style="width: 100%;">
+      <div style="display: flex; align-items: center; justify-content: space-between; position: relative; width: 100%;">
+
+        <!-- Bildirimler Butonu (Dropdown) -->
+        <div style="position: relative; display: flex; align-items: center; cursor: pointer;" onclick="toggleDropdown()">
+            <svg width="21" height="28" viewBox="0 0 21 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19.7921 21.3895H1.66367C1.36734 21.3895 1.1811 21.0699 1.3272 20.8121L2.38103 18.9524C3.01489 17.8338 3.34807 16.5701 3.34807 15.2844V9.73828C3.34807 6.63777 5.86153 4.12431 8.96204 4.12431H9.08011C9.11825 4.12431 9.14917 4.09339 9.14917 4.05525V2.95028C9.14917 2.14931 9.79848 1.5 10.5994 1.5C11.4004 1.5 12.0497 2.14931 12.0497 2.95028V4.05525C12.0497 4.09339 12.0806 4.12431 12.1188 4.12431H12.2413C15.4156 4.12431 17.989 6.69761 17.989 9.87194V15.2006C17.989 16.5389 18.3527 17.8521 19.0412 18.9997L20.1237 20.8038C20.2784 21.0616 20.0927 21.3895 19.7921 21.3895Z" stroke="black" stroke-width="1.54696"/>
+                <path d="M13.9853 23.0469H7.35547V23.185C7.35547 25.0158 8.83961 26.4999 10.6704 26.4999C12.5012 26.4999 13.9853 25.0158 13.9853 23.185V23.0469Z" stroke="black" stroke-width="1.54696" stroke-linejoin="round"/>
+            </svg>
+            <span style="margin-left: 12px; font-size: 16px; font-weight: 400; color: #000000;">
+              Bildirimler
+              <img src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e" 
+                   alt="arrow-icon" 
+                   style="margin-left: 5px; vertical-align: middle; transform: rotate(90deg);">
+          </span>
+          
+            <!-- Dropdown Menü (Başlangıçta Gizli) -->
+            <ul id="dropdownMenu" class="dropdown-menu-custom">
+              <li><a href="#">Bildirim</a></li>
+              <li><a href="#">Bildirim</a></li>
+              <li><a href="#">Bildirim</a></li>
+              <li><a href="#">Bildirim</a></li>
+              <li><a href="#">Bildirim</a></li>
+              </li>
+          </ul>
+          
+          
+        </div>
+    
+        <!-- Çıkış Yap Butonu -->
+        <span style="right: 56px; position: absolute; font-size: 16px; font-weight: 400; columns: #414141;">Çıkış Yap</span>
+    
+        <!-- Çıkış Yap İkonu -->
+        <svg style="right: 20px; position: absolute; margin-top: 4px; cursor: pointer;" width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 4L13.59 5.41L16.17 8H6V10H16.17L13.59 12.58L15 14L20 9L15 4ZM2 2H10V0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H10V16H2V2Z" fill="black"/>
+        </svg>
+    
+    </div>
+    <li style="display: grid;" class="border-top my-3"></li>
       <ul class="list-unstyled ps-0">
         
         <ul class="list-unstyled">
           {% for category in categories %}
               <li class="mb-1">
                   <!-- Main Category Dropdown -->
-                  <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" 
+                  <button style="flex-direction: row-reverse;
+    gap: 6px;" class="btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
                           data-bs-toggle="collapse" data-bs-target="#category-{{ category.slug }}" 
                           aria-expanded="false">
                       {{ category.name }}
                   </button>
       
                   <div class="collapse" id="category-{{ category.slug }}">
-                      <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                      <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
                           {% for subcategory in category.subcategories.all %}
                               <li>
-                                  <!-- SubCategory Dropdown -->
-                                  <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" 
+                                  <a href="{% url 'tuerny_app:category' subcategory.slug %}">
+                                  <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
                                           data-bs-toggle="collapse" data-bs-target="#subcategory-{{ subcategory.slug }}" 
                                           aria-expanded="false">
                                       {{ subcategory.name }}
                                   </button>
-      
-                                  <div class="collapse" id="subcategory-{{ subcategory.slug }}">
-                                      <ul class="list-unstyled">
-                                          {% for blog in subcategory.blogs.all %}
-                                              <li class="d-flex align-items-center mb-2">
-                                                  {% if blog.media %}
-                                                      <img src="{{ blog.media.url }}" alt="{{ blog.title }}" class="img-fluid rounded" width="50">
-                                                  {% endif %}
-                                                  <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="ms-2 text-decoration-none">
-                                                      {{ blog.title }}
-                                                  </a>
-                                              </li>
-                                          {% empty %}
-                                              <li class="text-muted">Bu kategoride henüz blog yazısı yok.</li>
-                                          {% endfor %}
-                                      </ul>
-                                  </div>
+                                </a>
+                                  
                               </li>
-                          {% empty %}
-                              <li class="text-muted">Bu kategoride henüz alt kategori yok.</li>
+                          
                           {% endfor %}
                       </ul>
                   </div>
@@ -136,25 +150,7 @@
           {% endfor %}
       </ul>
 
-        <li class="border-top my-3"></li>
-        <li class="mb-1">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-            Hesap
-          </button>
-          <div class="collapse" id="account-collapse">
-            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-              {% if user.is_authenticated %}
-              <li><a href="{% url 'tuerny_app:profile' %}?tab=settings" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profil</a></li>
-              <li><a href="{% url 'tuerny_app:logout' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Çıkış Yap</a></li>
-              {% else %}
-              
-              <li><a href="{% url 'tuerny_app:register' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Üye Ol</a></li>
-              <li><a href="{% url 'tuerny_app:login' %}" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Giriş Yap</a></li>
-              {% endif %}
-            </ul>
-          </div>
-        </li>
-      </ul>
+       
     </div>
   </div>
 </div>
@@ -180,9 +176,10 @@
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-          <button type="button" class="icon-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
-            <i class="fa-solid fa-bars fs-5"></i>
-          </button>
+
+          <button id="sidebarToggle" type="button" class="icon-button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
+            <i id="toggleIcon" class="fa-solid fa-bars fs-5"></i>
+        </button>
           </div>
           <a class="navbar-brand order-2" href="/">
             <img
@@ -214,7 +211,7 @@
                     >
                       <div class="h-100 header-link-menu-content p-3 p-lg-4">
                         <div class="container-fluid">
-                          <div class="row gap-5 px-0 px-lg-5">
+                          <div class="row gap-5 px-0 px-lg-5 xa">
                             <div class="col col-lg-auto">
                               <div class="header-link-menu-nav">
                                 {% for category in category.subcategories.all %}
@@ -228,7 +225,7 @@
                                 
                               </div>
                             </div>
-                            <div class="d-none d-lg-block col">
+                            <div class="d-none d-lg-block col xb">
                               <div class="h-100">
                                 <div class="row h-100 menu-load-div">
                                   {% for blog in blog %}
@@ -284,40 +281,35 @@
                     <span>Sorular</span>
                     <i class="fa-solid fa-chevron-down"></i>
                   </a>
-                  <div class="header-link-menu question-link-menu">
-                    <div
-                      class="container-fluid px-0 px-lg-3 h-100 header-link-menu-container"
-                    >
-                      <div class="h-100 header-link-menu-content p-3 p-lg-4">
-                        <div class="container-fluid">
-                          <div class="row gap-5 px-0 px-lg-5">
-                            <div class="col col-lg-auto">
-                              <div class="header-link-menu-nav">
-                                <div class="d-none d-lg-block col">
-                                  <div class="h-100">
-                                    <div class="row h-100 menu-load-div">
-                                      <a
-                                        href="{% url 'tuerny_app:ask'%}"
-                                        class="header-link d-flex align-items-center gap-2 text-decoration-none"
-                                      >
-                                        <span>Soru Sor</span>
-                                      </a>
-                                      <a
-                                        href="{% url 'tuerny_app:question' %}"
-                                        class="header-link d-flex align-items-center gap-2 text-decoration-none"
-                                      >
-                                        <span>Gündemdeki Sorular</span>
-                                      </a>
+                  <div class="header-link-menu question-link-menu" style="max-width: 270px !important;">
+                    <div class="container-fluid px-0 px-lg-3 h-100 header-link-menu-container" style="max-width: 270px !important;">
+                        <div class="h-100 header-link-menu-content p-3 p-lg-4">
+
+                            <div class="container-fluid">
+                                <div class="row gap-5 px-0 px-lg-5">
+                                    <div class="col col-lg-auto">
+                                        <div class="header-link-menu-nav">
+
+                                            <div class="d-none d-lg-block col">
+                                                <div class="h-100">
+                                                    <div class="row h-100 menu-load-div">
+                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>Soru Sor</span>
+                                                        </a>
+                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>Gündemdeki Sorular</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
-                              </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -545,13 +537,13 @@
 {% endblock content %}
 <footer>
   <div>
-    <div class="flex-fill d-lg-none">
+    <div class="flex-fill d-lg-none" style="overflow-x: clip;">
       <!-- FUTURE BOX -->
       <div class="feature-box h-100">
         <div class="p-2 flex-fill">
           <div class="feature-box-gallery1">
             <div>
-              <a href="#" target="_blank">
+              <a href="https://www.instagram.com/teurny/" target="_blank">
                 <img src="{% static 'tuerny_app/images/5524788.jpeg' %}" alt="feature-box"
               /></a>
             </div>
@@ -561,7 +553,7 @@
         <div class="p-2 d-flex align-items-center justify-content-center">
           <a
             style="text-align: center; width: 310px"
-            href="#"
+            href="https://www.instagram.com/teurny/"
             class="teurny-footer-btn"
           >
             <i class="fa-brands fa-instagram"></i>
@@ -591,17 +583,25 @@
 
             <div class="d-flex flex-column gap-2">
               <p class="fw-medium fs-6 mb-0">Gizlilik Politikası</p>
-              <a href="#" class="fw-light">Gizlilik P. Nav Title</a>
+              <a href="{% url 'tuerny_app:contract' %}?tab=1" class="fw-light">KVKK Politikası</a>
+              <a href="{% url 'tuerny_app:contract' %}?tab=2" class="fw-light">KVKK  Aydınlatma Metni</a>
+              <a href="{% url 'tuerny_app:contract' %}?tab=3" class="fw-light">Çerez Politikası</a>
+              <a href="{% url 'tuerny_app:contract' %}?tab=4" class="fw-light">Üyelik ve Gizlilik Sözleşmesi</a>
             </div>
           </div>
           <div class="flex-fill d-flex flex-column" style="gap: 32px">
             <div class="d-flex flex-column gap-2">
               <p class="fw-medium fs-6 mb-0">Kategoriler</p>
-              <a href="#" class="fw-light">Kategoriler Nav Title</a>
+              {% for c in categories %}
+              <a href="{% url 'tuerny_app:category' c.slug %}" class="fw-light">{{c.name}}</a>
+              {% endfor %}
             </div>
             <div class="d-flex flex-column gap-2">
               <p class="fw-medium fs-6 mb-0">Teurny</p>
-              <a href="#" class="fw-light">Nav Title</a>
+              <a href="{% url 'tuerny_app:about' %}" class="fw-light">İletişim</a>
+              <a href="mailto:info@teurny.com" class="fw-light">E-posta</a>
+              <a href="{% url 'tuerny_app:about' %}" class="fw-light">Teurny Hakkında</a>
+              <a href="{% url 'tuerny_app:contract' %}?tab=4" class="fw-light">Yayın İlkeleri</a>
             </div>
           </div>
         </div>
@@ -669,7 +669,7 @@
                 <div class="p-2 flex-fill">
                   <div class="feature-box-gallery">
                     <div>
-                      <a href="#" target="_blank">
+                      <a href="https://www.instagram.com/teurny/" target="_blank">
                         <img
                           src="{% static 'tuerny_app/images/5524788.jpeg' %}"
                           alt="feature-box"
@@ -681,7 +681,7 @@
                 <div class="p-2">
                   <a
                     style="text-align: center"
-                    href="#"
+                    href="https://www.instagram.com/teurny/"
                     class="teurny-footer-btn"
                   >
                     <i class="fa-brands fa-instagram"></i>
@@ -741,7 +741,7 @@
       </div>
     </div>
   </div>
-</div>
+
 </footer>
 
 
@@ -1520,6 +1520,86 @@ $(".nav-link.profile-tab").on("click", function () {
       let observer = new MutationObserver(() => {
           console.log("🆕 Yeni içerik yüklendi, script tekrar başlatılıyor...");
           initVoteSelection();
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      function initSidebarAndDropdown() {
+          console.log("🔄 Offcanvas ve Dropdown Scripti Yüklendi!");
+
+          let offcanvasDiv = document.getElementById("offcanvasScrolling");
+          let sidebarToggle = document.getElementById("sidebarToggle");
+          let dropdownMenu = document.getElementById("dropdownMenu");
+
+          // **📌 Sayfa Scroll İzleme**
+          document.removeEventListener("scroll", handleScroll);
+          document.addEventListener("scroll", handleScroll);
+
+          function handleScroll() {
+              let scrollY = window.scrollY || window.pageYOffset;
+              if (scrollY < 40) {
+                  offcanvasDiv.style.marginTop = `${111 - scrollY}px`; 
+                  
+              } else {
+                  offcanvasDiv.style.marginTop = "71px"; 
+              }
+          }
+
+          // **📌 Dropdown Aç/Kapat**
+          function toggleDropdown() {
+              dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+          }
+
+          // **📌 Offcanvas Aç/Kapat İzleme**
+          if (sidebarToggle) {
+              sidebarToggle.removeEventListener("click", toggleSidebar);
+              sidebarToggle.addEventListener("click", toggleSidebar);
+          }
+
+          function toggleSidebar() {
+              let icon = document.getElementById("toggleIcon");
+
+              if (offcanvasDiv.classList.contains("show")) {
+                  icon.outerHTML = `<i id="toggleIcon" class="fa-solid fa-bars fs-5"></i>`;
+              } else {
+                  icon.outerHTML = `
+                      <svg id="toggleIcon" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M2 19.3242L19.3241 2.0001" stroke="black" stroke-width="3"/>
+                          <path d="M2 2.32422L19.3241 19.6483" stroke="black" stroke-width="3"/>
+                      </svg>
+                  `;
+              }
+          }
+
+          // **📌 Offcanvas Kapanınca Hamburger Menüyü Geri Getir**
+          offcanvasDiv.removeEventListener("hidden.bs.offcanvas", resetIcon);
+          offcanvasDiv.addEventListener("hidden.bs.offcanvas", resetIcon);
+
+          function resetIcon() {
+              document.getElementById("toggleIcon").outerHTML = `<i id="toggleIcon" class="fa-solid fa-bars fs-5"></i>`;
+          }
+      }
+
+      // **Sayfa yüklendiğinde başlat**
+      initSidebarAndDropdown();
+
+      // **Sekme Değişimlerini Dinle**
+      document.querySelectorAll(".profile-tab").forEach(tab => {
+          tab.addEventListener("click", function () {
+              setTimeout(() => {
+                  console.log("🔄 Sekme değişti, script tekrar başlatılıyor...");
+                  initSidebarAndDropdown();
+              }, 500); // İçeriğin yüklenmesini beklemek için gecikme
+          });
+      });
+
+      // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+      let observer = new MutationObserver(() => {
+          console.log("🆕 Yeni içerik yüklendi, script tekrar başlatılıyor...");
+          initSidebarAndDropdown();
       });
 
       observer.observe(document.body, { childList: true, subtree: true });
