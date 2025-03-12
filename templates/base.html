@@ -57,6 +57,14 @@
   #hero-slider-top .slick-slide.slick-active .px-2 a{
     max-width: 100%;
   }
+  @media screen and (min-width: 1400px) {
+    .xa {
+      padding-left: 0 !important;
+    }
+    .xb {
+      margin-right: 50px;
+    }
+}
 
   </style>
   <body>
@@ -204,7 +212,7 @@
                     >
                       <div class="h-100 header-link-menu-content p-3 p-lg-4">
                         <div class="container-fluid">
-                          <div class="row gap-5 px-0 px-lg-5">
+                          <div class="row gap-5 px-0 px-lg-5 xa">
                             <div class="col col-lg-auto">
                               <div class="header-link-menu-nav">
                                 {% for category in category.subcategories.all %}
@@ -218,7 +226,7 @@
                                 
                               </div>
                             </div>
-                            <div class="d-none d-lg-block col">
+                            <div class="d-none d-lg-block col xb">
                               <div class="h-100">
                                 <div class="row h-100 menu-load-div">
                                   {% for blog in blog %}
