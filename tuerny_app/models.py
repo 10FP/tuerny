@@ -124,7 +124,7 @@ class Blog(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="product_blog")
     extra_product = models.ManyToManyField(Product, related_name="extra_product_blog", blank=True)
     title = models.CharField(max_length=255)
-    short_description = RichTextField(default="", null=True, blank=True)
+    short_description = models.TextField(default="", null=True, blank=True)
     
     media = models.ImageField(upload_to='blog_media/', null=True, blank=True)
     media_extra = models.FileField(

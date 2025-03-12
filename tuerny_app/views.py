@@ -423,7 +423,11 @@ def category(request, slug):
     category = MainCategory.objects.get(slug=slug)
     if category:
         first_subcategory = category.subcategories.first()
-            
+        all_subcategories = list(category.subcategories.all())
+        if len(all_subcategories) >= 3:
+            random_subcategories = random.sample(all_subcategories[1:], 2)
+        else:
+            random_subcategories = all_subcategories
         blogs = first_subcategory.blogs.all()
             
         return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs, "saved_blogs": saved_blogs})

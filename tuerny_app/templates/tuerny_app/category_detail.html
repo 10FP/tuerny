@@ -1,5 +1,51 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
+<style>
+  .max-line-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 83.2px;
+    line-height: 41.6px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .max-line-5 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 41.6px;
+    line-height: 41.6px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .max-line-3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 41.6px;
+    line-height: 20.8px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .max-line-4 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 20.8px;
+    line-height: 20.8px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  body > div.wrapper > div.category-content > div:nth-child(4) > div {
+    overflow-x: clip;
+  }
+  .social-menu {
+    left: -20px;
+    top: -120px;
+  }
 
+</style>
 <div class="container py-5 category-title">
   <div class="page-title">
     <h1 class="mb-0 fw-normal">{{category.name}}</h1>
@@ -23,12 +69,12 @@
               <p class="blog-card-category mb-2" style="margin-bottom: 20px !important;">{{category.name}}</p>
               <a
                 href="{% url 'tuerny_app:blog_detail' blog.slug %}"
-                class="blog-card-title stretched-link"
+                class="blog-card-title stretched-link max-line-2"
               >
                 {{blog.title}}
               </a>
-              <div class="blog-card-text mb-0 mt-3">
-                {{blog.short_description | safe}}
+              <div class="blog-card-text mb-0 mt-3 max-line-3">
+                {{blog.short_description}}
               </div>
               <div style="clear: both"></div>
               <div class="blog-card-content-bottom mt-2 mt-md-4">
@@ -147,13 +193,13 @@
               /></a>
             </div>
             <div class="blog-card-content">
-              <p class="blog-card-category mb-2" style="margin-bottom: 10px;"> {{blog.category.name}}</p>
-              <a href="#" class="blog-card-title stretched-link">
+              <p class="blog-card-category mb-2 max-line-2" style="margin-bottom: 10px;"> {{blog.category.name}}</p>
+              <a href="#" class="blog-card-title stretched-link max-line-5">
                 {{blog.title}}
               </a>
-              <p class="blog-card-text mb-0 mt-3"> {{blog.short_description | safe}}</p>
+              <p class="blog-card-text mb-0 mt-3 max-line-4">{{blog.short_description}}</p>
               <div style="clear: both"></div>
-              <div class="blog-card-content-bottom mt-2 mt-md-4">
+              <div class="blog-card-content-bottom mt-2 mt-md-4" style="margin-bottom: 10px;">
                 <p class="mb-0 blog-card-author text-uppercase">
                   {{blog.author}}
                 </p>
@@ -323,10 +369,10 @@
             </div>
             <div class="blog-card-content">
               <p class="blog-card-category mb-2">{{blog.category.name}}</p>
-              <a href="#" class="blog-card-title stretched-link">
+              <a href="#" class="blog-card-title stretched-link max-line-5">
                 {{blog.title}}
               </a>
-              <p class="blog-card-text mb-0 mt-3">{{blog.short_description | safe}}</p>
+              <p class="blog-card-text mb-0 mt-3 max-line-4">{{blog.short_description}}</p>
               <div class="blog-card-content-bottom mt-2 mt-md-4">
                 <p class="mb-0 blog-card-author">{{blog.author}}</p>
                 <div class="blog-card-buttons gap-0">
