@@ -331,8 +331,7 @@
         
     </div>
     </div>
-    {% if blog_.extra_product %}
-    {% for product in blog_.extra_product.all %}
+    
         <div class="d-flex flex-column gap-4 py-5">
             <div class="">
                 <span style="    font-family: Playfair Display;
@@ -345,67 +344,34 @@ color: #8F4D61;">Teurny Önerileri</span>
             </div>
             <div>
                 <div class="blog-card-slider">
+                    {% if blog_.extra_product %}
+                        {% for product in blog_.extra_product.all %}
+                       
                         <div class="">
                             <div class="blog-card-1">
                                 <div class="ratio-1">
                                     <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
                                 </div>
-                                <a href="#" class="blog-card-title mb-0 stretched-link">
+                                <a href="{{product.link}}" class="blog-card-title mb-0 stretched-link">
                                     {{product.title}}
                                 </a>
                             </div>
                         </div>
-                        <div class="">
-                            <div class="blog-card-1">
-                                <div class="ratio-1">
-                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                </div>
-                                <a href="#" class="blog-card-title mb-0 stretched-link">
-                                    {{product.title}}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="blog-card-1">
-                                <div class="ratio-1">
-                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                </div>
-                                <a href="#" class="blog-card-title mb-0 stretched-link">
-                                    {{product.title}}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="blog-card-1">
-                                <div class="ratio-1">
-                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                </div>
-                                <a href="#" class="blog-card-title mb-0 stretched-link">
-                                    {{product.title}}
-                                </a>
-                            </div>
-                        </div>
-                        <div class="">
-                            <div class="blog-card-1">
-                                <div class="ratio-1">
-                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
-                                </div>
-                                <a href="#" class="blog-card-title mb-0 stretched-link">
-                                    {{product.title}}
-                                </a>
-                            </div>
-                        </div>
+
+                        {% endfor %}
+                        {% else %}
+                    
+                    
+                           
+                        {% endif %}
+
                 </div>
             </div>
         </div>
-        {% endfor %}
-    {% else %}
-
-
        
-    {% endif %}
 
     <div class="blog-comment">
+        {% if blog_.comments.all %}
         <div class="blog-section-title soru" style="margin-bottom: 24px;">
           <span style="color: #989491; ;">Yorumlar</span>
           <div class="blog-section-title-divider"></div>
@@ -432,7 +398,10 @@ color: #8F4D61;">Teurny Önerileri</span>
                    
         </div>
         {% endfor %}
+        
         <a href=""><h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 24px;">Devamını Gör</h1></a>
+        {% else %}
+        {% endif %}
           <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add_blog_comment' %}">
               {% csrf_token %}
               <input type="hidden" name="type" value="blog">
