@@ -4,6 +4,7 @@
       <div class="d-flex flex-column gap-4 saved-comments-list">
         {% for comment in request.user.comments.all  %}
         {% if comment.question %}
+        <a href="{% url 'tuerny_app:ask' comment.question.id %}">
         <div class="question-card">
           <div class="question-card-category">
             <p>{{comment.question.subcategory.name}}</p>
@@ -60,7 +61,9 @@
           </form>
           </div>
         </div>
+      </a>
         {% else %}
+        <a href="{% url 'tuerny_app:blog_detail' comment.blog.slug %}">
         <div class="question-card">
           <div class="question-card-category">
             <p>{{comment.blog.category.name}}</p>
@@ -148,6 +151,7 @@
             </form>
           </div>
         </div>
+      </a>
         {% endif %}
         {% endfor %}
 
