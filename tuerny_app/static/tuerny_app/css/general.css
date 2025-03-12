@@ -348,4 +348,65 @@ p {
 .collapse .list-unstyled li {
   margin-left: 25px;
 }
+.fw-semibold-respo{
+  font-weight: 400 !important;
+}
+
+.fs-5-respo{
+  font-size: 16px !important;
+}
+
+.btn-toggle::before {
+  transform: rotate(90deg);
+}
+
+/* Dropdown Menü */
+.dropdown-menu-custom {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #ffffff;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  border-radius: 8px;
+  display: none;
+  max-height: 100vh;
+  overflow-y: auto; 
+  z-index: 999;
+  margin-top: 18px;
+}
+
+/* Dropdown İçindeki Bağlantılar */
+.dropdown-menu-custom li {
+  padding: 10px;
+  font-size: 14px;
+  border-bottom: 0.5px solid #ddd; 
+}
+
+.dropdown-menu-custom li:last-child {
+  border-bottom: none; 
+}
+
+.dropdown-menu-custom li a {
+  text-decoration: none;
+  color: #989491;
+  display: block;
+  transition: color 0.3s ease-in-out;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.dropdown-menu-custom li a:hover {
+  color: #ff3233; /* Hover rengi */
+}
+
+/* Bölme Çizgisi */
+.dropdown-divider {
+  border-top: 1px solid #ddd;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-bottom: none; /* Ekstra alt çizgiyi kaldır */
+}
 /*# sourceMappingURL=general.css.map */

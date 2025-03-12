@@ -493,3 +493,44 @@ $(document).ready(function() {
   );
 });
 
+document.addEventListener("scroll", function() {
+  let scrollY = window.scrollY || window.pageYOffset; // Kullanıcının kaydırdığı piksel miktarı
+  let offcanvasDiv = document.getElementById("offcanvasScrolling");
+
+  if (scrollY < 40) {
+      offcanvasDiv.style.marginTop = `${111 - scrollY}px`; // Her kaydırmada azalt
+  } else {
+      offcanvasDiv.style.marginTop = "71px"; // 40px veya daha fazla kaydırıldığında sabit
+  }
+});
+
+
+function toggleDropdown() {
+  let dropdown = document.getElementById("dropdownMenu");
+  dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+}
+
+
+document.getElementById("sidebarToggle").addEventListener("click", function () {
+  let icon = document.getElementById("toggleIcon");
+  let sidebar = document.getElementById("offcanvasScrolling");
+
+  // Offcanvas açık mı kapalı mı kontrol et
+  if (sidebar.classList.contains("show")) {
+      // Eğer açık ise, ikon tekrar hamburger menüye dönsün
+      icon.outerHTML = `<i id="toggleIcon" class="fa-solid fa-bars fs-5"></i>`;
+  } else {
+      // Eğer kapalı ise, ikon "çarpı" SVG'si olsun
+      icon.outerHTML = `
+          <svg id="toggleIcon" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 19.3242L19.3241 2.0001" stroke="black" stroke-width="3"/>
+              <path d="M2 2.32422L19.3241 19.6483" stroke="black" stroke-width="3"/>
+          </svg>
+      `;
+  }
+});
+
+// Offcanvas kapanınca ikon tekrar hamburger menüye dönsün
+document.getElementById("offcanvasScrolling").addEventListener("hidden.bs.offcanvas", function () {
+  document.getElementById("toggleIcon").outerHTML = `<i id="toggleIcon" class="fa-solid fa-bars fs-5"></i>`;
+});
