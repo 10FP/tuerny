@@ -155,7 +155,7 @@
   padding: 0 !important;
 }
 .header .header-link-menu .header-link-menu-content {
-  min-height: 370px;
+  min-height: 100%;
   background-color: #ffffff;
 }
 .header .header-link-container:hover .header-link-menu {

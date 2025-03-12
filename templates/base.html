@@ -281,40 +281,35 @@
                     <span>Sorular</span>
                     <i class="fa-solid fa-chevron-down"></i>
                   </a>
-                  <div class="header-link-menu question-link-menu">
-                    <div
-                      class="container-fluid px-0 px-lg-3 h-100 header-link-menu-container"
-                    >
-                      <div class="h-100 header-link-menu-content p-3 p-lg-4">
-                        <div class="container-fluid">
-                          <div class="row gap-5 px-0 px-lg-5">
-                            <div class="col col-lg-auto">
-                              <div class="header-link-menu-nav">
-                                <div class="d-none d-lg-block col">
-                                  <div class="h-100">
-                                    <div class="row h-100 menu-load-div">
-                                      <a
-                                        href="{% url 'tuerny_app:ask'%}"
-                                        class="header-link d-flex align-items-center gap-2 text-decoration-none"
-                                      >
-                                        <span>Soru Sor</span>
-                                      </a>
-                                      <a
-                                        href="{% url 'tuerny_app:question' %}"
-                                        class="header-link d-flex align-items-center gap-2 text-decoration-none"
-                                      >
-                                        <span>Gündemdeki Sorular</span>
-                                      </a>
+                  <div class="header-link-menu question-link-menu" style="max-width: 270px !important;">
+                    <div class="container-fluid px-0 px-lg-3 h-100 header-link-menu-container" style="max-width: 270px !important;">
+                        <div class="h-100 header-link-menu-content p-3 p-lg-4">
+
+                            <div class="container-fluid">
+                                <div class="row gap-5 px-0 px-lg-5">
+                                    <div class="col col-lg-auto">
+                                        <div class="header-link-menu-nav">
+
+                                            <div class="d-none d-lg-block col">
+                                                <div class="h-100">
+                                                    <div class="row h-100 menu-load-div">
+                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>Soru Sor</span>
+                                                        </a>
+                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>Gündemdeki Sorular</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
-                              </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>

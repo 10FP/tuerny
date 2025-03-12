@@ -10,7 +10,7 @@
                               <p>{{vote.poll.question.subcategory.name}}</p>
                           </div>
                           <div class="question-card-date">
-                              <p>{{ vote.poll.question.created_at|date:"d-m-Y" }}</p>
+                              <p>{{ vote.poll.question.created_at|date:"d.m.Y" }}</p>
                           </div>
                           <h3 class="question-card-title pb-2">
                               <a href="{% url 'tuerny_app:asked' vote.poll.question.id %}">{{vote.poll.question.title}}</a>
@@ -36,7 +36,7 @@
                                                     <div class="question-card-survey-item-progress-rate"
                                                         id="progress-{{ option.id }}"
                                                         style="width: {% if total_votes > 0 %}{{ poll.percentages|get_item:option.id|floatformat:1 }}{% else %}0{% endif %}%">
-                                                        <span id="percentage-{{ option.id }}">
+                                                        <span id="percentage-{{ option.id }}" class="percentage">
                                                             {% if total_votes > 0 %}
                                                                 {{ poll.percentages|get_item:option.id|floatformat:1 }}%
                                                             {% else %}
