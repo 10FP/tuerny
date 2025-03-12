@@ -1,0 +1,412 @@
+:root {
+  --teurny-black: #000000;
+  --teurny-darker: #202020;
+  --teurny-dark: #414141;
+  --teurny-mid: #989491;
+  --teurny-light: #faf6f1;
+  --teurny-lighter: #f2f2f2;
+  --teurny-1: #8f4d61;
+  --teurny-2: #ca7c83;
+  --teurny-3: #d09f83;
+  --teurny-4: #cd9095;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  scroll-behavior: smooth;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+* {
+  color: var(--teurny-dark);
+  font-family: "Poppins";
+}
+
+.text-roboto,
+.text-roboto * {
+  font-family: "Roboto" !important;
+}
+
+a {
+  text-decoration: none;
+  color: var(--teurny-dark);
+}
+
+.teurny-text-dark {
+  color: var(--teurny-dark);
+}
+
+.teurny-text-darker {
+  color: var(--teurny-dark);
+}
+
+.teurny-border-lighter {
+  border-color: var(--teurny-lighter) !important;
+}
+
+.flex-fill {
+  flex-shrink: 0;
+  flex: 1 1 0px !important;
+}
+
+.ratio-1 {
+  aspect-ratio: 1;
+}
+
+.ratio-9x16 {
+  aspect-ratio: 9/16;
+}
+
+.ratio-16x9 {
+  aspect-ratio: 16/9;
+}
+
+.font-roboto {
+  font-family: "Roboto", serif;
+}
+
+.text-teurny-mid {
+  color: var(--teurny-mid);
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.container {
+  padding-left: 28px;
+  padding-right: 28px;
+}
+
+.login {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+.login .logincont {
+  width: 630px;
+}
+.login .logincont h2 {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 24px;
+  color: #000000;
+  margin-bottom: 45px;
+}
+.login .logincont input {
+  padding: 13px 17px 13px 17px;
+  border: 1px solid #f2f2f2;
+  border-radius: 0;
+  background: white !important;
+  box-shadow: none;
+  font-family: "Roboto" !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}
+.login .logincont input[type=email],
+.login .logincont input[type=password],
+.login .logincont select,
+.login .logincont input[type=date],
+.login .logincont input[type=text] {
+  border-radius: 0px;
+  margin-bottom: 15px;
+  font-family: "Roboto";
+}
+.login .logincont select {
+  padding: 13px 17px;
+}
+.login .logincont select:focus {
+  box-shadow: none;
+}
+.login .logincont select option:first-child {
+  color: #212529;
+}
+.login .logincont .form-check .form-check-input {
+  padding: 17px;
+}
+.login .logincont .form-check .form-check-input:checked {
+  background-color: #000;
+  border-color: #000;
+}
+.login .logincont .form-check-label {
+  display: flex;
+  align-items: center;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  color: #000000;
+  padding-right: 5px;
+}
+.login .logincont .form-check-label a {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  color: #000000;
+  padding-right: 5px;
+  text-decoration: underline;
+}
+.login .logincont button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.login .logincont .loginbtn {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: white;
+  background-color: #000;
+  border: 2px solid #000;
+  border-radius: 0px;
+  margin-top: 20px;
+  text-transform: uppercase;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  letter-spacing: 3px;
+}
+.login .logincont .loginbtn:hover {
+  border: 2px solid black;
+  background: white;
+  color: black;
+}
+.login .logincont .google,
+.login .logincont .apple {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #414141;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border: 1px solid #f2f2f2;
+  border-radius: 0px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: block;
+}
+.login .logincont .google:hover,
+.login .logincont .apple:hover {
+  background: black;
+  color: white;
+}
+.login .logincont .googlebtn,
+.login .logincont .applebtn {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  color: #000;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius: 0px;
+}
+.login .logincont .googlebtn svg,
+.login .logincont .applebtn svg {
+  width: 15px;
+  margin-top: -2px;
+  margin-right: 5px;
+}
+
+.header-p-btn {
+  padding-top: 7px;
+}
+
+.header-p-btn-2 {
+  padding-top: 9px;
+}
+
+.unsaved,
+.saved {
+  font-size: 25px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+}
+
+.saved i {
+  color: var(--teurny-1);
+}
+
+.share-container {
+  position: relative;
+  display: inline-block;
+}
+
+.social-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 10px;
+}
+.social-menu a {
+  display: block;
+  padding: 5px 10px;
+  color: #414141;
+  text-decoration: none;
+  font-size: 14px;
+}
+.social-menu a:hover {
+  background: #f0f0f0;
+}
+
+.stretched-link::after {
+  position: unset;
+}
+
+#searchModal .modal-dialog {
+  max-height: 200px;
+}
+
+.sm .alert {
+  padding: 5px !important;
+}
+
+.header-icons:hover,
+.footersocial i:hover {
+  color: #8f4d61 !important;
+}
+
+.container .profile-tabs .profile-tab {
+  border: 1px solid #f2f2f2;
+  text-align: center;
+}
+
+.profile-tabs .profile-tab.active {
+  border-color: #8f4d61 !important;
+}
+
+.page-tab-button {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.contact-form #subject {
+  border-radius: 0px;
+  padding: 10px 5px;
+}
+.contact-form #subject:focus {
+  box-shadow: none;
+}
+.contact-form #subject:first-child {
+  color: #989491;
+}
+.contact-form textarea {
+  resize: none;
+}
+.contact-form .icon-circle {
+  width: 31px;
+  height: 31px;
+  border: 1px solid var(--teurny-dark);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+}
+.contact-form .icon-circle i {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.contact-form .icon-circle i::before {
+  font-size: 19px;
+}
+
+.profile-tab-panes p {
+  font-size: 18px;
+}
+.profile-tab-panes .teurny-text-mid {
+  color: #989491;
+  font-size: 20px;
+}
+.collapse .btn-toggle-nav li {
+  margin-left: 10px;
+}
+.collapse .list-unstyled li {
+  margin-left: 25px;
+}
+.fw-semibold-respo{
+  font-weight: 400 !important;
+}
+
+.fs-5-respo{
+  font-size: 16px !important;
+}
+
+.btn-toggle::before {
+  transform: rotate(90deg);
+}
+
+/* Dropdown Menü */
+.dropdown-menu-custom {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: #ffffff;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  border-radius: 8px;
+  display: none;
+  max-height: 100vh;
+  overflow-y: auto; 
+  z-index: 999;
+  margin-top: 18px;
+}
+
+/* Dropdown İçindeki Bağlantılar */
+.dropdown-menu-custom li {
+  padding: 10px;
+  font-size: 14px;
+  border-bottom: 0.5px solid #ddd; 
+}
+
+.dropdown-menu-custom li:last-child {
+  border-bottom: none; 
+}
+
+.dropdown-menu-custom li a {
+  text-decoration: none;
+  color: #989491;
+  display: block;
+  transition: color 0.3s ease-in-out;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.dropdown-menu-custom li a:hover {
+  color: #ff3233; /* Hover rengi */
+}
+
+/* Bölme Çizgisi */
+.dropdown-divider {
+  border-top: 1px solid #ddd;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-bottom: none; /* Ekstra alt çizgiyi kaldır */
+}
+/*# sourceMappingURL=general.css.map */
