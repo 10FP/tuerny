@@ -20,7 +20,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static '/tuerny_app/js/try.css' %}">
+
     <link rel="stylesheet" href="{% static '/tuerny_app/css/general.css' %}" />
     <link rel="stylesheet" href="{% static '/tuerny_app/css/components.css' %}" />
     <link rel="stylesheet" href="{% static '/tuerny_app/css/blog.css' %}" />
@@ -69,10 +69,16 @@
     .xa {
       padding-left: 0 !important;
     }
+
     .xb {
       margin-right: 50px;
     }
 }
+@media screen and (min-width: 1400px) {
+    .xa {
+      margin-left: 40px !important;
+    }
+  }
 .no-icon-btn::before {
   display: none;
 }
@@ -272,13 +278,43 @@
                   </div>
                 </div>
                 {% endfor %}
-                <div class="header-link-container">
+                <div class="header-link-container question-link-container open-header-link">
                   <a
-                    href="{% url 'tuerny_app:about' %}"
+                    href="#"
                     class="header-link d-flex align-items-center gap-2 text-decoration-none"
                   >
                     <span>Hakkımızda</span>
+                    <i class="fa-solid fa-chevron-down"></i>
                   </a>
+                  <div class="header-link-menu question-link-menu" style="max-width: 270px !important;">
+                    <div class="container-fluid px-0 px-lg-3 h-100 header-link-menu-container" style="max-width: 270px !important;">
+                        <div class="h-100 header-link-menu-content p-3 p-lg-4">
+
+                            <div class="container-fluid">
+                                <div class="row gap-5 px-0 px-lg-5">
+                                    <div class="col col-lg-auto">
+                                        <div class="header-link-menu-nav">
+
+                                            <div class="d-none d-lg-block col">
+                                                <div class="h-100">
+                                                    <div class="row h-100 menu-load-div">
+                                                        <a href="{% url 'tuerny_app:about' %}" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>Teurny Hakkında</span>
+                                                        </a>
+                                                        <a href="{% url 'tuerny_app:contact' %}" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                            <span>İletişim</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
 
                 <div class="header-link-container question-link-container open-header-link">
@@ -301,7 +337,7 @@
                                             <div class="d-none d-lg-block col">
                                                 <div class="h-100">
                                                     <div class="row h-100 menu-load-div">
-                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                        <a href="/ask" class="header-link d-flex align-items-center gap-2 text-decoration-none">
                                                             <span>Soru Sor</span>
                                                         </a>
                                                         <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">

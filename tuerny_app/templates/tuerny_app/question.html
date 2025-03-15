@@ -98,7 +98,7 @@
                                                 <div class="question-card-survey-item" style="margin-bottom: 0px">
                                                     
                                                     <div class="question-card-survey-item-label">
-                                                        <input name="vote_{{ q.id }}" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
+                                                        <input name="vote_{{ q.id }}" class="votee" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
                                                         {% if request.user in vote.voted_users.all %} checked {% endif %}>
                                                         
                                                         <label class="vote-option" style="font-family: Roboto; {% if request.user in vote.voted_users.all %}color: #414141;{% else %}color: #989491; {% endif %}line-height: 130%;" for="r{{ vote.id }}">{{ vote.option_text }}</label>
@@ -168,35 +168,24 @@
                                             <span style="font-size: 14px; color: #414141; font-weight: 400;">Yorumlar</span>
                                             <div class="blog-section-title-divider"></div>
                                         </div>
-    
+                                        <div class="comment-section">
                                         <div class="d-flex flex-column gap-3 mt-4">
                                             {% for c in q.comments.all %}
-                                            <div class="blog-comment-item" style="gap: 6px;">
+                                            <div class="blog-comment-item" style="gap: 6px; display: none;">
                                                 {% if c.anonymous %}
                                                 <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
                                                 {% else %}
-                                                <p class="blog-comment-item-author">
-                                                    @{{c.user.username}}</p>
+                                                <p class="blog-comment-item-author">@{{c.user.username}}</p>
                                                 {% endif %}
-                                                
-                                               
-                                            <p class="blog-comment-item-text" style="font-weight: 400; font-size: 14px; line-height: 130%;">
-                                                {{c.content}}
-                                            </p>
-                                        </div>
-                                        <div class="teurny-divider"></div>
+                                                <p class="blog-comment-item-text" style="font-weight: 400; font-size: 14px; line-height: 130%; margin-bottom: 12px !important;">{{c.content}}</p>
+                                                <div class="teurny-divider"></div>
+                                            </div>
+                                            
                                             {% endfor %}
-                                            <button
-              data-start="9"
-              class="teurny-button-primary-outline saved-more-ask"
-              id="saved-more-ask"
-              style="height: 39px"
-            >
-              DAHA FAZLA
-            </button>
-                                                
-                                                    
-                                                   
+                                            <a href="#" class="load-more-comments">
+                                                <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 24px;">Devamını Gör</h1>
+                                            </a>  
+                                        </div>
                                         </div>
                                         <div class="mt-4">
                                             <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
@@ -206,7 +195,7 @@
                                                 <input type="hidden" name="parent" value="0" />
                                                 <div class="limit-counter textarea-counter">
                                                     <label for="content" id="content-counter" class="counter-area">00/360</label>
-                                                    <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none" required></textarea>
+                                                    <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none; height: 50px;" required></textarea>
                                                 </div>
                                                 <div class="d-flex gap-3 mt-4">
                                                     <div>
@@ -223,7 +212,6 @@
                                                 <div class="col-md-12 vAjaxErrors"></div>
                                                 <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
                                             </form>
-    
                                         </div>
                                     </div>
                                 </div>
@@ -577,5 +565,87 @@
     });
 });
     </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let allCommentSections = document.querySelectorAll(".comment-section");
+
+    allCommentSections.forEach(section => {
+        let comments = section.querySelectorAll(".blog-comment-item"); // O bölgedeki yorumlar
+        let loadMoreBtn = section.querySelector(".load-more-comments"); // O bölgedeki Devamını Gör butonu
+        let commentsPerPage = 2; // Kaç yorum gösterilecek (2'şer)
+        let currentIndex = 0; // Şu an gösterilen yorum sayısı
+
+        function showNextComments() {
+            let nextIndex = currentIndex + commentsPerPage;
+            for (let i = currentIndex; i < nextIndex && i < comments.length; i++) {
+                comments[i].style.display = "block"; // Yorumları göster
+            }
+            currentIndex = nextIndex;
+
+            if (currentIndex >= comments.length) {
+                loadMoreBtn.style.display = "none"; // Tüm yorumlar gösterildiyse butonu gizle
+            }
+        }
+
+        // Eğer yorum yoksa "Devamını Gör" butonunu gizle
+        if (comments.length === 0) {
+            loadMoreBtn.style.display = "none";
+        } else {
+            // Başlangıçta tüm yorumları gizle
+            comments.forEach(comment => comment.style.display = "none");
+
+            // İlk 2 yorumu göster
+            showNextComments();
+        }
+
+        // Butona tıklanınca yeni yorumları göster
+        loadMoreBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            showNextComments();
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+
+    textareas.forEach(textarea => {
+        textarea.addEventListener("focus", function () {
+            this.style.height = "200px";
+        });
+
+        textarea.addEventListener("blur", function () {
+            if (this.value.trim() === "") {
+                this.style.height = "50px";
+            }
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+    let maxLength = 360; // Maksimum karakter sayısı
+
+    textareas.forEach(textarea => {
+        let counterLabel = textarea.parentElement.querySelector("#content-counter"); // Aynı parent içindeki sayacı bul
+
+        textarea.addEventListener("input", function () {
+            let currentLength = this.value.length;
+
+            // Eğer girilen karakter sayısı maxLength'i geçerse, fazlalıkları sil
+            if (currentLength > maxLength) {
+                this.value = this.value.substring(0, maxLength);
+                currentLength = maxLength; // Güncellenmiş uzunluğu al
+            }
+
+            // Sayaç değerini güncelle
+            counterLabel.textContent = currentLength + "/" + maxLength;
+        });
+    });
+});
+</script>
+
 {% endblock content %}
   

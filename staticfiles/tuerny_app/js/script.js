@@ -326,6 +326,15 @@ $(".social-btn").on("click", function (e) {
       )}`,
       "_blank"
     );
+  } else if ($(this).hasClass("whatsapp")) {
+    window.open(
+      `https://wa.me/?text=${encodeURIComponent(fullUrl)}`,
+      "_blank"
+    );
+  } else if ($(this).hasClass("copy")) {
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      alert("Bağlantı kopyalandı!");
+  });
   }
 });
 

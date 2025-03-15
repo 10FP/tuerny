@@ -151,8 +151,8 @@ def add_comment(request):
             anonymous=anonymous
         )
         
+        return redirect("tuerny_app:ask", question_id = question_id)
         
-        return JsonResponse({"status": "success","redirect_url": f"/asked/{question_id}/"})
 
     return JsonResponse({"status": "error", "message": "Geçersiz istek!"}, status=400)
 
