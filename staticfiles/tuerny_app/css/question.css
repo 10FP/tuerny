@@ -128,6 +128,7 @@
   justify-content: flex-start;
   color: white;
   padding: 0 5px;
+  transition: width 1s ease-in-out;
 }
 
 .question-card-2 {
