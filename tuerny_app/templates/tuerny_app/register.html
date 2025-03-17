@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
+<style>
+  .select-register {
+    border: 1px solid #f2f2f2;
+  }
+  .select-register option {
+    color: #212529;
+    font-weight: 400;
+    font-size: 16px;
+  }
+</style>
 <div class="container-fluid login">
   <div class="container">
       <form method="POST" action="{% url 'tuerny_app:register' %}" class="ajaxFormTrue">
@@ -16,8 +25,8 @@
                   <input name="birth_date" type="text" value="" class="form-control vRequired"
                       placeholder="Doğum Tarihi" onfocus="(this.type='date')" onblur="(this.type='text')">
                   <input type="text" class="form-control vRequired" name="name" placeholder="Ad Soyad">
-                  <select name="gender" class="form-control vRequired">
-                      <option value="">Cinsiyet</option>
+                  <select name="gender" class="form-control vRequired select-register">
+                      <option style="font-weight: 400;" value="">Cinsiyet</option>
                       <option value="E">Erkek</option>
                       <option value="K">Kadın</option>
                   </select>

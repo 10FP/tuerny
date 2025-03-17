@@ -18,6 +18,12 @@
  .blog-card-content span{
   font-weight: 400 !important;
 }
+.m-cat {
+  gap: 0 !important;
+}
+.blog-section-more.d-flex.d-md-none {
+  display: none !important;
+}
 }
 </style>
 <div id="hero-slider" class="w-100 position-relative">
@@ -151,7 +157,7 @@
                   class="blog-card-img"
               /></a>
               
-              <div class="blog-card-content">
+              <div class="blog-card-content m-cat">
                 <span class="blog-card-category" style="font-weight: 100;">{{blog.category.name}}</span>
                 <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link">
                   {{blog.title}}</a
