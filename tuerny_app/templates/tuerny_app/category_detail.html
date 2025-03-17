@@ -46,6 +46,44 @@
   }
 
 </style>
+<style>
+  @media screen and (max-width: 720px) {
+    .blog-card-category {
+      margin-bottom: 0px !important;
+    }
+    .max-line-2 {
+      margin-top: 16px;
+      line-height: 130% !important;
+    }
+    .max-line-3 {
+      color: #989491 !important;
+    }
+    .blog-category {
+      margin-bottom: 0px !important;
+    }
+    .blog-card-slider-2 {
+      margin-bottom: 20px !important;
+    }
+    .special-- {
+      margin-top: 0px;
+      margin-bottom: 10px !important;
+    }
+    .max-line-4 {
+      margin-top: 0px !important;
+
+      font-size: 12px !important;
+      line-height: 130% !important;
+      color: #989491 !important;
+
+    }
+  }
+  @media screen and (min-width: 721px) {
+    .blog-card-category {
+      margin-bottom: 20px !important;
+    }
+    
+  }
+</style>
 <div class="container py-5 category-title">
   <div class="page-title">
     <h1 class="mb-0 fw-normal">{{category.name}}</h1>
@@ -66,7 +104,7 @@
               /></a>
             </div>
             <div class="blog-card-content">
-              <p class="blog-card-category mb-2" style="margin-bottom: 20px !important;">{{category.name}}</p>
+              <p class="blog-card-category mb-2 bottom" >{{category.name}}</p>
               <a
                 href="{% url 'tuerny_app:blog_detail' blog.slug %}"
                 class="blog-card-title stretched-link max-line-2"
@@ -113,11 +151,15 @@
                   </div>
                   {% if blog in saved_blogs %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
-                        <i class="fa-solid fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
                       </a>
                     {% else %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
-                        <i class="fa-regular fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
                       </a>
                     {% endif %}
                   
@@ -151,7 +193,7 @@
               >
               {{ e.blog.category.name }}
               </p>
-              <a href="#" class="blog-card-title mb-0 stretched-link">
+              <a href="#" class="blog-card-title mb-0 stretched-link spe-text">
                 {{ e.blog.title }}
               </a>
             </div>
@@ -193,7 +235,7 @@
               /></a>
             </div>
             <div class="blog-card-content">
-              <p class="blog-card-category mb-2 max-line-2" style="margin-bottom: 10px;"> {{blog.category.name}}</p>
+              <p class="blog-card-category mb-2 max-line-2 special--" style="margin-bottom: 10px;"> {{blog.category.name}}</p>
               <a href="#" class="blog-card-title stretched-link max-line-5">
                 {{blog.title}}
               </a>
@@ -235,11 +277,16 @@
                   </div>
                   {% if blog in saved_blogs %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
-                        <i class="fa-solid fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
                       </a>
                     {% else %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
-                        <i class="fa-regular fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
+                          
                       </a>
                     {% endif %}
                   
@@ -407,11 +454,16 @@
                   </div>
                   {% if blog in saved_blogs %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="saved">
-                        <i class="fa-solid fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
                       </a>
                     {% else %}
                       <a data-id="{{ blog.id }}" href="javascript:void(0)" class="unsaved">
-                        <i class="fa-regular fa-bookmark"></i>
+                        <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>
+                          
                       </a>
                     {% endif %}
                   
@@ -498,11 +550,15 @@
                   if (data.status === "saved") {
                       this.classList.remove("unsaved");
                       this.classList.add("saved");
-                      this.innerHTML = '<i class="fa-solid fa-bookmark"></i>'; // Dolgu bookmark ikonu
+                      this.innerHTML = `<svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                  </svg>`; // Dolgu bookmark ikonu
                   } else if (data.status === "unsaved") {
                       this.classList.remove("saved");
                       this.classList.add("unsaved");
-                      this.innerHTML = '<i class="fa-regular fa-bookmark"></i>'; // Boş bookmark ikonu
+                      this.innerHTML = `<svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                  </svg>`; // Boş bookmark ikonu
                   }
               })
               .catch(error => console.error("Error:", error));
