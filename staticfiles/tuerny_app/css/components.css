@@ -881,8 +881,8 @@ input[name="argument"]:checked + label {
     width: 100% !important;
   }
   .blog-card-3 .blog-card-title {
-    font-size: 20px !important;
-    line-height: 27px !important;
+    font-size: 16px !important;
+    line-height: 130% !important;
   }
   .product-detail .blog-card-text {
     font-size: 12px !important;
@@ -1135,7 +1135,7 @@ input[name="argument"]:checked + label {
 @media screen and (max-width: 576px) {
   .feature-box {
     margin-bottom: 10px;
-    border: none;
+
   }
   .feature-box-gallery1 img {
     height: auto;
@@ -1256,5 +1256,54 @@ input[name="argument"]:checked + label {
 .gap-2 {
   gap: 0.4rem !important;
 }
+@media screen and (max-width: 720px) {
+  #hero-slider-bottom .slick-next.slick-arrow::before {
+    display: none;
+  }
+  #hero-slider-bottom .slick-prev.slick-arrow::before {
+    display: none;
+  }
+  #hero-slider-bottom .slider-item span {
+    line-height: 130%;
+  }
+  .max-line {
+    font-size: 16px !important;
+  }
+  .aspect {
+    aspect-ratio: 152/175 !important;
+    
+  }
+  .blog-section-title::after{
+    content: none !important;
+  }
+  .p-text {
+    margin-bottom: 36px;
+    max-width: 80%;
+    margin-left: 10%;
+  }
+  .slick-dots {
+    bottom: -50px;
+  }
+  .px16 {
+    font-size: 16px !important;
+  }
+  .saved svg {
+    width: 14.5px !important;
+    height: 20px !important;
+  }
+  .unsaved svg {
+    width: 14.5px !important;
+    height: 20px !important;
+    
+  }
+  .share-btn svg {
+    width: 36px !important;
+  }
+  span.d-block.text-dark.p-0 {
+    margin-bottom: 12px;
+  }
+}
+
+
 
 /*# sourceMappingURL=components.css.map */

@@ -342,12 +342,7 @@ p {
   color: #989491;
   font-size: 20px;
 }
-.collapse .btn-toggle-nav li {
-  margin-left: 10px;
-}
-.collapse .list-unstyled li {
-  margin-left: 25px;
-}
+
 .fw-semibold-respo{
   font-weight: 400 !important;
 }

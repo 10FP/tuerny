@@ -162,6 +162,85 @@
           {% empty %}
               <li class="text-muted">Henüz kategori eklenmemiş.</li>
           {% endfor %}
+          <li class="mb-1">
+            <!-- Main Category Dropdown -->
+            <button style="flex-direction: row-reverse;
+gap: 6px;" class="btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                    data-bs-toggle="collapse" data-bs-target="#sorular" 
+                    aria-expanded="false">
+                Sorular
+            </button>
+
+            <div class="collapse" id="sorular">
+                <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
+                    
+                        <li>
+                            <a href="{% url 'tuerny_app:ask' %}">
+                            <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                    data-bs-toggle="collapse" data-bs-target="" 
+                                    aria-expanded="false">
+                                Soru Sor
+                            </button>
+                          </a>
+                            
+                        </li>
+                        <li>
+                            <a href="{% url 'tuerny_app:question' %}">
+                            <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                    data-bs-toggle="collapse" data-bs-target="" 
+                                    aria-expanded="false">
+                                Gündemdeki Sorular
+                            </button>
+                          </a>
+                            
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            
+        </li>
+        <li class="mb-1">
+          <!-- Main Category Dropdown -->
+          <button style="display: flex; flex-direction: row-reverse; gap: 6px; align-items: center;"
+        class="btn  d-inline-flex fw-semibold-respo rounded border-0 collapsed">
+    
+    <!-- Dropdown aç/kapat butonu (İkona tıklanınca çalışır) -->
+    <i class="fa-solid fa-chevron-down" data-bs-toggle="collapse" data-bs-target="#follow"></i>
+    
+    <!-- Linke yönlendirme (Metne tıklanınca çalışır) -->
+    <a href="https://www.example.com" style="text-decoration: none; color: inherit;">Takip Et</a>
+</button>
+
+          <div class="collapse" id="follow">
+              <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
+                  
+                      <li>
+                          <a href="{% url 'tuerny_app:ask' %}">
+                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                  data-bs-toggle="collapse" data-bs-target="" 
+                                  aria-expanded="false">
+                              Soru Sor
+                          </button>
+                        </a>
+                          
+                      </li>
+                      <li>
+                          <a href="{% url 'tuerny_app:question' %}">
+                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                  data-bs-toggle="collapse" data-bs-target="" 
+                                  aria-expanded="false">
+                              Gündemdeki Sorular
+                          </button>
+                        </a>
+                          
+                      </li>
+                  
+                  
+              </ul>
+          </div>
+          
+        </li>
       </ul>
 
        

@@ -62,7 +62,7 @@
               <a href="{% url 'tuerny_app:blog_detail' blog.slug %}"
                 ><img
                   src="{{blog.media.url}}"
-                  class="w-100 h-100 object-fit-cover"
+                  class="w-100 h-100 object-fit-cover aspect"
               /></a>
             </div>
             <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title mb-0 stretched-link max-line">
@@ -199,7 +199,7 @@
             style="height: 200px; width: auto; object-fit: cover; margin: 0 auto;"
           />
           <span
-            class="w-100 d-block mt-4"
+            class="w-100 d-block mt-4 p-text"
             style="
               font-family: 'Playfair Display';
               font-size: 14px;
@@ -250,7 +250,7 @@
                       class="blog-card-content-top"
                       style="margin-bottom: 30px"
                     >
-                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link max-line" style="color: #202020;">
+                      <a href="{% url 'tuerny_app:blog_detail' blog.slug %}" class="blog-card-title stretched-link max-line px16" style="color: #202020;">
                         {{blog.title}}</a
                       >
                       <div class="blog-card-text mb-0">{{blog.short_description | safe}}</div>
