@@ -1091,9 +1091,7 @@ input[name="argument"]:checked + label {
   .teurny-footer-btn {
     font-size: 14px;
   }
-  .question-card .question-card-comments {
-    display: none;
-  }
+  
   .ask-detail-container .ask-detail-row .question-card .question-card-comments {
     display: block;
   }
@@ -1303,7 +1301,14 @@ input[name="argument"]:checked + label {
     margin-bottom: 12px;
   }
 }
-
+@media screen and (max-width: 580px) {
+  .blog-comment-item {
+    padding-bottom: 0px !important;
+  }
+  .blog-comment-item-text {
+    margin-bottom: 10px !important;
+  }
+}
 
 
 /*# sourceMappingURL=components.css.map */

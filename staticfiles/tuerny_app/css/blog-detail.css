@@ -124,7 +124,7 @@
   margin: 0 !important;
 }
 .blog-comment-item .blog-comment-item-text {
-  font-weight: 300;
+  font-weight: 300 !important;
   margin: 0 !important;
 }
 
