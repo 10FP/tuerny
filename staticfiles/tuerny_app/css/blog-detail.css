@@ -11,6 +11,7 @@
 }
 
 .blog-text {
+  word-break: break-word;
   font-size: 14px;
   font-family: "Roboto";
   color: var(--teurny-mid);

@@ -832,15 +832,25 @@ def create_blog(request):
         # Blog içeriğini işle
         content_types = request.POST.getlist("content_type[]")
         content_texts = request.POST.getlist("content_text[]")
-        content_images = request.FILES.getlist("content_image[]")
-        
         content_videos = request.POST.getlist("content_video[]")
         content_products = request.POST.getlist("content_product[]")
+
+        # Resimleri doğru sıraya almak için
+        content_images_raw = request.FILES.getlist("content_image[]")
+        content_images = []  
+        image_index = 0  
+
+        for content_type in content_types:
+            if content_type == "image" and image_index < len(content_images_raw):
+                content_images.append(content_images_raw[image_index])
+                image_index += 1
+            else:
+                content_images.append(None)  # Diğer türlerde image boş olmalı
 
         order = 1
         for i in range(len(content_types)):
             content_type = content_types[i]
-            text = content_texts[i] if content_texts else None
+            text = content_texts[i] if len(content_texts) > i else None
             image = content_images[i] if len(content_images) > i else None
             video = content_videos[i] if len(content_videos) > i else None
             product_id = content_products[i] if len(content_products) > i and content_products[i] else None
@@ -900,13 +910,25 @@ def edit_blog(request, slug):
         # **2️⃣ Formdan Gelen Yeni İçerikleri Kaydediyoruz**
         content_types = request.POST.getlist("content_type[]")
         content_texts = request.POST.getlist("content_text[]")
-        content_images = request.FILES.getlist("content_image[]")
         content_videos = request.POST.getlist("content_video[]")
         content_products = request.POST.getlist("content_product[]")
+
+        # Resimleri doğru sıraya almak için
+        content_images_raw = request.FILES.getlist("content_image[]")
+        content_images = []  
+        image_index = 0  
+
+        for content_type in content_types:
+            if content_type == "image" and image_index < len(content_images_raw):
+                content_images.append(content_images_raw[image_index])
+                image_index += 1
+            else:
+                content_images.append(None)  # Diğer türlerde image boş olmalı
+
         order = 1
         for i in range(len(content_types)):
             content_type = content_types[i]
-            text = content_texts[i] if content_texts else None
+            text = content_texts[i] if len(content_texts) > i else None
             image = content_images[i] if len(content_images) > i else None
             video = content_videos[i] if len(content_videos) > i else None
             product_id = content_products[i] if len(content_products) > i and content_products[i] else None
@@ -922,7 +944,6 @@ def edit_blog(request, slug):
                 product=product
             )
             order += 1
-
 
         return redirect("tuerny_app:blog_detail", slug=blog_.slug)
     s_category = SubCategory.objects.all()
