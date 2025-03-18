@@ -175,7 +175,7 @@
                                                 {% if c.anonymous %}
                                                 <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
                                                 {% else %}
-                                                <p class="blog-comment-item-author">@{{c.user.username}}</p>
+                                                <p class="blog-comment-item-author" style="margin-bottom: 5px !important;">@{{c.user.username}}</p>
                                                 {% endif %}
                                                 <p class="blog-comment-item-text" style="font-weight: 400; font-size: 14px; line-height: 130%; margin-bottom: 12px !important;">{{c.content}}</p>
                                                 <div class="teurny-divider"></div>
@@ -183,7 +183,7 @@
                                             
                                             {% endfor %}
                                             <a href="#" class="load-more-comments">
-                                                <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 24px;">Devamını Gör</h1>
+                                                <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 0px; font-style: italic;">Devamını Gör</h1>
                                             </a>  
                                         </div>
                                         </div>
@@ -677,5 +677,46 @@
     });
 });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    function updateRateLines(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+        let likeBar = document.getElementById(`rate-like-${qId}`);
+        let dislikeBar = document.getElementById(`rate-dislike-${qId}`);
+
+        let likeCount = parseInt(likeCountEl.innerText) || 0;
+        let dislikeCount = parseInt(dislikeCountEl.innerText) || 0;
+        let total = likeCount + dislikeCount;
+
+        if (total === 0) {
+            likeBar.style.width = "0%";
+            dislikeBar.style.width = "0%";
+        } else {
+            likeBar.style.width = (likeCount / total) * 100 + "%";
+            dislikeBar.style.width = (dislikeCount / total) * 100 + "%";
+        }
+    }
+
+    // Like & Dislike sayıları değiştiğinde otomatik güncellemek için Observer tanımlıyoruz
+    function observeChanges(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+
+        let observer = new MutationObserver(() => updateRateLines(qId));
+
+        observer.observe(likeCountEl, { childList: true });
+        observer.observe(dislikeCountEl, { childList: true });
+    }
+
+    // Tüm sorular için güncelleme işlemini başlat
+    document.querySelectorAll("[id^='like-count-']").forEach(el => {
+        let qId = el.id.replace("like-count-", "");
+        updateRateLines(qId);
+        observeChanges(qId);
+    });
+});
+</script>
+
 {% endblock content %}
   

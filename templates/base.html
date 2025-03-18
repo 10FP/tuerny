@@ -82,6 +82,12 @@
 .no-icon-btn::before {
   display: none;
 }
+#offcanvasScrolling  button a {
+  color: #000000;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Poppins';
+}
   </style>
   <body>
     <div style="margin-top: 111px; width: 100%; z-index: 100;" class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
@@ -131,74 +137,83 @@
       <ul class="list-unstyled ps-0">
         
         <ul class="list-unstyled">
-          {% for category in categories %}
-              <li class="mb-1">
-                  <!-- Main Category Dropdown -->
-                  <button style="flex-direction: row-reverse;
-    gap: 6px;" class="btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                          data-bs-toggle="collapse" data-bs-target="#category-{{ category.slug }}" 
-                          aria-expanded="false">
-                      {{ category.name }}
-                  </button>
-      
-                  <div class="collapse" id="category-{{ category.slug }}">
-                      <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
-                          {% for subcategory in category.subcategories.all %}
-                              <li>
-                                  <a href="{% url 'tuerny_app:category' subcategory.slug %}">
-                                  <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                                          data-bs-toggle="collapse" data-bs-target="#subcategory-{{ subcategory.slug }}" 
-                                          aria-expanded="false">
-                                      {{ subcategory.name }}
-                                  </button>
-                                </a>
-                                  
-                              </li>
-                          
-                          {% endfor %}
-                      </ul>
-                  </div>
-              </li>
-          {% empty %}
-              <li class="text-muted">Henüz kategori eklenmemiş.</li>
-          {% endfor %}
-          <li class="mb-1">
-            <!-- Main Category Dropdown -->
-            <button style="flex-direction: row-reverse;
-gap: 6px;" class="btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                    data-bs-toggle="collapse" data-bs-target="#sorular" 
-                    aria-expanded="false">
-                Sorular
-            </button>
+          
+          
+        {% for category in categories %}
+        <li class="mb-1">
+          <!-- Main Category Dropdown -->
+          <button style="display: flex; flex-direction: row-reverse; gap: 6px; align-items: center;"
+        class="btn  d-inline-flex fw-semibold-respo rounded border-0 collapsed">
+    
+    <!-- Dropdown aç/kapat butonu (İkona tıklanınca çalışır) -->
+    <i class="fa-solid fa-chevron-down" data-bs-toggle="collapse" data-bs-target="#{{category.slug}}"></i>
+    
+    <!-- Linke yönlendirme (Metne tıklanınca çalışır) -->
+    <a href="{% url 'tuerny_app:category' category.slug %}" style="text-decoration: none;">{{category.name}}</a>
+</button>
 
-            <div class="collapse" id="sorular">
-                <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
-                    
-                        <li>
-                            <a href="{% url 'tuerny_app:ask' %}">
-                            <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                                    data-bs-toggle="collapse" data-bs-target="" 
-                                    aria-expanded="false">
-                                Soru Sor
-                            </button>
-                          </a>
-                            
-                        </li>
-                        <li>
-                            <a href="{% url 'tuerny_app:question' %}">
-                            <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                                    data-bs-toggle="collapse" data-bs-target="" 
-                                    aria-expanded="false">
-                                Gündemdeki Sorular
-                            </button>
-                          </a>
-                            
-                        </li>
-                    
-                    
-                </ul>
-            </div>
-            
+          <div class="collapse" id="{{category.slug}}">
+              <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
+                {% for subcategory in category.subcategories.all %}
+                      <li>
+                          <a href="{% url 'tuerny_app:category' subcategory.slug %}">
+                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                  data-bs-toggle="collapse" data-bs-target="" 
+                                  aria-expanded="false">
+                              {{subcategory.slug}}
+                          </button>
+                        </a>
+                          
+                      </li>
+                      {%endfor %}
+
+                  
+                  
+              </ul>
+          </div>
+          
+        </li>
+        {%endfor %}
+        <li class="mb-1">
+          <!-- Main Category Dropdown -->
+          <button style="display: flex; flex-direction: row-reverse; gap: 6px; align-items: center;"
+        class="btn  d-inline-flex fw-semibold-respo rounded border-0 collapsed">
+    
+    <!-- Dropdown aç/kapat butonu (İkona tıklanınca çalışır) -->
+    <i class="fa-solid fa-chevron-down" data-bs-toggle="collapse" data-bs-target="#ask"></i>
+    
+    <!-- Linke yönlendirme (Metne tıklanınca çalışır) -->
+    <a href="https://www.example.com" style="text-decoration: none;">Sorular</a>
+</button>
+
+          <div class="collapse" id="ask">
+              <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
+                  
+                      <li>
+                          <a href="{% url 'tuerny_app:ask' %}">
+                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                  data-bs-toggle="collapse" data-bs-target="" 
+                                  aria-expanded="false">
+                              Soru Sor
+                          </button>
+                        </a>
+                          
+                      </li>
+                      <li>
+                          <a href="{% url 'tuerny_app:question' %}">
+                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
+                                  data-bs-toggle="collapse" data-bs-target="" 
+                                  aria-expanded="false">
+                              Gündemdeki Sorular
+                          </button>
+                        </a>
+                          
+                      </li>
+                  
+                  
+              </ul>
+          </div>
+          
         </li>
         <li class="mb-1">
           <!-- Main Category Dropdown -->
@@ -209,7 +224,7 @@ gap: 6px;" class="btn btn-toggle d-inline-flex align-items-center fw-semibold-re
     <i class="fa-solid fa-chevron-down" data-bs-toggle="collapse" data-bs-target="#follow"></i>
     
     <!-- Linke yönlendirme (Metne tıklanınca çalışır) -->
-    <a href="https://www.example.com" style="text-decoration: none; color: inherit;">Takip Et</a>
+    <a href="https://www.example.com" style="text-decoration: none;">Takip Et</a>
 </button>
 
           <div class="collapse" id="follow">
