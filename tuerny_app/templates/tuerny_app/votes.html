@@ -1,5 +1,14 @@
 {% load math_filters %}
-
+<style>
+    @media screen and (max-width: 720px) {
+        .gap-c {
+            gap: 0.2rem !important;
+        }
+        .gap-c-2 {
+            gap: 0.5rem !important;
+        }
+    }
+</style>
 <div class="row justify-content-center">
   <div class="col-12 col-xl-8">
       <div class="py-4">
@@ -27,7 +36,7 @@
                                             <div class="question-card-survey-item" style="margin-bottom: 10px">
                                                 
                                                 <div class="question-card-survey-item-label">
-                                                    <input name="vote_{{ vote.poll.question.id }}" value="{{ option.id }}" type="radio" id="r{{ option.id }}"
+                                                    <input class="votee" name="vote_{{ vote.poll.question.id }}" value="{{ option.id }}" type="radio" id="r{{ option.id }}"
                                                     {% if request.user in option.voted_users.all %} checked {% endif %}>
                                                     <label for="r{{ option.id }}" style="{% if request.user in option.voted_users.all %}color: #414141;{% else %}color: #989491; {% endif %}" class="vote-option">{{ option.option_text }}</label>
                                                 </div>
@@ -55,7 +64,7 @@
                               <div class="question-card-survey py-2 vCheckRequired">
                                   
                           <div class="d-flex justify-content-between align-items-center pt-4">
-                              <div class="d-flex gap-4">
+                              <div class="d-flex gap-4 gap-c-2">
                                   <div class="question-card-button">
                                       <i class="fa-regular fa-eye question-card-button-icon"></i>
                                       <span class="question-card-button-text">{{vote.poll.question.views_count}}</span>
@@ -66,7 +75,7 @@
                                           class="question-card-button-text">{{vote.poll.question.comments.count}}</span>
                                   </div>
                               </div>
-                              <div class="d-flex align-items-center gap-3">
+                              <div class="d-flex align-items-center gap-3 gap-c">
                                 <div class="question-card-button">
                                     <i {% if request.user in vote.poll.question.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ vote.poll.question.id }}"
                                        id="dislike-icon-{{ vote.poll.question.id }}"
@@ -76,8 +85,8 @@
                             
                                 <div class="question-card-rate-line-container">
                                     <div class="question-card-rate-line">
-                                        <div class="rate-line-dislike" id="rate-dislike-{{ q.id }}"></div>
-                                        <div class="rate-line-like" id="rate-like-{{ q.id }}"></div>
+                                        <div class="rate-line-dislike" id="rate-dislike-{{ vote.poll.question.id }}"></div>
+                                        <div class="rate-line-like" id="rate-like-{{ vote.poll.question.id }}"></div>
                                     </div>
                                 </div>
                             
@@ -101,7 +110,7 @@
           <div class="row justify-content-center">
             <div class="col-12 col-lg-8">
               <div class="hstack justify-content-center mt-5">
-                  <button data-start="9" class="teurny-button-primary-outline saved-more-ask"
+                  <button data-visible="2" class="teurny-button-primary-outline saved-more-ask"
                       style="width: 383px;height: 39px;">
                       DAHA FAZLA
                   </button>

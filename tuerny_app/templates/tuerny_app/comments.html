@@ -4,8 +4,9 @@
       <div class="d-flex flex-column gap-4 saved-comments-list">
         {% for comment in request.user.comments.all  %}
         {% if comment.question %}
-        <a href="{% url 'tuerny_app:ask' comment.question.id %}">
+       
         <div class="question-card">
+          <a href="{% url 'tuerny_app:ask' comment.question.id %}">
           <div class="question-card-category">
             <p>{{comment.question.subcategory.name}}</p>
           </div>
@@ -42,7 +43,7 @@
               <input type="hidden" name="parent" value="0" />
               <div class="limit-counter textarea-counter">
                   <label for="content" id="content-counter" class="counter-area">00/360</label>
-                  <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none" required></textarea>
+                  <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none; height: 100px !important;" required></textarea>
               </div>
               <div class="d-flex gap-3 mt-4">
                   <div>
@@ -60,11 +61,13 @@
               <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
           </form>
           </div>
+        </a>
         </div>
-      </a>
+      
         {% else %}
-        <a href="{% url 'tuerny_app:blog_detail' comment.blog.slug %}">
+        
         <div class="question-card">
+          <a href="{% url 'tuerny_app:blog_detail' comment.blog.slug %}">
           <div class="question-card-category">
             <p>{{comment.blog.category.name}}</p>
           </div>
@@ -117,7 +120,7 @@
                   rows="4"
                   maxlength="360"
                   placeholder="Yorum Yap"
-                  style="resize: none"
+                  style="resize: none; height: 100px !important;"
                 ></textarea>
               </div>
 
@@ -150,8 +153,9 @@
               </button>
             </form>
           </div>
+        </a>
         </div>
-      </a>
+
         {% endif %}
         {% endfor %}
 

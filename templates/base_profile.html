@@ -1605,4 +1605,116 @@ $(".nav-link.profile-tab").on("click", function () {
       observer.observe(document.body, { childList: true, subtree: true });
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  function initRateLines() {
+      console.log("🔄 Like & Dislike Bar Güncelleme Scripti Yüklendi!");
+
+      function updateRateLines(qId) {
+          let likeCountEl = document.getElementById(`like-count-${qId}`);
+          let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+          let likeBar = document.getElementById(`rate-like-${qId}`);
+          let dislikeBar = document.getElementById(`rate-dislike-${qId}`);
+
+          if (!likeCountEl || !dislikeCountEl || !likeBar || !dislikeBar) {
+              console.warn(`❌ Hata: ID bulunamadı -> ${qId}`);
+              return;
+          }
+
+          let likeCount = parseInt(likeCountEl.innerText) || 0;
+          let dislikeCount = parseInt(dislikeCountEl.innerText) || 0;
+          let total = likeCount + dislikeCount;
+
+          console.log(`✅ Güncelleniyor: ${qId} | Likes: ${likeCount} | Dislikes: ${dislikeCount}`);
+
+          if (total === 0) {
+              likeBar.style.width = "0%";
+              dislikeBar.style.width = "0%";
+          } else {
+              likeBar.style.width = (likeCount / total) * 100 + "%";
+              dislikeBar.style.width = (dislikeCount / total) * 100 + "%";
+          }
+      }
+
+      function observeChanges(qId) {
+          let likeCountEl = document.getElementById(`like-count-${qId}`);
+          let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+
+          if (!likeCountEl || !dislikeCountEl) {
+              console.warn(`⚠️ Observer başlatılamadı (ID eksik) -> ${qId}`);
+              return;
+          }
+
+          let observer = new MutationObserver(() => updateRateLines(qId));
+
+          observer.observe(likeCountEl, { childList: true, subtree: true });
+          observer.observe(dislikeCountEl, { childList: true, subtree: true });
+      }
+
+      setTimeout(() => {
+          document.querySelectorAll("[id^='like-count-']").forEach(el => {
+              let qId = el.id.replace("like-count-", "");
+              updateRateLines(qId);
+              observeChanges(qId);
+          });
+      }, 300);
+  }
+
+  initRateLines();
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function initLoadMore() {
+        console.log("🔄 Load More Script Yüklendi!");
+
+        let questionCards = document.querySelectorAll(".question-card");
+        let loadMoreButton = document.querySelector(".saved-more-ask");
+
+        if (!loadMoreButton || questionCards.length === 0) return; // Eğer buton veya soru yoksa çık
+
+        let visibleCount = parseInt(loadMoreButton.getAttribute("data-visible")) || 3; // Başlangıçta 3 tane görünür
+
+        function updateVisibleQuestions() {
+            questionCards.forEach((card, index) => {
+                card.style.display = index < visibleCount ? "block" : "none";
+            });
+
+            // Tüm sorular açıldıysa butonu gizle
+            if (visibleCount >= questionCards.length) {
+                loadMoreButton.style.display = "none";
+            }
+        }
+
+        updateVisibleQuestions(); // İlk 3'ü göster
+
+        loadMoreButton.addEventListener("click", function () {
+            visibleCount += 2; // 2 tane daha aç
+            loadMoreButton.setAttribute("data-visible", visibleCount);
+            updateVisibleQuestions();
+        });
+    }
+
+    // **Sayfa yüklendiğinde çağır**
+    initLoadMore();
+
+    // **Sekme Değişimlerini Dinle ve Script'i Yeniden Çalıştır**
+    document.querySelectorAll(".profile-tab").forEach(tab => {
+        tab.addEventListener("click", function () {
+            setTimeout(() => {
+                console.log("🔄 Sekme Yüklendi, Load More Script Yeniden Başlatılıyor...");
+                initLoadMore();
+            }, 500);
+        });
+    });
+
+    // **Dinamik İçerik Yüklenmesini İzle (Eğer AJAX Kullanıyorsan)**
+    let observer = new MutationObserver(() => {
+        console.log("🆕 Yeni İçerik Eklendi, Load More Script Yeniden Başlatılıyor...");
+        initLoadMore();
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+});
+</script>
 </html>

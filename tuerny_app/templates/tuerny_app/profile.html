@@ -2,6 +2,26 @@
 {% load static %}
 {% block content %}
 {% load math_filters %}
+<style>
+  .profile-tab-panes .teurny-text-mid {
+    color: #414141;
+  }
+  .blog-comment-item .blog-comment-item-text {
+    word-break: break-word;
+  }
+  @media screen and (max-width: 720px) {
+    #nav-tabContent {
+    margin-top: 50px;
+  }
+  .gap-c {
+            gap: 0.2rem !important;
+        }
+        .gap-c-2 {
+            gap: 0.5rem !important;
+        }
+  }
+
+</style>
       </div>
 
       <div class="container py-5 profile-container">
@@ -405,5 +425,46 @@
         
             observer.observe(document.body, { childList: true, subtree: true });
         });
-        </script>   
+        </script>  
+        
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+          function updateRateLines(qId) {
+              let likeCountEl = document.getElementById(`like-count-${qId}`);
+              let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+              let likeBar = document.getElementById(`rate-like-${qId}`);
+              let dislikeBar = document.getElementById(`rate-dislike-${qId}`);
+      
+              let likeCount = parseInt(likeCountEl.innerText) || 0;
+              let dislikeCount = parseInt(dislikeCountEl.innerText) || 0;
+              let total = likeCount + dislikeCount;
+      
+              if (total === 0) {
+                  likeBar.style.width = "0%";
+                  dislikeBar.style.width = "0%";
+              } else {
+                  likeBar.style.width = (likeCount / total) * 100 + "%";
+                  dislikeBar.style.width = (dislikeCount / total) * 100 + "%";
+              }
+          }
+      
+          // Like & Dislike sayıları değiştiğinde otomatik güncellemek için Observer tanımlıyoruz
+          function observeChanges(qId) {
+              let likeCountEl = document.getElementById(`like-count-${qId}`);
+              let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+      
+              let observer = new MutationObserver(() => updateRateLines(qId));
+      
+              observer.observe(likeCountEl, { childList: true });
+              observer.observe(dislikeCountEl, { childList: true });
+          }
+      
+          // Tüm sorular için güncelleme işlemini başlat
+          document.querySelectorAll("[id^='like-count-']").forEach(el => {
+              let qId = el.id.replace("like-count-", "");
+              updateRateLines(qId);
+              observeChanges(qId);
+          });
+      });
+      </script>
 {% endblock content %}
