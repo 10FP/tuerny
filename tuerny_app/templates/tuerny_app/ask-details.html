@@ -1,4 +1,10 @@
 {% extends 'base.html' %} {% load static %} {% load math_filters %} {% block content %}
+<style>
+.vote-option{
+  font-family: 'Roboto';
+  color: #989491;
+}
+</style>
 <div class="container py-5 ask-detail-container">
 	<div class="row ask-detail-row">
 		<div class="col-lg-9">
@@ -9,9 +15,9 @@
 							<p>{{pool.question.subcategory.name}}</p>
 						</div>
 						<div class="question-card-date">
-							<p>Question Date</p>
+							<p>{{ pool.question.created_at|date:"d.m.Y" }}</p>
 						</div>
-						<h3 class="question-card-title pb-2">
+						<h3 class="question-card-title pb-2" style="font-weight: 400;">
                 <a href="{% url 'tuerny_app:ask' %}">
                   {{pool.question.title}}
                 </a>
@@ -24,12 +30,12 @@
 
     {% for vote in pool.options.all %}
         <div class="question-card-survey py-2 vCheckRequired">
-            <div class="question-card-survey-item" style="margin-bottom: 10px">
+            <div class="question-card-survey-item" >
                 
                 <div class="question-card-survey-item-label">
-                    <input name="vote_{{ pool.question.id }}" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
+                    <input class="votee" name="vote_{{ pool.question.id }}" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
                     {% if request.user in vote.voted_users.all %} checked {% endif %}>
-                    <label class="vote-option" for="r{{ vote.id }}">{{ vote.option_text }}</label>
+                    <label class="vote-option" {% if request.user in vote.voted_users.all %} style="color: rgb(65, 65, 65);" {% endif %} for="r{{ vote.id }}">{{ vote.option_text }}</label>
                 </div>
                 
                 <div class="question-card-survey-item-progress">
@@ -68,7 +74,12 @@
                      class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in pool.question.dislikes.all %}active{% endif %}"></i>
                   <span id="dislike-count-{{ pool.question.id }}">{{ pool.question.dislike_count }}</span>
               </div>
-								<div class="question-card-rate-line"></div>
+              <div class="question-card-rate-line-container">
+                <div class="question-card-rate-line">
+                    <div class="rate-line-dislike" id="rate-dislike-{{  pool.question.id }}"></div>
+                    <div class="rate-line-like" id="rate-like-{{  pool.question.id }}"></div>
+                </div>
+            </div>
 								<div class="question-card-button">
                   <i style="cursor: pointer" data-id="{{ pool.question.id }}"
                      id="like-icon-{{ pool.question.id }}"
@@ -82,14 +93,17 @@
 								<div class="blog-section-title-divider"></div>
 								<p></p>
 							</div> {% for comment in pool.question.comments.all%}
-							<div class="d-flex flex-column gap-3 mt-4">
+							<div class="d-flex flex-column gap-3 mt-4 comment-x" style="gap: 0 !important;">
 								<div class="blog-comment-item"> {% if comment.anonymous %}
 									<p class="blog-comment-item-author"> Kullanıcı adı gizli </p> {% else %}
-									<p class="blog-comment-item-author">{{comment.user.username}}</p> {% endif %}
-									<p class="blog-comment-item-text"></p>
+									<p class="blog-comment-item-author">@{{comment.user.username}}</p> {% endif %}
+									<p class="blog-comment-item-text" style="margin-bottom: 5px !important; font-weight: 400; font-size: 14px; font-family: 'Poppins';">{{comment.content}}</p>
 								</div>
-								<div class="teurny-divider">{{comment.content}}</div>
+								<div class="teurny-divider"></div>
 							</div> {% endfor %}
+              <a href="#" class="load-more-comments">
+                <h1 style="font-family: 'Poppins'; font-weight: 500; font-size: 12px; line-height: 130%; margin-top: 10px; font-style: italic;">Devamını Gör</h1>
+            </a> 
 							<div class="mt-4">
 								<form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
 									{% csrf_token %}
@@ -395,6 +409,139 @@
               .catch(error => console.error("❌ Fetch Hatası:", error));
           });
       });
+  });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+// Tüm radio inputlarını seç
+const radioButtons = document.querySelectorAll("input[type='radio'][name^='vote_']");
+
+radioButtons.forEach((radio) => {
+    radio.addEventListener("change", function () {
+        // Aynı name'e sahip tüm labelları gri yap
+        const groupName = this.name;
+        const labels = document.querySelectorAll(`input[name='${groupName}'] + label`);
+
+        labels.forEach(label => {
+            label.style.color = "#989491"; // Varsayılan rengi uygula (gri)
+        });
+
+        // Seçili olan radio'nun label'ını koyu renk yap
+        const selectedLabel = document.querySelector(`label[for='${this.id}']`);
+        if (selectedLabel) {
+            selectedLabel.style.color = "#414141"; // Seçili olan koyu renk
+        }
+    });
+});
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      // Tüm radio inputlarını seç
+      const radioButtons = document.querySelectorAll("input[type='radio'][name^='vote_']");
+  
+      radioButtons.forEach((radio) => {
+          radio.addEventListener("change", function () {
+              const groupName = this.name;
+  
+              // Aynı name'e sahip tüm labelları gri yap
+              const labels = document.querySelectorAll(`input[name='${groupName}'] + label`);
+              labels.forEach(label => {
+                  label.style.color = "#989491"; // Varsayılan gri renk
+              });
+  
+              // Seçili olan radio'nun label'ını koyu renk yap
+              const selectedLabel = document.querySelector(`label[for='${this.id}']`);
+              if (selectedLabel) {
+                  selectedLabel.style.color = "#414141"; // Seçili olan koyu renk
+              }
+          });
+      });
+  });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+    function updateRateLines(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+        let likeBar = document.getElementById(`rate-like-${qId}`);
+        let dislikeBar = document.getElementById(`rate-dislike-${qId}`);
+
+        let likeCount = parseInt(likeCountEl.innerText) || 0;
+        let dislikeCount = parseInt(dislikeCountEl.innerText) || 0;
+        let total = likeCount + dislikeCount;
+
+        if (total === 0) {
+            likeBar.style.width = "0%";
+            dislikeBar.style.width = "0%";
+        } else {
+            likeBar.style.width = (likeCount / total) * 100 + "%";
+            dislikeBar.style.width = (dislikeCount / total) * 100 + "%";
+        }
+    }
+
+    // Like & Dislike sayıları değiştiğinde otomatik güncellemek için Observer tanımlıyoruz
+    function observeChanges(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+
+        let observer = new MutationObserver(() => updateRateLines(qId));
+
+        observer.observe(likeCountEl, { childList: true });
+        observer.observe(dislikeCountEl, { childList: true });
+    }
+
+    // Tüm sorular için güncelleme işlemini başlat
+    document.querySelectorAll("[id^='like-count-']").forEach(el => {
+        let qId = el.id.replace("like-count-", "");
+        updateRateLines(qId);
+        observeChanges(qId);
+    });
+});
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const comments = document.querySelectorAll(".comment-x"); 
+      const divider = document.querySelectorAll(".teurny-divider");
+      const loadMoreButton = document.querySelector(".load-more-comments");
+  
+      let visibleComments = 2; // Başlangıçta kaç yorum gözükecek
+  
+      function updateComments() {
+          comments.forEach((comment, index) => {
+              if (index < visibleComments) {
+                  comment.style.display = "block"; // Yorumu göster
+                  if (divider[index]) {
+                      divider[index].style.display = "block"; // Ayraçları da göster
+                  }
+              } else {
+                comment.setAttribute("style", "display: none !important;"); // Fazla yorumları gizle
+                  if (divider[index]) {
+                      divider[index].style.display = "none"; // Ayraçları da gizle
+                  }
+              }
+          });
+  
+          // Eğer tüm yorumlar gösterildiyse butonu gizle
+          if (visibleComments >= comments.length) {
+              loadMoreButton.style.display = "none";
+          }
+      }
+  
+      // Butona tıklanınca yorumları 2 tane daha göster
+      loadMoreButton.addEventListener("click", function (e) {
+          e.preventDefault();
+          visibleComments += 2;
+          updateComments();
+      });
+  
+      // Eğer hiç yorum yoksa butonu gizle
+      if (comments.length === 0) {
+          loadMoreButton.style.display = "none";
+      }
+  
+      // İlk çalıştırma
+      updateComments();
   });
   </script>
 {% endblock content %}

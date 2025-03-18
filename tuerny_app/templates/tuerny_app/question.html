@@ -90,7 +90,7 @@
                                         <p>{{q.subcategory.name}}</p>
                                     </div>
                                     <div class="question-card-date">
-                                        <p>{{ q.created_at|date:"d-m-Y" }}</p>
+                                        <p>{{ q.created_at|date:"d.m.Y" }}</p>
                                     </div>
                                     <h3 class="question-card-title pb-2" style="margin-top: 20px; margin-bottom: 0px;">
                                         <a href="{% url 'tuerny_app:ask' q.id %}" style="color: #202020; font-weight: 400;"> {{q.title}} </a>
