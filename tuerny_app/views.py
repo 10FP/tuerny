@@ -305,26 +305,30 @@ def votes(request):
 def questions(request):
     return render(request, "tuerny_app/questions.html")
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Count
+from django.shortcuts import render
+from .models import Question, SuggestedQuestion
+
 def question(request):
     sort_option = request.GET.get("sort", "latest")  # Varsayılan sıralama
 
+    # **Sadece Onaylı Soruları Getir**
+    questions = Question.objects.filter(status="approved").prefetch_related("poll__options")
+
     # **Sıralama Seçenekleri**
     if sort_option == "latest":
-        questions = Question.objects.prefetch_related("poll__options").order_by("-created_at")
+        questions = questions.order_by("-created_at")
     elif sort_option == "oldest":
-        questions = Question.objects.prefetch_related("poll__options").order_by("created_at")
+        questions = questions.order_by("created_at")
     elif sort_option == "most_commented":
-        questions = Question.objects.prefetch_related("poll__options").annotate(comment_count=Count("comments")).order_by("-comment_count")
+        questions = questions.annotate(comment_count=Count("comments")).order_by("-comment_count")
     elif sort_option == "most_liked":
-        questions = Question.objects.prefetch_related("poll__options") \
-            .annotate(like_count_annotated=Count("likes", distinct=True)) \
-            .order_by("-like_count_annotated")
-    else:
-        questions = Question.objects.prefetch_related("poll__options")
+        questions = questions.annotate(like_count_annotated=Count("likes", distinct=True)).order_by("-like_count_annotated")
 
     # **Paginator Kullanımı**
     page = request.GET.get("page", 1)  # Varsayılan olarak ilk sayfa
-    paginator = Paginator(questions, 3)  # Sayfa başına 5 soru gösterilecek
+    paginator = Paginator(questions, 3)  # Sayfa başına 3 soru gösterilecek
 
     try:
         questions = paginator.page(page)
@@ -354,7 +358,6 @@ def question(request):
         "selected_sort": sort_option,
         "paginator": paginator,  # Paginator nesnesini şablona gönder
     })
-
 def save(request):
     
     return render(request, "tuerny_app/save.html")

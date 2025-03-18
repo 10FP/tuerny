@@ -85,6 +85,7 @@
                 <div class="mt-5">
                     <div class="d-flex flex-column gap-4 quest-listdiv">
                         {% for q in questions %}
+                        {% if q.status == "approved" %}
                                 <div class="question-card">
                                     <div class="question-card-category">
                                         <p>{{q.subcategory.name}}</p>
@@ -224,6 +225,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endif %}
                                 {% endfor %}
                         
                     </div>

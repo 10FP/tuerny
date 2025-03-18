@@ -60,6 +60,11 @@ class Question(models.Model):
         ("sikayet", "Şikayet"),
         ("diger", "Diğer"),
     ]
+    STATUS_CHOICES = [
+    ("pending", "Beklemede"),
+    ("approved", "Onaylandı"),
+    ("rejected", "Reddedildi"),
+]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="questions")
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="question_category", null=True, blank=True)
     topic = models.CharField(max_length=20, choices=topics, verbose_name="Konu", null=True, blank=True)
@@ -70,6 +75,7 @@ class Question(models.Model):
     likes = models.ManyToManyField(CustomUser, related_name="liked_questions", blank=True)
     dislikes = models.ManyToManyField(CustomUser, related_name="disliked_questions", blank=True)
     views_count = models.PositiveIntegerField(default=0)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending", null=True, blank=True)
 
     def __str__(self):
         return self.title
