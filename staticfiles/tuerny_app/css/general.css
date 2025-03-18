@@ -25,6 +25,7 @@ body {
 * {
   color: var(--teurny-dark);
   font-family: "Poppins";
+  word-wrap: break-word;
 }
 
 .text-roboto,

@@ -44,5 +44,7 @@ urlpatterns = [
     path("toggle-favorite/<int:subcategory_id>/", views.toggle_favorite_subcategory, name="toggle_favorite_subcategory"),
     path('verify-email/<str:token>/', views.verify_email, name='verify_email'),
      path("blog/yeni/", views.create_blog, name="create_blog"),
+     path("blog-control/<slug:slug>/", views.control_blog, name="control_blog"),
      path("blog/<slug:slug>/edit/", views.edit_blog, name="edit_blog"),
+     path("blog/<int:blog_id>/change-status/", views.change_blog_status, name="change_blog_status"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,507 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    @media screen and (max-width: 720px) {
+        .blog-title.fw-normal {
+            font-size: 32px;
+            word-wrap: break-word;
+        }
+        p.blog-text {
+            width: 100%;
+            padding: 0 10px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+        }
+        .blog-content h1 {
+            text-indent: 0;
+            padding-left: 10px;
+        }
+        .blog-content p {
+            text-indent: 0;
+        }
+        .blog-content h2 {
+            text-indent: 0;
+            padding-left: 10px;
+        }
+        .g-control {
+            gap: 0 !important;
+        }
+        
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-around">
+        <div class="col-lg-6 p-0">
+            <div class="d-flex flex-column gap-4">
+                <div class="text-center d-flex flex-column gap-2">
+                    <form method="POST" action="{% url 'tuerny_app:change_blog_status' blog_.id %}" class="ajaxFormFalse">
+                        {% csrf_token %}
+                        
+                        <label>Blog Durumu:</label>
+                        <select name="status" class="teurny-input w-100">
+                            <option value="pending" {% if blog.status == "pending" %}selected{% endif %}>Beklemede</option>
+                            <option value="approved" {% if blog.status == "approved" %}selected{% endif %}>Onaylandı</option>
+                            <option value="rejected" {% if blog.status == "rejected" %}selected{% endif %}>Reddedildi</option>
+                        </select>
+                        
+                        <button type="submit" class="btn btn-default">Durumu Güncelle</button>
+                    </form>
+                    <p class="blog-category" style="margin-bottom: 12px;">{{blog_.category.name}}</p>
+                    <h1 class="blog-title fw-normal" style="line-height: 130%; word-break: break-word;">
+                        {{blog_.title}}
+                    </h1>
+                    <p class="blog-text">
+                        {{blog_.short_description}}
+                    </p>
+                    <p class="blog-author text-uppercase">BY  {{blog_.author}}</p>
+                </div>
+
+                <div>
+                    <div class="ratio-16x9">
+                        <img src="{{blog_.media.url}}" class="w-100 h-100 object-fit-cover" />
+                    </div>
+                    
+                    <div class="blog-buttons d-flex gap-0 justify-content-end mt-3">
+                        <div class="share-container">
+                            <a href="#" class="share-btn">
+                                <svg width="44" height="44" viewBox="0 0 44 44" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M34.2267 13.6443L6.99986 13.838L18.1526 22.9247M34.2267 13.6443L20.3724 37L18.1526 22.9247M34.2267 13.6443L18.1526 22.9247"
+                                        stroke="#414141" stroke-width="1.16919" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <div class="social-menu">
+                                <a href="#" class="social-btn facebook"
+                                    data-url="/blog-detail/<?= $row->slug ?>">Facebook</a>
+                                <a href="#" class="social-btn twitter"
+                                    data-url="/blog-detail/{{blog_.slug}}">Twitter</a>
+                                <a href="#" class="social-btn linkedin"
+                                    data-url="/blog-detail/<?= $row->slug ?>">LinkedIn</a>
+                            </div>
+                        </div>
+                        {% if blog_ in saved_blog %}
+                        <a data-id="{{ blog_.id }}" href="javascript:void(0)" class="saved">
+                            <svg width="20" height="27" viewBox="0 0 20 27" fill="rgb(130,68,68)" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="rgb(130,68,68)" stroke-width="1.47368" stroke-linejoin="round"/>
+                                </svg>
+                        </a>
+                      {% else %}
+                        <a data-id="{{ blog_.id }}" href="javascript:void(0)" class="unsaved">
+                            <svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                                </svg>
+                        </a>
+                      {% endif %}
+                            
+                    </div>
+
+                    <style>
+                        .player {
+                            cursor: pointer;
+                            transition: fill 0.3s;
+                        }
+
+                        .playing circle {
+                            fill: #ca7c83;
+                            
+                        }
+                    </style>
+                    {% if blog_.media_extra %}
+                    <div id="player-container">
+                        <!-- SVG Icon -->
+                        <svg id="player-icon" class="player" width="44" height="44" viewBox="0 0 44 44" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="22" cy="22" r="22" fill="#989491" />
+                            <path id="icon-path" d="M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z"
+                                fill="#F2F2F2" />
+                        </svg>
+                    </div>
+                    <audio id="audio-player" src="{{blog_.media_extra.url}}"></audio>
+                    {% endif %}
+                   
+                   
+                    
+                    
+                    {% if user.is_authenticated %}
+                    <script>
+                        const playerIcon = document.getElementById('player-icon');
+                        const audioPlayer = document.getElementById('audio-player');
+                        const iconPath = document.getElementById('icon-path');
+
+                        // Toggle play/pause and change icon
+                        playerIcon.addEventListener('click', () => {
+                            if (audioPlayer.paused) {
+                                audioPlayer.play();
+                                playerIcon.classList.add('playing');
+                                // Change to pause icon (rectangle)
+                                iconPath.setAttribute('d', 'M18 18H21V26H18V18ZM23 18H26V26H23V18Z');
+                            } else {
+                                audioPlayer.pause();
+                                playerIcon.classList.remove('playing');
+                                // Change to play icon (triangle)
+                                iconPath.setAttribute('d', 'M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z');
+                            }
+                        });
+
+                        // Reset to play icon when audio ends
+                        audioPlayer.addEventListener('ended', () => {
+                            playerIcon.classList.remove('playing');
+                            iconPath.setAttribute('d', 'M26.4805 22.0555L19 26.1111L19 18L26.4805 22.0555Z');
+                        });
+                    </script>
+                    {% endif %}
+
+                </div>
+                <div class="blog-content d-flex flex-column gap-3">
+                    {% for content in blog_.contents.all %}
+        {% if content.type == "header" %}
+        
+            <h1>{{ content.text }}</h1>
+        {% elif content.type == "subheader" %}
+            <h2>{{ content.text}}</h2>
+        {% elif content.type == "paragraph" %}
+            <p>{{ content.text }}</p>
+        {% elif content.type == "image" %}
+            <img src="{{ content.image.url }}" alt="Blog Image" style="max-width: 100%; height: auto;">
+        {% elif content.type == "video" %}
+            <iframe width="100%" height="315" src="{{ content.video }}" frameborder="0" allowfullscreen></iframe>
+        {% elif content.type == "product" %}
+        <div class="py-5">
+            <div class="blog-card-3 product-detail">
+                <div class="row edit-special">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="blog-card-img">
+                            <img src="{{content.product.image.url}}" class="w-100 object-fit-cover" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="blog-card-content">
+                            <div class="blog-card-content-top">
+                                <a href="#" class="blog-card-title stretched-link">{{content.product.title}}</a>
+                                <p class="blog-card-text mb-0">
+                                    {{content.product.description}}
+                                </p>
+                            </div>
+                            <div class="blog-card-content-bottom justify-content-start">
+                                <a href="{{content.product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+                                    style="width: 207px;">
+                                    DETAYLAR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+                </div>
+                {% if blog_.product %}
+                
+                <div class="blog-content d-flex flex-column gap-3">
+                        <div class="py-5">
+                            <div class="blog-card-3 product-detail">
+                                <div class="row edit-special">
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="blog-card-img">
+                                            <img src="{{blog_.product.image.url}}" class="w-100 object-fit-cover" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <div class="blog-card-content">
+                                            <div class="blog-card-content-top">
+                                                <a href="#" class="blog-card-title stretched-link">{{blog_.product.title}}</a>
+                                                <p class="blog-card-text mb-0">
+                                                    {{blog_.product.description}}
+                                                </p>
+                                            </div>
+                                            <div class="blog-card-content-bottom justify-content-start">
+                                                <a href="{{blog_.product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+                                                    style="width: 207px;">
+                                                    DETAYLAR
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                
+                {% else %}
+        
+    {% endif %}
+    
+                <!-- BLOG SECTION 1 -->
+               
+            </div>
+        </div>
+
+
+            </div>
+
+
+
+
+            
+        </div>
+
+
+
+
+        
+    </div>
+    </div>
+    
+        <div class="d-flex flex-column gap-4 py-5" style="width: 80%; margin-left: 10%;">
+            {% if blog_.extra_product %}
+            <div class="">
+                <span style="    font-family: Playfair Display;
+font-size: 16px;
+font-style: italic;
+font-weight: 400;
+line-height: 20.8px;
+color: #8F4D61;">Teurny Önerileri</span>
+                <p></p>
+            </div>
+            <div>
+                <div class="blog-card-slider">
+                    
+                        {% for product in blog_.extra_product.all %}
+                       
+                        <div class="">
+                            <div class="blog-card-1">
+                                <div class="ratio-1">
+                                    <a href="#"> <img src="{{product.image.url}}" class="w-100 h-100 object-fit-cover" /></a>
+                                </div>
+                                <a href="{{product.link}}" class="blog-card-title mb-0 stretched-link">
+                                    {{product.title}}
+                                </a>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                        {% else %}
+                    
+                    
+                           
+                        {% endif %}
+
+                </div>
+            </div>
+        </div>
+       
+
+  
+
+</div>
+
+  <div
+    class="modal fade"
+    id="searchModal"
+    tabindex="-1"
+    aria-labelledby="searchModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="row justify-content-center">
+              <div class="col-12 col-sm-8">
+                <form method="GET" action="/search">
+                  <div>
+                    <div
+                      class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                    >
+                      <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                      <div class="flex-grow-1 ps-3">
+                        <input
+                          name="keyword"
+                          type="text"
+                          class="teurny-input border-0 w-100"
+                          placeholder="Ara..."
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        class="teurny-button-secondary w-auto"
+                      >
+                        ARA
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const commentForm = document.querySelector(".ajaxFormTrue");
+
+    if (commentForm) {
+        commentForm.addEventListener("submit", function (e) {
+            e.preventDefault(); // Sayfanın yenilenmesini engelle
+
+            let formData = new FormData(commentForm); // Form verilerini al
+            let actionUrl = "{% url 'tuerny_app:add_blog_comment' %}"; // Django `urls.py` içindeki endpoint
+
+            fetch(actionUrl, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Eğer sunucudan hata içeren HTML gelirse, sayfa yenilenmeyebilir
+                    console.log("Yorum başarıyla eklendi!");
+                    location.reload(); // Yorum eklendiğinde sayfayı yenile
+                })
+                .catch(error => {
+                    console.error("Bağlantı Hatası:", error);
+                    alert("Sunucuyla bağlantı kurulamadı!");
+                });
+                
+        });
+    }
+});
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll(".saved, .unsaved").forEach(button => {
+          button.addEventListener("click", function() {
+              let blogId = this.getAttribute("data-id");
+              let isSaved = this.classList.contains("saved");  // Eğer kaydedilmişse kaldır, değilse kaydet
+  
+              fetch("{% url 'tuerny_app:save_blog' %}", {
+                  method: "POST",
+                  headers: {
+                      "X-CSRFToken": "{{ csrf_token }}",
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ blog_id: blogId })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.status === "saved") {
+                      this.classList.remove("unsaved");
+                      this.classList.add("saved");
+                      this.innerHTML = `<svg width="20" height="27" viewBox="0 0 20 27" fill="rgb(130,68,68)" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="rgb(130,68,68)" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>`;
+                  } else if (data.status === "unsaved") {
+                      this.classList.remove("saved");
+                      this.classList.add("unsaved");
+                      this.innerHTML = `<svg width="20" height="27" viewBox="0 0 20 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16.2105 1H3.96292C2.32907 1 1.007 2.32905 1.01559 3.96288L1.12495 24.7412C1.12862 25.4375 1.6941 26 2.39039 26C2.68251 26 2.96563 25.8989 3.19172 25.714L8.26133 21.5661C9.3249 20.6959 10.8487 20.6762 11.9344 21.5186L17.4188 25.7737C17.6079 25.9204 17.8404 26 18.0797 26C18.6752 26 19.1579 25.5173 19.1579 24.9218V3.94737C19.1579 2.31958 17.8383 1 16.2105 1Z" stroke="#414141" stroke-width="1.47368" stroke-linejoin="round"/>
+                          </svg>`; 
+                  }
+              })
+              .catch(error => console.error("Error:", error));
+          });
+      });
+  });
+  </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let allCommentSections = document.querySelectorAll(".comment-section");
+
+    allCommentSections.forEach(section => {
+        let comments = section.querySelectorAll(".blog-comment-item"); // O bölgedeki yorumlar
+        let loadMoreBtn = section.querySelector(".load-more-comments"); // O bölgedeki Devamını Gör butonu
+        let commentsPerPage = 2; // Kaç yorum gösterilecek (2'şer)
+        let currentIndex = 0; // Şu an gösterilen yorum sayısı
+
+        function showNextComments() {
+            let nextIndex = currentIndex + commentsPerPage;
+            for (let i = currentIndex; i < nextIndex && i < comments.length; i++) {
+                comments[i].style.display = "block"; // Yorumları göster
+            }
+            currentIndex = nextIndex;
+
+            if (currentIndex >= comments.length) {
+                loadMoreBtn.style.display = "none"; // Tüm yorumlar gösterildiyse butonu gizle
+            }
+        }
+
+        // Eğer yorum yoksa "Devamını Gör" butonunu gizle
+        if (comments.length === 0) {
+            loadMoreBtn.style.display = "none";
+        } else {
+            // Başlangıçta tüm yorumları gizle
+            comments.forEach(comment => comment.style.display = "none");
+
+            // İlk 2 yorumu göster
+            showNextComments();
+        }
+
+        // Butona tıklanınca yeni yorumları göster
+        loadMoreBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            showNextComments();
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+
+    textareas.forEach(textarea => {
+        textarea.addEventListener("focus", function () {
+            this.style.height = "200px";
+        });
+
+        textarea.addEventListener("blur", function () {
+            if (this.value.trim() === "") {
+                this.style.height = "50px";
+            }
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+    let maxLength = 360; // Maksimum karakter sayısı
+
+    textareas.forEach(textarea => {
+        let counterLabel = textarea.parentElement.querySelector("#content-counter"); // Aynı parent içindeki sayacı bul
+
+        textarea.addEventListener("input", function () {
+            let currentLength = this.value.length;
+
+            // Eğer girilen karakter sayısı maxLength'i geçerse, fazlalıkları sil
+            if (currentLength > maxLength) {
+                this.value = this.value.substring(0, maxLength);
+                currentLength = maxLength; // Güncellenmiş uzunluğu al
+            }
+
+            // Sayaç değerini güncelle
+            counterLabel.textContent = currentLength + "/" + maxLength;
+        });
+    });
+});
+</script>
+{% endblock content %}

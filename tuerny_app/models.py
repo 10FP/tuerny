@@ -125,6 +125,12 @@ class Product(models.Model):
         return self.title
 
 class Blog(models.Model):
+    STATUS_CHOICES = [
+    ("pending", "Beklemede"),
+    ("approved", "Onaylandı"),
+    ("rejected", "Reddedildi"),
+]
+
     category = models.ForeignKey('SubCategory', on_delete=models.SET_NULL, null=True, related_name="blogs")
     extra_categories = models.ManyToManyField('SubCategory', related_name="extra_blogs", blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, related_name="product_blog")
@@ -148,6 +154,7 @@ class Blog(models.Model):
     author = models.CharField(max_length=200, null=True, blank=True)  # Kaynak (isteğe bağlı)
     slug = models.SlugField(max_length=255, unique=True, blank=True)  # Slug alanı
     created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending", null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Eğer slug yoksa başlık üzerinden oluştur

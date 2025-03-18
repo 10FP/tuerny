@@ -394,6 +394,8 @@ def blog_detail(request, slug):
     blog = Blog.objects.all()
     s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
+    if blog_.status != "approved":
+        return redirect("tuerny_app:control_blog", slug=blog_.slug)
 
     if request.user.is_authenticated:
         saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
@@ -403,6 +405,10 @@ def blog_detail(request, slug):
     
 
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs, "saved_blog": saved_blogs})
+
+def control_blog(request, slug):
+    blog_ = get_object_or_404(Blog, slug=slug)
+    return render(request, "tuerny_app/blog_control.html", {"blog_": blog_})
 
 def category(request, slug):
     if request.user.is_authenticated:
@@ -974,3 +980,15 @@ def password_reset_confirm(request, uidb64, token):
         return redirect("tuerny_app:login")
 
     return render(request, "tuerny_app/password_reset_confirm.html", {"uidb64": uidb64, "token": token})
+
+@login_required
+def change_blog_status(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        if new_status in ["pending", "approved", "rejected"]:  # Geçerli değerleri kontrol et
+            blog.status = new_status
+            blog.save()
+
+    return redirect("tuerny_app:blog_detail", slug=blog.slug)  # Blog detay sayfasına yönlendir
