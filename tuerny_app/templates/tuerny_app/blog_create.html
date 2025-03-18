@@ -40,12 +40,12 @@
                 {% if user.is_authenticated %}
                 
                 <!-- Kategori Seçimi -->
-                <select name="category" class="teurny-input w-100 vRequired">
+                <!-- <select name="category" class="teurny-input w-100 vRequired">
                     <option value="">Kategori</option>
                     {% for category in categories %}
                         <option value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
-                </select>
+                </select> -->
 
                 <!-- Blog Başlığı -->
                 <div class="limit-counter">
@@ -54,6 +54,8 @@
                         id="counter-input" maxlength="90" />
                 </div>
 
+                <label>Yazar:</label>
+            <input type="text" name="author" value="{{ blog_.author }}" class="teurny-input w-100">
                 <!-- Kısa Açıklama -->
                 <div class="limit-counter textarea-counter">
                     <label for="short_description" id="content-counter" class="counter-area">00/360</label>
@@ -67,6 +69,39 @@
                     <!-- Ekstra Medya (MP3, Video, Diğer Dosyalar) -->
                     <label>Ekstra Medya (MP3, Video vb.):</label>
                     <input type="file" name="media_extra" class="teurny-input w-100">
+                    <label>Kategori:</label>
+            <select name="category" class="teurny-input w-100">
+                {% for category in subcategories %}
+                    <option value="{{ category.id }}">
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <label>Ekstra Kategoriler:</label>
+                <select name="extra_categories[]" class="teurny-input w-100" multiple>
+                    {% for category in subcategories %}
+                        <option value="{{ category.id }}" >
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label>Ürün Seç:</label>
+                <select name="product" class="teurny-input w-100">
+                    <option value="">Ürün Seç</option>
+                    {% for product in products %}
+                        <option value="{{ product.id }}" >
+                            {{ product.title }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label>Ekstra Ürünler:</label>
+                <select name="extra_product[]" class="teurny-input w-100" multiple>
+                    {% for product in products %}
+                        <option value="{{ product.id }}" >
+                            {{ product.title }}
+                        </option>
+                    {% endfor %}
+                </select>
                 <!-- Blog İçeriği -->
                 <h2 class="ask-title">Blog İçeriği</h2>
                 <div id="content-container"></div>

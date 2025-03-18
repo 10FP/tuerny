@@ -805,11 +805,13 @@ def create_blog(request):
         media = request.FILES.get("media", None)
         media_extra = request.FILES.get("media_extra", None)
         product_id = request.POST.get("product", None)
-        extra_product_ids = request.POST.getlist("extra_product")
-
+        extra_product_ids = request.POST.getlist("extra_product[]")
+        author = request.POST.get("author", "")
+        extra_category_ids = request.POST.getlist("extra_categories[]")
         # Blog oluştur
         blog = Blog.objects.create(
             title=title,
+            author=author,
             category_id=category_id,
             short_description=short_description,
             media=media,
@@ -821,12 +823,17 @@ def create_blog(request):
 
         # Ekstra ürünleri ManyToMany olarak ekle
         if extra_product_ids:
-            blog.extra_product.set(Product.objects.filter(id__in=extra_product_ids))
+            
+            blog.extra_product.set(extra_product_ids)
+
+        if extra_category_ids:
+            blog.extra_categories.set(extra_category_ids)
 
         # Blog içeriğini işle
         content_types = request.POST.getlist("content_type[]")
         content_texts = request.POST.getlist("content_text[]")
         content_images = request.FILES.getlist("content_image[]")
+        
         content_videos = request.POST.getlist("content_video[]")
         content_products = request.POST.getlist("content_product[]")
 
@@ -850,7 +857,7 @@ def create_blog(request):
             )
             order += 1
 
-        return redirect("blog_detail", slug=blog.slug)
+        return redirect("tuerny_app:blog_detail", slug=blog.slug)
 
     return render(request, "tuerny_app/blog_create.html", {
         "products": Product.objects.all()
