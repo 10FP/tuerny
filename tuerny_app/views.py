@@ -20,7 +20,7 @@ from django.db.models import Count
 from django.core.mail import send_mail
 from .utils import verify_email_token
 from django.utils.text import slugify
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 # Create your views here.
 User = get_user_model()
@@ -306,7 +306,7 @@ def questions(request):
     return render(request, "tuerny_app/questions.html")
 
 def question(request):
-    sort_option = request.GET.get("sort", "latest")  # Varsayılan: "En son eklenenler"
+    sort_option = request.GET.get("sort", "latest")  # Varsayılan sıralama
 
     # **Sıralama Seçenekleri**
     if sort_option == "latest":
@@ -317,10 +317,21 @@ def question(request):
         questions = Question.objects.prefetch_related("poll__options").annotate(comment_count=Count("comments")).order_by("-comment_count")
     elif sort_option == "most_liked":
         questions = Question.objects.prefetch_related("poll__options") \
-    .annotate(like_count_annotated=Count("likes", distinct=True)) \
-    .order_by("-like_count_annotated")
+            .annotate(like_count_annotated=Count("likes", distinct=True)) \
+            .order_by("-like_count_annotated")
     else:
         questions = Question.objects.prefetch_related("poll__options")
+
+    # **Paginator Kullanımı**
+    page = request.GET.get("page", 1)  # Varsayılan olarak ilk sayfa
+    paginator = Paginator(questions, 3)  # Sayfa başına 5 soru gösterilecek
+
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)
 
     # **Anket Verilerini Hazırla**
     poll_data = {}
@@ -340,7 +351,8 @@ def question(request):
         "questions": questions,
         "poll_data": poll_data,
         "s_q": s_questions,
-        "selected_sort": sort_option  # Seçili sıralama bilgisini gönderiyoruz
+        "selected_sort": sort_option,
+        "paginator": paginator,  # Paginator nesnesini şablona gönder
     })
 
 def save(request):
