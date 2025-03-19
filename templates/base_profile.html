@@ -314,12 +314,12 @@
                             <div class="row gap-5 px-0 px-lg-5 xa">
                               <div class="col col-lg-auto">
                                 <div class="header-link-menu-nav">
-                                  {% for category in category.subcategories.all %}
+                                  {% for c in category.subcategories.all %}
                                   <a
                                     class="menu-loader text-uppercase"
-                                    data-category="{{ category.name }}"
-                                    href="{% url 'tuerny_app:category' category.slug %}"
-                                    >{{category.name}}</a
+                                    data-category="{{ c.name }}"
+                                    href="{% url 'tuerny_app:category' c.slug %}"
+                                    >{{c.name}}</a
                                   >
                                   {% endfor %}
                                   
@@ -330,7 +330,7 @@
                                   <div class="row h-100 menu-load-div">
                                     {% for blog in blog %}
                                     
-                                    <div class="col-md-2 blog-item" data-category="{{ blog.category.name }}">
+                                    <div class="col-md-2 blog-item" data-category="{{ blog.category.name }}" data-extra-category="{% for category in blog.extra_categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}">
                                       <div
                                         class="h-100 header-link-menu-card d-flex flex-column gap-3"
                                       >
