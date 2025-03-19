@@ -10,6 +10,10 @@
     font-weight: 400;
     font-size: 16px;
   }
+  .login .logincont .google:hover i, 
+.login .logincont .apple:hover i {
+    color: white;  /* İstediğin rengi buraya yaz */
+}
 </style>
 <div class="container-fluid login">
   <div class="container">
@@ -27,8 +31,8 @@
                   <input type="text" class="form-control vRequired" name="name" placeholder="Ad Soyad">
                   <select name="gender" class="form-control vRequired select-register">
                       <option style="font-weight: 400;" value="">Cinsiyet</option>
-                      <option value="E">Erkek</option>
-                      <option value="K">Kadın</option>
+                      <option value="Male">Erkek</option>
+                      <option value="Female">Kadın</option>
                   </select>
                   <input type="password" class="form-control vRequired vPassword" name="password" placeholder="Şifre">
                   <input type="password" class="form-control vRequired vPasswordConfirm" name="password_again"
@@ -57,7 +61,7 @@
 
                   <button type="submit" class="btn btn-default loginbtn">Üye Ol</button>
                   <a href="javascript:;" class="btn btn-default google">
-                      <img src="{% static 'tuerny_app/images/icons/image 2.svg' %}">
+                    <i class="fa-brands fa-google"></i>
                       Google ile Giriş Yap
                   </a>
                   

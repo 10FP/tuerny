@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<style>
+  .contracts-container .contracts-content #contractsTab .nav-item .nav-link {
+    font-weight: 500;
+  }
+  .contracts-container .contracts-content .tab-content .agreement-content .agreement-list ul li {
+    font-size: 18px;
+  }
+  @media screen and (max-width: 720px) {
+    .contracts-container .contracts-content .tab-content .agreement-content .agreement-list ul li {
+    font-size: 12px;
+  }
+  }
+</style>
       <div class="container py-5 contracts-container">
         <div class="contracts-content">
           <ul class="nav nav-tabs nav-fill" id="contractsTab" role="tablist">

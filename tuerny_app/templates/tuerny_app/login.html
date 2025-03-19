@@ -6,6 +6,10 @@
   .login {
     padding-bottom: 25px;
   }
+  .login .logincont .google:hover i, 
+.login .logincont .apple:hover i {
+    color: white;  /* İstediğin rengi buraya yaz */
+}
 </style>
 
       <div class="container-fluid login">
@@ -16,15 +20,28 @@
                     <div class="ms-auto me-auto logincont">
                         <h2>Giriş Yap</h2>
                         {% if messages %}
-                            <div class="alert alert-danger">
-                                {% for message in messages %}
+                        {% for message in messages %}
+                        {% if 'success' in message.tags %}
+                            <div class="alert alert-success">
+                               
+                                
                                     <p>{{ message }}</p>
-                                {% endfor %}
                             </div>
+
+                                    {% else %}
+                                    <div class="alert alert-danger">
+                                    <p>{{ message }}</p>
+
+                                    
+                            </div>
+                            {% endif %}
+                                {% endfor %}
                         {% endif %}
-                        <input type="email" class="form-control" name="mail" placeholder="Mail adresi" required>
+                        <input type="email" class="form-control" name="email" placeholder="Mail adresi" required>
+                        
                         <div class="position-relative">
-                            <input type="password" class="form-control" name="password" placeholder="Şifre" required>
+<input type="password" class="form-control" name="password" placeholder="Şifre" required>
+                            
                             <i class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye"
                                style="color:#989491; display:none"></i>
                             <i class="position-absolute top-50 end-0 translate-middle fa-solid fa-eye-slash"
@@ -33,7 +50,7 @@
                         <div class="col-md-12 vAjaxErrors"></div>
                         <button type="submit" class="btn btn-default loginbtn">Giriş Yap</button>
                         <a href="{% provider_login_url 'google' %}" class="btn btn-default google">
-                            <img src="{% static 'tuerny_app/images/icons/image 2.svg' %}">
+                          <i class="fa-brands fa-google"></i>
                             Google ile Giriş Yap
                         </a>
                         <div class="hstack gap-2 justify-content-center mt-4 text-roboto fw-light">

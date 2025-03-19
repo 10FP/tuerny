@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-uv=!a=*9_@r)z&rtncj9deg12$o-n*au_jf8hsj7ra)ejfz8!n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 AUTH_USER_MODEL = 'tuerny_app.CustomUser'
@@ -54,7 +54,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
-
+SOCIALACCOUNT_LOGIN_ON_GET=True
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE' : [
@@ -221,6 +221,28 @@ CACHES = {
 }
 
 FRONTEND_URL = "http://127.0.0.1:8000"
+ACCOUNT_ADAPTER = "tuerny_app.adapters.CustomAccountAdapter"
+ACCOUNT_USERNAME_REQUIRED = True
+
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
+
+# Kullanıcı adı yerine sadece e-posta ile giriş yap
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USERNAME_MIN_LENGTH = 3  # Kullanıcı adının minimum uzunluğu
+ACCOUNT_EMAIL_REQUIRED = True  # E-posta zorunlu olsun
+ACCOUNT_UNIQUE_EMAIL = True  # E-posta tekil olsun
+ACCOUNT_USERNAME_BLACKLIST = ["admin", "root", "test"]  # Yasaklı kullanıcı adları
+
+# Kullanıcı giriş yaptıktan sonra yönlendirilecek URL
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"  
+ACCOUNT_LOGIN_REDIRECT_URL = "/"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+
+# Otomatik username oluşturulacağı için username zorunlu olmamalı
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_REQUIRED = True  
+ACCOUNT_UNIQUE_EMAIL = True
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

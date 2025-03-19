@@ -21,7 +21,7 @@ from django.core.mail import send_mail
 from .utils import verify_email_token
 from django.utils.text import slugify
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+from django.contrib.auth import get_backends
 # Create your views here.
 User = get_user_model()
 
@@ -219,6 +219,7 @@ def register(request):
         birth_date = request.POST.get('birth_date')
         full_name = request.POST.get('name')
         gender = request.POST.get('gender')
+        print("gender", gender)
         password = request.POST.get('password')
         password_again = request.POST.get('password_again')
         
@@ -255,31 +256,30 @@ def register(request):
         messages.success(request, "Kayıt başarılı! Giriş yapabilirsiniz.")
         return render(request, 'tuerny_app/login.html')  # Başarılı işlem sonrası login sayfasına yönlendirme
     return render(request, 'tuerny_app/register.html') 
-
+User = get_user_model()
 def login(request):
     if request.user.is_authenticated:
         return redirect("tuerny_app:index")
-    if request.method == 'POST':
-        email = request.POST.get('mail')  # Formdaki "mail" alanını al
-        password = request.POST.get('password')  # Formdaki "password" alanını al
-        
-        # Kullanıcıyı email üzerinden doğrulamak için varsayılan User modeline uygun hale getirin
-        try:
-            # Email üzerinden kullanıcıyı bul
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            user = None
 
-        if user and user.check_password(password):
-            auth_login(request, user,backend='allauth.account.auth_backends.AuthenticationBackend')  # Kullanıcıyı giriş yaptır
+    if request.method == "POST":
+        email = request.POST.get("email")  # FORM'DAKİ NAME="email" İLE UYUMLU OLMALI
+        password = request.POST.get("password")
+
+        print(f"Email: {email}, Password: {password}")  # Debugging İçin
+
+        # Kullanıcıyı email ile getir
+        user = User.objects.filter(email=email).first()
+
+        if user and user.check_password(password):  # Şifreyi doğrula
+            backend = get_backends()[0].__class__.__module__ + "." + get_backends()[0].__class__.__name__
+            auth_login(request, user, backend=backend)
             messages.success(request, "Başarıyla giriş yaptınız.")
-            return redirect('tuerny_app:index')  
+            return redirect("tuerny_app:index")
         else:
-            messages.error(request, "Geçersiz e-posta veya şifre!")  # Hata mesajı ekle
-        
-        
-    
-    return render(request, 'tuerny_app/login.html')
+            messages.error(request, "Hatalı e-posta veya şifre!")
+            return redirect("tuerny_app:login")
+
+    return render(request, "tuerny_app/login.html")
 
 
 @login_required
