@@ -452,54 +452,37 @@ $(".header-link-container.open-header-link").hover(function() {
 // });
 
 $(document).ready(function() {
-  // Belirtilen kategoriye ait blog öğelerini filtreleyen fonksiyon
-  function filterBlogs(category) {
-    $(".menu-load-div .col-md-2")
-      .hide() // Tüm blogları gizle
-      .filter(function() {
-        return $(this).data("category") == category;
-      })
-      .show(); // Seçilen kategoriye ait blogları göster
+  function filterBlogs(category, $container) {
+    const $all = $container.find(".menu-load-div .col-md-2").hide();
+    const $matched = $all.filter(function() {
+      const mainCat = $(this).data("category");
+      const extraCats = ($(this).data("extra-category") || "")
+                          .split(",")
+                          .map(c => c.trim());
+      return mainCat === category || extraCats.includes(category);
+    });
+    const $toShow = $matched.slice(0, 6).show();
+    return $toShow;
   }
 
-  // Sayfa yüklendiğinde, global olarak ilk bulunan menü-loader'ın kategorisine göre blogları göster
-  let firstCategory = $(".menu-loader").first().data("category");
-  filterBlogs(firstCategory);
+  // İlk dropdown’daki ilk kategori
+  const $firstDropdown = $(".header-link-container").first();
+  const firstCat = $firstDropdown.find(".menu-loader").first().data("category");
+  filterBlogs(firstCat, $firstDropdown);
 
-  // Menü içindeki kategori öğesi üzerine gelindiğinde ilgili blogları göster
   $(".menu-loader").on("mouseenter", function() {
-    let selectedCategory = $(this).data("category");
-    filterBlogs(selectedCategory);
-  });
+    const $dropdown = $(this).closest(".header-link-container");
+    const category = $(this).data("category");
+    const $shown = filterBlogs(category, $dropdown);
 
-  // Her ana dropdown (header-link-container) üzerine gelindiğinde, o menüye ait default (ilk) kategori aktif hale gelsin
-  $(".header-link-container").on("mouseenter", function() {
-    let defaultCategory = $(this).find(".menu-loader").first().data("category");
-    filterBlogs(defaultCategory);
-  });
-
-
-
-
-  // Hover olayı için
-  $(".menu-loader").hover(
-    function () {
-      const selectedCategory = $(this).data("category"); // Menüdeki kategori
-      
-      // Blog kategorilerini kontrol et ve göster/gizle
-      $(".menu-load-div .col-md-2").each(function () {
-        const blogCategory = $(this).data("category"); // Blogun kategori verisi
-
-        if (blogCategory === selectedCategory) {
-          $(this).show(); // Kategori eşleşiyorsa göster
-        } else {
-          $(this).hide(); // Eşleşmiyorsa gizle
-        }
-      });
-      
-    },
+    // Konsola başlık listesini yazdır
     
-  );
+  });
+
+  $(".header-link-container").on("mouseenter", function() {
+    const defaultCat = $(this).find(".menu-loader").first().data("category");
+    filterBlogs(defaultCat, $(this));
+  });
 });
 
 document.addEventListener("scroll", function() {
