@@ -323,3 +323,22 @@ class BlogContent(models.Model):
 
     def __str__(self):
         return f"{self.blog.title} - {self.get_type_display()} (Sıra: {self.order})"
+    
+
+
+class ContactMessage(models.Model):
+    SUBJECT_CHOICES = [
+        ("support", "Destek Talebi"),
+        ("offer", "Öneri"),
+        ("complaint", "Şikayet"),
+        ("other", "Diğer"),
+    ]
+
+    subject = models.CharField(max_length=20, choices=SUBJECT_CHOICES)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.get_subject_display()} - {self.email}"

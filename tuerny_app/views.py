@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion, Product, BlogContent
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion, Product, BlogContent, ContactMessage
 from django.contrib.auth import authenticate, login as auth_login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -469,6 +469,24 @@ def broken(request):
     return render(request, "tuerny_app/404.html")
 
 def contact(request):
+    if request.method == "POST":
+        subject = request.POST.get("subject")
+        email = request.POST.get("mail")
+        phone = request.POST.get("phone")
+        message = request.POST.get("message")
+
+        if subject and email and phone and message:
+            ContactMessage.objects.create(
+                subject=subject,
+                email=email,
+                phone=phone,
+                message=message
+            )
+            messages.success(request, "Mesajınız başarıyla gönderildi!")
+            return redirect("tuerny_app:contact")  # İletişim sayfasına yönlendirme
+        else:
+            messages.error(request, "Lütfen tüm alanları doldurun!")
+
     return render(request, "tuerny_app/contact.html")
 
 def contract(request):
@@ -992,3 +1010,6 @@ def change_blog_status(request, blog_id):
             blog.save()
 
     return redirect("tuerny_app:blog_detail", slug=blog.slug)  # Blog detay sayfasına yönlendir
+
+def custom_404_view(request, exception):
+    return render(request, "404.html", status=404)

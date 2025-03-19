@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion, BlogContent
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion, BlogContent,ContactMessage
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -271,6 +271,12 @@ class SavedBlogAdmin(admin.ModelAdmin):
     list_filter = ('saved_at',)  # Tarihe göre filtreleme
     ordering = ('-saved_at',)  # En son kaydedilenleri üste koy
 
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = ("email", "subject", "created_at")  # Admin panelinde gösterilecek sütunlar
+    list_filter = ("subject", "created_at")  # Filtreleme seçenekleri
+    search_fields = ("email", "message")  # Arama yapılacak alanlar
+    ordering = ("-created_at",)  # Yeni mesajları en üstte göstermek için sıralama
     
 @admin.register(BlogContent)
 class BlogContentAdmin(admin.ModelAdmin):
