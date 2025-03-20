@@ -126,7 +126,7 @@ const initBlogCardSlider = () => {
           slidesToShow: 2,
           slidesToScroll: 1,
           arrows: true,
-          dots: true,
+          dots: false,
         },
       },
     ],
