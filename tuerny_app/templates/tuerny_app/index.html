@@ -24,6 +24,41 @@
 .blog-section-more.d-flex.d-md-none {
   display: none !important;
 }
+.blog-card-slider .slick-arrow {
+  display: inline-block !important;
+  margin-bottom: 30px;
+}
+.blog-card-slider .blog-card-1 {
+  min-height: 320px;
+  justify-content: space-between;
+}
+.blog-card-slider .blog-card-1 a.blog-card-title {
+  min-height: 72px;
+}
+.blog-section-1 .slick-list.draggable {
+  height: 375px;
+}
+.blog-section-1 .slick-arrow {
+  margin-bottom: 50px;
+}
+.blog-section-1 .fs-m-12 {
+  font-size: 16px !important;
+}
+.unsaved svg {
+  width: 16px !important;
+  height: 20px !important;
+}
+.saved svg {
+  width: 16px !important;
+  height: 20px !important;
+}
+.blog-card-2 .blog-card-category {
+  font-weight: 200 !important;
+}
+.blog-card-3 .blog-card-title {
+  min-height: 4.5em;
+  line-height: 1.5em !important;
+}
 }
 </style>
 <div id="hero-slider" class="w-100 position-relative">
@@ -56,7 +91,7 @@
     <div class="blog-section-title px-2">
       <span class="fs-m-12">Cinsel Sağlık</span>
       <div class="blog-section-title-divider"></div>
-      <a class="home-blogs" href="{% url 'tuerny_app:category' 'cinsel-saglik' %}">Daha Fazlası</a>
+      <a class="home-blogs" href="{% url 'tuerny_app:category' 'cinsel-saglik' %}">Daha Fazla</a>
     </div>
     <div>
       <div class="blog-card-slider">
@@ -250,7 +285,7 @@
                     </a>
                   </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6" style="min-height: 100px;">
                   <div class="blog-card-content h-100">
                     <div
                       class="blog-card-content-top"
@@ -409,6 +444,12 @@
           nulla sed libero congue euismod.
         </span>
       </div>
+      <div class="blog-card-content-bottom justify-content-start" style="display: flex; justify-content: center !important;">
+        <a href="{{content.product.link}}" class="teurny-footer-btn blog-detail-product-btn"
+            style="width: 310px; height: 40px;">
+            DETAYLAR
+        </a>
+    </div>
     </div>
   </div>
 </div>

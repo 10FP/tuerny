@@ -74,6 +74,14 @@
       margin-right: 50px;
     }
 }
+  @media screen and (max-width: 720px) {
+    .email-s {
+      font-size: 13px !important;
+    }
+    #follow a i {
+      color: #000000 !important;
+    }
+}
 @media screen and (min-width: 1400px) {
     .xa {
       margin-left: 40px !important;
@@ -90,12 +98,211 @@
 }
   </style>
   <body>
+<!-- Kısa Bilgilendirme Kutusu -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>
+      Hey Teurners! Sizlere sorunsuz ve kişiselleştirilmiş bir deneyim sunabilmek için <strong>zorunlu</strong> ve üçüncü taraf çerezleri kullanıyoruz. 
+      Daha fazla bilgi için <a href="/cerez-politikasi" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
+    </p>
+    <div class="cookie-buttons">
+      <button id="open-preferences">TERCİHLER</button>
+      <button id="accept-all-short">KABUL ET</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detaylı Tercih Ekranı -->
+<div id="cookie-preferences" class="cookie-banner" style="display: none;">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>Her bir çerez, sitemizdeki deneyiminizi nasıl iyileştireceğimize dair bize fikirler sunar. Gerekli çerezleri Web sitesini kullanarak kabul etmiş oluyorsunuz. Diğer çerez tipleri için ise tercih yapabilirsiniz.</p>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" checked disabled />
+        <strong>Gerekli Çerezler</strong>
+        <p>Bu çerezler, Web sitesinin düzgün çalışmasını sağlar. Sizinle etkileşime geçebilmemiz ve güvenli ve sorunsuz bir gezinme sağlamamız için olmazsa olmazlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="analytics" />
+        <strong>Analitik Çerezler</strong>
+        <p>Bu çerezler, sizi anlamamıza yardım eden veriler sağlar. Sitemizi iyileştirmemizi sağlarlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="marketing" />
+        <strong>Pazarlama Çerezleri</strong>
+        <p>Size özel teklifler, reklamlar ve deneyimler sunmamıza yardımcı olur.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="functional" />
+        <strong>İşlevsel Çerezler</strong>
+        <p>Tercihlerinizi hatırlamamızı ve deneyiminizi kişiselleştirmemizi sağlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-buttons">
+      <button id="save-preferences">TERCİHLERİMİ KAYDET</button>
+      <button id="accept-all-long">HEPSİNİ KABUL ET</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  z-index: 10000;
+  padding: 30px 20px;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.6);
+  overflow-y: auto;
+  max-height: 95vh;
+}
+
+.cookie-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cookie-banner h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.cookie-banner p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #ccc;
+}
+
+.cookie-banner a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.cookie-option {
+  margin-top: 20px;
+}
+
+.cookie-option label {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+}
+
+.cookie-option input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+.cookie-option p {
+  margin: 5px 0 0 28px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.cookie-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-buttons button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  min-width: 180px;
+  transition: 0.3s;
+}
+
+.cookie-buttons button:hover {
+  opacity: 0.85;
+}
+
+#open-preferences, #save-preferences {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+#accept-all-short, #accept-all-long {
+  background-color: white;
+  color: black;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const banner = document.getElementById('cookie-banner');
+  const preferencesPanel = document.getElementById('cookie-preferences');
+  const openPreferences = document.getElementById('open-preferences');
+  const acceptAllShort = document.getElementById('accept-all-short');
+  const acceptAllLong = document.getElementById('accept-all-long');
+  const savePreferences = document.getElementById('save-preferences');
+
+  if (localStorage.getItem('cookiesAccepted') === 'true') {
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'none';
+  }
+
+  openPreferences.addEventListener('click', () => {
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'block';
+  });
+
+  function saveAndClose(preferences) {
+    localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
+    localStorage.setItem('cookiesAccepted', 'true');
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'none';
+  }
+
+  acceptAllShort.addEventListener('click', () => {
+    saveAndClose({ analytics: true, marketing: true, functional: true });
+  });
+
+  acceptAllLong.addEventListener('click', () => {
+    saveAndClose({ analytics: true, marketing: true, functional: true });
+  });
+
+  savePreferences.addEventListener('click', () => {
+    const analytics = document.getElementById('analytics').checked;
+    const marketing = document.getElementById('marketing').checked;
+    const functional = document.getElementById('functional').checked;
+
+    saveAndClose({ analytics, marketing, functional });
+  });
+});
+</script>
+
+
+
+
+
     <div style="margin-top: 111px; width: 100%; z-index: 100;" class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
       
       <div class="offcanvas-body">
        
       
     <div class="flex-shrink-0 p-3" style="width: 100%;">
+      {% if user.is_authenticated %}
       <div style="display: flex; align-items: center; justify-content: space-between; position: relative; width: 100%;">
 
         <!-- Bildirimler Butonu (Dropdown) -->
@@ -125,15 +332,19 @@
         </div>
     
         <!-- Çıkış Yap Butonu -->
+       
         <span style="right: 56px; position: absolute; font-size: 16px; font-weight: 400; columns: #414141;">Çıkış Yap</span>
     
         <!-- Çıkış Yap İkonu -->
         <svg style="right: 20px; position: absolute; margin-top: 4px; cursor: pointer;" width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 4L13.59 5.41L16.17 8H6V10H16.17L13.59 12.58L15 14L20 9L15 4ZM2 2H10V0H2C0.9 0 0 0.9 0 2V16C0 17.1 0.9 18 2 18H10V16H2V2Z" fill="black"/>
         </svg>
+       
     
     </div>
+  
     <li style="display: grid;" class="border-top my-3"></li>
+    {% endif %}
       <ul class="list-unstyled ps-0">
         
         <ul class="list-unstyled">
@@ -160,7 +371,7 @@
                           <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
                                   data-bs-toggle="collapse" data-bs-target="" 
                                   aria-expanded="false">
-                              {{subcategory.slug}}
+                              {{subcategory.name}}
                           </button>
                         </a>
                           
@@ -228,31 +439,21 @@
 </button>
 
           <div class="collapse" id="follow">
-              <ul class="btn-toggle-nav list-unstyled fw-semibold-respo pb-1 small">
-                  
-                      <li>
-                          <a href="{% url 'tuerny_app:ask' %}">
-                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                                  data-bs-toggle="collapse" data-bs-target="" 
-                                  aria-expanded="false">
-                              Soru Sor
-                          </button>
-                        </a>
-                          
-                      </li>
-                      <li>
-                          <a href="{% url 'tuerny_app:question' %}">
-                          <button style="color: #989491;" class="no-icon-btn btn btn-toggle d-inline-flex align-items-center fw-semibold-respo rounded border-0 collapsed" 
-                                  data-bs-toggle="collapse" data-bs-target="" 
-                                  aria-expanded="false">
-                              Gündemdeki Sorular
-                          </button>
-                        </a>
-                          
-                      </li>
-                  
-                  
-              </ul>
+            <div
+            class="flex-grow-1 d-flex align-items-end justify-content-center"
+          >
+            <div
+              class="d-flex align-items-center justify-content-center flex-wrap gap-5 footersocial"
+            >
+              <a href="#"><i class="fa-brands fa-instagram fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-tiktok fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-pinterest fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-facebook-f fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-x-twitter fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-youtube fs-2"></i></a>
+              <a href="#"><i class="fa-brands fa-linkedin fs-2"></i></a>
+            </div>
+          </div>
           </div>
           
         </li>
@@ -772,7 +973,7 @@
                     <input
                       name="mail"
                       type="email"
-                      class="teurny-input w-100"
+                      class="teurny-input w-100 email-s"
                       placeholder="E-posta"
                     />
                   </div>

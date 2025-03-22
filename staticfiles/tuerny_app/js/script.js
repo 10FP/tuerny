@@ -136,7 +136,7 @@ const initBlogCardSlider = () => {
     slidesToScroll: 1,
     infinite: true,
     focusOnSelect: true,
-    arrows: false,
+    arrows: true,
     dots: false,
     centerMode: false,
     responsive: [
