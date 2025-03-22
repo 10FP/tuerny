@@ -397,7 +397,9 @@ p {
 .dropdown-menu-custom li a:hover {
   color: #ff3233; /* Hover rengi */
 }
-
+.dropdown-item.active, .dropdown-item:active {
+  background-color: #8f4d61;
+}
 /* Bölme Çizgisi */
 .dropdown-divider {
   border-top: 1px solid #ddd;

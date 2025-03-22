@@ -10,13 +10,42 @@
             .gap-c-2 {
                 gap: 0.5rem !important;
             }
+            .question-card-survey.py-2 {
+                padding-top: 0.2rem !important;
+                padding-bottom: 0.2rem !important;
+            }
+            div.d-flex.align-items-center.ps-3 {
+                padding-left: 0 !important;
+            }
+            div.container.py-5 h1{
+                display: block !important;
+                font-family: 'Poppins';
+                font-size: 16px;
+                font-weight: 400;
+                color: #414141;
+                text-indent: 5px;
+            }
+            .question-card-comments .ajaxFormTrue{
+                display: none !important;
+            }
+            
+            .question-card {
+                padding: 34px 16px 0px 16px;
+            }
+            .question-card-title {
+                padding-bottom: 0 !important;
+            }
         }
 
-        question-card-survey-item-progress-rate span {
+        .question-card-survey-item-progress-rate span {
             word-wrap: normal;
         }
 </style>
+
       <div class="container py-5">
+
+        <h1 style="display: none;">Gündemdeki Sorular</h1>
+
         <div class="row">
             <div class="col-lg-9">
                 <div class="question-bar d-flex align-items-center p-1">
@@ -79,7 +108,7 @@
                           </div>
                     </div>
                     <div class="flex-grow-1 text-center">
-                        <p class="mb-0 text-teurny-mid">Filtreler</p>
+                        
                     </div>
                     <div>
                         <a href="{% url 'tuerny_app:ask' %}" class="teurny-button-secondary">SOR</a>
@@ -178,14 +207,22 @@
                                     </div>
     
                                     <div class="question-card-comments" style="padding-top: 15px">
+                                        {% if q.comments.all %}
                                         <div class="blog-section-title">
                                             <span style="font-size: 14px; color: #414141; font-weight: 400;">Yorumlar</span>
                                             <div class="blog-section-title-divider"></div>
                                         </div>
+                                        {% else %}
+                                        <a href="{% url 'tuerny_app:ask' q.id %}" class="load-more-comments">
+                                            <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 0px; font-style: italic;">Devamını Gör</h1>
+                                        </a>
+                                        {% endif %}
+                                        {% if q.comments.all %}
                                         <div class="comment-section">
                                         <div class="d-flex flex-column gap-3 mt-4">
                                             {% for c in q.comments.all %}
-                                            <div class="blog-comment-item" style="gap: 6px; display: none;">
+                                            {% if forloop.counter <= 2 %}
+                                            <div class="blog-comment-item" style="gap: 6px;">
                                                 {% if c.anonymous %}
                                                 <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
                                                 {% else %}
@@ -194,13 +231,14 @@
                                                 <p class="blog-comment-item-text" style="font-weight: 400; font-size: 14px; line-height: 130%; margin-bottom: 12px !important;">{{c.content}}</p>
                                                 <div class="teurny-divider"></div>
                                             </div>
-                                            
+                                            {% endif %}
                                             {% endfor %}
-                                            <a href="#" class="load-more-comments">
+                                            <a href="{% url 'tuerny_app:ask' q.id %}" class="load-more-comments">
                                                 <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 0px; font-style: italic;">Devamını Gör</h1>
                                             </a>  
                                         </div>
                                         </div>
+                                        {% endif %}
                                         <div class="mt-4">
                                             <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
                                                 {% csrf_token %}
@@ -584,47 +622,7 @@
     });
 });
     </script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    let allCommentSections = document.querySelectorAll(".comment-section");
 
-    allCommentSections.forEach(section => {
-        let comments = section.querySelectorAll(".blog-comment-item"); // O bölgedeki yorumlar
-        let loadMoreBtn = section.querySelector(".load-more-comments"); // O bölgedeki Devamını Gör butonu
-        let commentsPerPage = 2; // Kaç yorum gösterilecek (2'şer)
-        let currentIndex = 0; // Şu an gösterilen yorum sayısı
-
-        function showNextComments() {
-            let nextIndex = currentIndex + commentsPerPage;
-            for (let i = currentIndex; i < nextIndex && i < comments.length; i++) {
-                comments[i].style.display = "block"; // Yorumları göster
-            }
-            currentIndex = nextIndex;
-
-            if (currentIndex >= comments.length) {
-                loadMoreBtn.style.display = "none"; // Tüm yorumlar gösterildiyse butonu gizle
-            }
-        }
-
-        // Eğer yorum yoksa "Devamını Gör" butonunu gizle
-        if (comments.length === 0) {
-            loadMoreBtn.style.display = "none";
-        } else {
-            // Başlangıçta tüm yorumları gizle
-            comments.forEach(comment => comment.style.display = "none");
-
-            // İlk 2 yorumu göster
-            showNextComments();
-        }
-
-        // Butona tıklanınca yeni yorumları göster
-        loadMoreBtn.addEventListener("click", function (event) {
-            event.preventDefault();
-            showNextComments();
-        });
-    });
-});
-</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
     let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç

@@ -863,7 +863,22 @@ def create_blog(request):
         content_products = request.POST.getlist("content_product[]")
 
         # Resimleri doğru sıraya almak için
+        content_ids = request.POST.getlist("content_id[]")
+        existing_image_ids = request.POST.getlist("existing_content_image[]")
         content_images_raw = request.FILES.getlist("content_image[]")
+        image_index = 0
+        for i in range(len(content_ids)):
+            content_id = content_ids[i]
+            image = None
+
+            # image type ise işlem yap
+            if content_types[i] == "image":
+                if image_index < len(content_images_raw):
+                    image = content_images_raw[image_index]
+                    image_index += 1
+                elif content_id and content_id != "new":
+                    old_content = BlogContent.objects.filter(id=content_id).first()
+                    image = old_content.image if old_content else None
         content_images = []  
         image_index = 0  
 
@@ -910,56 +925,68 @@ def edit_blog(request, slug):
         blog_.short_description = request.POST.get("short_description", "")
         blog_.author = request.POST.get("author", "")
 
-        if "media" in request.FILES:
+        if request.FILES.get("media"):
             blog_.media = request.FILES["media"]
-        if "media_extra" in request.FILES:
+        if request.FILES.get("media_extra"):
             blog_.media_extra = request.FILES["media_extra"]
 
-        blog_.slug = slugify(blog_.title)
+        # Benzersiz slug oluştur
+        base_slug = slugify(blog_.title)
+        slug = base_slug
+        counter = 1
+        while Blog.objects.filter(slug=slug).exclude(pk=blog_.pk).exists():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+        blog_.slug = slug
 
+        # Kategori ve ürünler
         extra_category_ids = request.POST.getlist("extra_categories[]")
         blog_.extra_categories.set(extra_category_ids)
 
-        # **Product Güncelleme**
         product_id = request.POST.get("product")
         blog_.product = Product.objects.get(id=product_id) if product_id else None
 
-        # **Extra Product Güncelleme**
         extra_product_ids = request.POST.getlist("extra_product[]")
         blog_.extra_product.set(extra_product_ids)
 
-
         blog_.save()
 
-        # **1️⃣ Önce Bu Bloga Ait Tüm İçerikleri Siliyoruz**
-        BlogContent.objects.filter(blog=blog_).delete()
-
-        # **2️⃣ Formdan Gelen Yeni İçerikleri Kaydediyoruz**
+        # İçerik verileri
+        content_ids = request.POST.getlist("content_id[]")
         content_types = request.POST.getlist("content_type[]")
         content_texts = request.POST.getlist("content_text[]")
         content_videos = request.POST.getlist("content_video[]")
         content_products = request.POST.getlist("content_product[]")
-
-        # Resimleri doğru sıraya almak için
+        content_orders = request.POST.getlist("content_order[]")
+        existing_image_ids = request.POST.getlist("existing_content_image[]")
         content_images_raw = request.FILES.getlist("content_image[]")
-        content_images = []  
-        image_index = 0  
 
-        for content_type in content_types:
-            if content_type == "image" and image_index < len(content_images_raw):
-                content_images.append(content_images_raw[image_index])
-                image_index += 1
-            else:
-                content_images.append(None)  # Diğer türlerde image boş olmalı
+        # Eski içerikleri silmeden önce yedekle
+        old_contents = {str(content.id): content for content in BlogContent.objects.filter(blog=blog_)}
 
-        order = 1
-        for i in range(len(content_types)):
+        # Tüm içerikleri sil
+        BlogContent.objects.filter(blog=blog_).delete()
+
+        # Görsel sıralaması için index
+        image_index = 0
+
+        for i in range(len(content_ids)):
+            content_id = content_ids[i]
             content_type = content_types[i]
             text = content_texts[i] if len(content_texts) > i else None
-            image = content_images[i] if len(content_images) > i else None
             video = content_videos[i] if len(content_videos) > i else None
             product_id = content_products[i] if len(content_products) > i and content_products[i] else None
             product = Product.objects.get(id=product_id) if product_id else None
+            order = int(content_orders[i]) if len(content_orders) > i else i + 1
+
+            # Görsel işle
+            image = None
+            if content_type == "image":
+                if image_index < len(content_images_raw):
+                    image = content_images_raw[image_index]
+                    image_index += 1
+                elif content_id != "new" and content_id in old_contents:
+                    image = old_contents[content_id].image
 
             BlogContent.objects.create(
                 blog=blog_,
@@ -970,12 +997,16 @@ def edit_blog(request, slug):
                 video=video,
                 product=product
             )
-            order += 1
 
         return redirect("tuerny_app:blog_detail", slug=blog_.slug)
-    s_category = SubCategory.objects.all()
-    return render(request, "tuerny_app/blog_edit.html", {"blog_": blog_,"s_cat": s_category, "contents": blog_.contents.all(), "products": Product.objects.all()})
 
+    s_category = SubCategory.objects.all()
+    return render(request, "tuerny_app/blog_edit.html", {
+        "blog_": blog_,
+        "s_cat": s_category,
+        "contents": blog_.contents.all(),
+        "products": Product.objects.all()
+    })
 
 def password_reset_confirm(request, uidb64, token):
     try:
