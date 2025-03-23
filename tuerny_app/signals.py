@@ -1,9 +1,13 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save,pre_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from .utils import send_verification_email  # Fonksiyonu içeri aktar
-from .models import Comment, UserSettings
+from .utils import send_verification_email, HtmlEmailThread
+from .models import Comment, UserSettings, Notification, Question
 from django.core.mail import send_mail
+from django.urls import reverse
+from django.conf import settings
+
+
 User = get_user_model()
 
 @receiver(post_save, sender=User)
@@ -12,38 +16,47 @@ def send_verification_email_signal(sender, instance, created, **kwargs):
         send_verification_email(instance)
 
 
-@receiver(post_save, sender=Comment)
-def notify_question_comment(sender, instance, created, **kwargs):
-    """
-    Bir soru için yeni yorum yapıldığında, sorunun sahibine bildirim ve e-posta gönder.
-    """
-    if created and instance.question:  # Eğer yorum bir soru ile ilişkiliyse
-        question = instance.question
-        user = question.user  # Soruyu soran kullanıcı
-
+@receiver(pre_save, sender=Question)
+def cache_old_status(sender, instance, **kwargs):
+    if instance.pk:
         try:
-            settings = user.settings  # Kullanıcının bildirim ayarlarını al
-        except UserSettings.DoesNotExist:
-            return  # Kullanıcının ayarları yoksa işlemi durdur
+            old_instance = Question.objects.get(pk=instance.pk)
+            instance._old_status = old_instance.status
+        except Question.DoesNotExist:
+            instance._old_status = None
 
-        # **1️⃣ Bildirim Gönder**
-        # if settings.notify_question_answers:  # Yorumlar için bildirim alma ayarı açıksa
-        #     Notification.objects.create(
-        #         user=user,
-        #         content_type=ContentType.objects.get_for_model(Comment),
-        #         object_id=instance.id,
-        #         message=f"{instance.user.username} soruna yorum yaptı.",
-        #     )
+# ✅ Onay geçişi varsa bildirimi gönder
+@receiver(post_save, sender=Question)
+def send_question_approval_notification(sender, instance, created, **kwargs):
+    if created:
+        return  # yeni oluşturulduysa değil
 
-        # **2️⃣ E-posta Gönder**
-        if settings.email_question_answers and user.email:  # Yorumlar için e-posta alma ayarı açıksa
-            subject = "Soruna Yeni Bir Yorum Yapıldı"
-            
-            
-            send_mail(
-                subject,
-                "Soruna Yeni Bir Yorum Yapıldı",
-                "furkanp2002@gmail.com",
-                [user.email],
-                fail_silently=False,
-            )
+    if hasattr(instance, "_old_status") and instance._old_status != "approved" and instance.status == "approved":
+        user = instance.user
+
+        if hasattr(user, "settings"):
+
+            # 🔔 Bildirim tercihi varsa
+            if user.settings.notify_question_approval:
+                Notification.objects.create(
+                    user=user,
+                    content=f"'{instance.title}' başlıklı sorunuz onaylandı.",
+                    url=reverse("tuerny_app:ask", kwargs={"question_id": instance.id}),
+                    notification_type="question_approval"
+                )
+
+            # 📧 E-posta tercihi varsa
+            if user.settings.email_question_approval:
+                context = {
+                    "user": user,
+                    "question": instance,
+                    "question_url": f"{settings.FRONTEND_URL}/ask/{instance.id}"
+                }
+
+                HtmlEmailThread(
+                    subject="Sorunuz Onaylandı!",
+                    template_name="email/question_approval.html",
+                    context=context,
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    to=user.email
+                ).start()

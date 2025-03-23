@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion, Product, BlogContent, ContactMessage
+from .models import Poll, Blog, SubCategory, Question, MainCategory, SuggestedBlog, CategorySuggestedBlog, APISettings, PollOption, Comment, MainSuggestedBlog, SavedBlog, UserSettings, CustomUser, SuggestedQuestion, Product, BlogContent, ContactMessage, Notification
 from django.contrib.auth import authenticate, login as auth_login,update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import logout
+from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from itertools import chain
@@ -134,26 +135,55 @@ def add_blog_comment(request):
     return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs})
 
 def add_comment(request):
-    
     if request.method == "POST":
-        question_id = request.POST.get("type_id")  # Formdaki `type_id`, `Question` ID'sini tutuyor
-        
+        question_id = request.POST.get("type_id")
         content = request.POST.get("content")
-        anonymous = request.POST.get("hidden_user_name") == "on"  # Checkbox "on" olarak gelir
+        anonymous = request.POST.get("hidden_user_name") == "on"
 
-        # 🔹 Sorunun var olup olmadığını kontrol et
+        # 🔹 Soru kontrolü
         question = get_object_or_404(Question, id=question_id)
 
-        # 🔹 Yorum ekle
+        # 🔹 Yorumu oluştur
         comment = Comment.objects.create(
             question=question,
             user=request.user,
             content=content,
             anonymous=anonymous
         )
-        
-        return redirect("tuerny_app:ask", question_id = question_id)
-        
+
+        # 🔔 Bildirim ve 📧 e-posta göndermek için hedef kullanıcı (soru sahibi)
+        receiver = question.user
+
+        if receiver != request.user:  # Kendine bildirim gitmesin
+            # 🔔 Site içi bildirim ayarı varsa
+            if hasattr(receiver, "settings") and receiver.settings.notify_question_comments:
+                Notification.objects.create(
+                    user=receiver,
+                    content=f"'{question.title}' başlıklı soruna bir yorum yapıldı.",
+                    url=reverse("tuerny_app:ask", kwargs={"question_id": question.id}),
+                    notification_type="question_comment"
+                )
+
+            # 📧 E-posta bildirimi ayarı varsa
+            if hasattr(receiver, "settings") and receiver.settings.email_question_comments:
+                context = {
+                    "user": receiver,
+                    "question": question,
+                    "comment": comment,
+                    "question_url": request.build_absolute_uri(
+                        reverse("tuerny_app:ask", kwargs={"question_id": question.id})
+                    )
+                }
+
+                HtmlEmailThread(
+                    subject="Soruna Yorum Yapıldı",
+                    template_name="email/question_comment.html",
+                    context=context,
+                    from_email='furkanp2002@gmail.com',
+                    to=receiver.email
+                ).start()
+
+        return redirect("tuerny_app:ask", question_id=question_id)
 
     return JsonResponse({"status": "error", "message": "Geçersiz istek!"}, status=400)
 
@@ -507,31 +537,60 @@ def logout_view(request):
 
 
 def vote_poll(request, question_id, option_id):
-    """
-    Kullanıcı yeni oy verirse ekler, eski oyunu değiştirmek isterse günceller.
-    """
     if request.method == "POST" and request.user.is_authenticated:
         question = get_object_or_404(Question, id=question_id)
+        poll = question.poll
+        poll_owner = question.user
 
-        # Kullanıcının bu anket için önceki oyunu var mı?
-        previous_vote = PollOption.objects.filter(poll=question.poll, voted_users=request.user).first()
-
-        # Eğer daha önce oy verdiyse eski oyunu kaldır
+        # Önceki oyunu kaldır
+        previous_vote = PollOption.objects.filter(poll=poll, voted_users=request.user).first()
         if previous_vote:
             previous_vote.voted_users.remove(request.user)
 
-        # Yeni oyu ekle
+        # Yeni oy ekle
         new_option = get_object_or_404(PollOption, id=option_id)
         new_option.voted_users.add(request.user)
 
         # Toplam oyları tekrar hesapla
-        total_votes = sum(option.vote_count for option in question.poll.options.all())
+        total_votes = sum(option.vote_count for option in poll.options.all())
 
-        # Yüzdelik oranları tekrar hesapla
+        # Yüzdelik oranları hesapla
         percentages = {
             option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
-            for option in question.poll.options.all()
+            for option in poll.options.all()
         }
+
+        # 🔔 Site içi bildirim & ✉️ Mail
+        if poll_owner != request.user and hasattr(poll_owner, "settings"):
+            # 🔔 Site içi bildirim
+            if poll_owner.settings.notify_poll_votes:
+                Notification.objects.create(
+                    user=poll_owner,
+                    content=f"'{question.title}' başlıklı anketine yeni bir oy verildi.",
+                    url=reverse("tuerny_app:ask", kwargs={"question_id": question.id}),
+                    notification_type="poll_vote"
+                )
+
+            # ✉️ E-posta kontrolü
+            if poll_owner.settings.email_poll_votes:
+                if total_votes % 10 != 0 or total_votes % 50 != 0:
+                    context = {
+                        "user": poll_owner,
+                        "question": question,
+                        "poll": poll,
+                        "total_votes": total_votes,
+                        "question_url": request.build_absolute_uri(
+                            reverse("tuerny_app:ask", kwargs={"question_id": question.id})
+                        )
+                    }
+
+                    HtmlEmailThread(
+                        subject="Anketine Oy Verildi!",
+                        template_name="email/question_comment.html",
+                        context=context,
+                        from_email="furkanp2002@gmail.com",
+                        to=poll_owner.email
+                    ).start()
 
         return JsonResponse({
             "success": True,
@@ -572,33 +631,50 @@ def save_blog(request):
 
 
 def like_question(request, question_id):
-    """
-    Kullanıcı bir soruyu beğenirse ekler, tekrar basarsa beğeniyi kaldırır.
-    Eğer kullanıcı daha önce beğenmediyse ve beğenmediyse, beğenme işlemi yapılır.
-    """
-    print("✅ FP: Fonksiyon çalıştı")
-    
     if request.method == "POST":
-        print("✅ FP: POST isteği geldi")
-
         if request.user.is_authenticated:
-            print(f"✅ FP: Kullanıcı giriş yapmış - {request.user}")
-
             question = get_object_or_404(Question, id=question_id)
-            print(f"✅ FP: Soru bulundu - {question.title}")
 
             if request.user in question.likes.all():
                 question.likes.remove(request.user)
                 liked = False
-                print("✅ FP: Kullanıcı beğeniyi kaldırdı")
             else:
                 question.likes.add(request.user)
-                question.dislikes.remove(request.user)  # Beğenmediyse önceki beğenmeyi kaldır
+                question.dislikes.remove(request.user)
                 liked = True
-                print("✅ FP: Kullanıcı beğendi")
 
-            print(f"✅ FP: Güncel beğeni sayısı: {question.like_count}")
-            print(f"✅ FP: Güncel beğenmeme sayısı: {question.dislike_count}")
+                # 🔔 Bildirim & Mail
+                receiver = question.user
+                if receiver != request.user and hasattr(receiver, "settings"):
+                    # 🔔 Bildirim ayarı açıksa
+                    if receiver.settings.notify_question_votes:
+                        Notification.objects.create(
+                            user=receiver,
+                            content=f"'{question.title}' başlıklı sorun beğenildi.",
+                            url=reverse("tuerny_app:ask", kwargs={"question_id": question.id}),
+                            notification_type="question_vote"
+                        )
+
+                    # 📧 E-posta eşik kontrolü
+                    like_count = question.like_count
+                    if receiver.settings.email_question_votes:
+                        if like_count % 10 == 0 or like_count % 50 == 0:
+                            context = {
+                                "user": receiver,
+                                "question": question,
+                                "like_count": like_count,
+                                "question_url": request.build_absolute_uri(
+                                    reverse("tuerny_app:ask", kwargs={"question_id": question.id})
+                                )
+                            }
+
+                            HtmlEmailThread(
+                                subject="Sorun Beğeniliyor!",
+                                template_name="emails/question_like_milestone.html",
+                                context=context,
+                                from_email=settings.DEFAULT_FROM_EMAIL,
+                                to=receiver.email
+                            ).start()
 
             return JsonResponse({
                 "success": True,
@@ -606,28 +682,51 @@ def like_question(request, question_id):
                 "like_count": question.like_count,
                 "dislike_count": question.dislike_count
             })
-        else:
-            print("❌ FP: Kullanıcı giriş yapmamış!")
-            return JsonResponse({"success": False, "message": "Giriş yapmalısınız!"})
-    else:
-        print("❌ FP: GET isteği geldi, işlem yapılmadı!")
-        return JsonResponse({"success": False, "message": "Geçersiz istek!"})
-    
+
+        return JsonResponse({"success": False, "message": "Giriş yapmalısınız!"})
+    return JsonResponse({"success": False, "message": "Geçersiz istek!"})
 def dislike_question(request, question_id):
-    """
-    Kullanıcı bir soruyu beğenmezse ekler, tekrar basarsa kaldırır.
-    Eğer kullanıcı daha önce beğendiyse, beğenisini kaldırır ve beğenmeyi ekler.
-    """
     if request.method == "POST" and request.user.is_authenticated:
         question = get_object_or_404(Question, id=question_id)
-        
+
         if request.user in question.dislikes.all():
             question.dislikes.remove(request.user)
             disliked = False
         else:
             question.dislikes.add(request.user)
-            question.likes.remove(request.user)  # Önceki beğeniyi kaldır
+            question.likes.remove(request.user)
             disliked = True
+
+            # 🔔 Bildirim & Mail
+            receiver = question.user
+            if receiver != request.user and hasattr(receiver, "settings"):
+                if receiver.settings.notify_question_votes:
+                    Notification.objects.create(
+                        user=receiver,
+                        content=f"'{question.title}' başlıklı sorun beğenilmedi.",
+                        url=reverse("tuerny_app:ask", kwargs={"question_id": question.id}),
+                        notification_type="question_vote"
+                    )
+
+                dislike_count = question.dislike_count
+                if receiver.settings.email_question_votes:
+                    if dislike_count % 10 == 0 or dislike_count % 50 == 0:
+                        context = {
+                            "user": receiver,
+                            "question": question,
+                            "dislike_count": dislike_count,
+                            "question_url": request.build_absolute_uri(
+                                reverse("tuerny_app:ask", kwargs={"question_id": question.id})
+                            )
+                        }
+
+                        HtmlEmailThread(
+                            subject="Sorun Beğenilmedi!",
+                            template_name="emails/question_dislike_milestone.html",
+                            context=context,
+                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            to=receiver.email
+                        ).start()
 
         return JsonResponse({
             "success": True,
@@ -637,7 +736,6 @@ def dislike_question(request, question_id):
         })
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"})
-
 
 @login_required
 def update_settings(request):
@@ -837,6 +935,7 @@ def verify_email(request, token):
         user = User.objects.get(email=email)
         user.is_email_verified = True
         user.save()
+        return redirect("tuerny_app:index")
         return JsonResponse({"message": "E-posta doğrulandı!"}, status=200)
     except User.DoesNotExist:
         return JsonResponse({"message": "Kullanıcı bulunamadı!"}, status=404)
