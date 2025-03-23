@@ -199,10 +199,9 @@
                           </td>
                           <td class="text-end">
                               <div class="form-switch">
-                                
-                                <input class="form-check-input setting-toggle" type="checkbox" 
-                                id="email_newsletter" data-setting="email_newsletter"
-                                {% if user_settings.email_newsletter %}checked{% endif %}>
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_newsletter" data-setting="email_newsletter"
+                                         {% if user_settings.email_newsletter %}checked{% endif %}>
                               </div>
                           </td>
                       </tr>
@@ -217,22 +216,32 @@
                           </td>
                       </tr>
                       <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Cevapları</td>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Yorumları</td>
                           <td class="text-end">
                               <div class="form-switch">
                                   <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="email_question_answers" data-setting="email_question_answers"
-                                         {% if user_settings.email_question_answers %}checked{% endif %}>
+                                         id="email_question_comments" data-setting="email_question_comments"
+                                         {% if user_settings.email_question_comments %}checked{% endif %}>
                               </div>
                           </td>
                       </tr>
                       <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Cevapları</td>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Onayları</td>
                           <td class="text-end">
                               <div class="form-switch">
                                   <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="email_comment_replies" data-setting="email_comment_replies"
-                                         {% if user_settings.email_comment_replies %}checked{% endif %}>
+                                         id="email_question_approval" data-setting="email_question_approval"
+                                         {% if user_settings.email_question_approval %}checked{% endif %}>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Anket Oylamaları</td>
+                          <td class="text-end">
+                              <div class="form-switch">
+                                  <input class="form-check-input setting-toggle" type="checkbox" 
+                                         id="email_poll_votes" data-setting="email_poll_votes"
+                                         {% if user_settings.email_poll_votes %}checked{% endif %}>
                               </div>
                           </td>
                       </tr>
@@ -243,16 +252,6 @@
                                   <input class="form-check-input setting-toggle" type="checkbox" 
                                          id="email_security_alerts" data-setting="email_security_alerts"
                                          {% if user_settings.email_security_alerts %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Tepkileri</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="email_comment_reactions" data-setting="email_comment_reactions"
-                                         {% if user_settings.email_comment_reactions %}checked{% endif %}>
                               </div>
                           </td>
                       </tr>
@@ -269,156 +268,90 @@
                   </tbody>
               </table>
 
-                <!-- <table class="table">
-                  <thead>
-                    <tr>
-                      <th
-                        style="
-                          font-family: Roboto;
-                          font-size: 16px;
-                          font-weight: 400;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        SMS
-                      </th>
-                      <th style="text-align: right"></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Bildiri ve Kampanyalar
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="smsOption1"
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        style="
-                          color: #989491;
-                          font-family: Poppins;
-                          font-size: 16px;
-                          font-weight: 300;
-                          line-height: 20.8px;
-                          text-align: left;
-                        "
-                      >
-                        Hesap Güvenliği
-                      </td>
-                      <td class="text-end">
-                        <div class="form-switch">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            id="smsOption2"
-                            checked
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table> -->
+               
 
-                <table class="table">
-                  <thead>
-                      <tr>
-                          <th style="font-family: Roboto; font-size: 16px; font-weight: 400; line-height: 20.8px; text-align: left;">
-                              Bildirimler
-                          </th>
-                          <th style="text-align: right"></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Bildiri ve Kampanyalar</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_campaigns" data-setting="notify_campaigns"
-                                         {% if user_settings.notify_campaigns %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Gündemdekiler</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_trending" data-setting="notify_trending"
-                                         {% if user_settings.notify_trending %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Oylamaları</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_question_votes" data-setting="notify_question_votes"
-                                         {% if user_settings.notify_question_votes %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Cevapları</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_question_answers" data-setting="notify_question_answers"
-                                         {% if user_settings.notify_question_answers %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Cevapları</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_comment_replies" data-setting="notify_comment_replies"
-                                         {% if user_settings.notify_comment_replies %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Yorum Tepkileri</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_comment_reactions" data-setting="notify_comment_reactions"
-                                         {% if user_settings.notify_comment_reactions %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                      <tr>
-                          <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Hesap Güvenliği</td>
-                          <td class="text-end">
-                              <div class="form-switch">
-                                  <input class="form-check-input setting-toggle" type="checkbox" 
-                                         id="notify_security_alerts" data-setting="notify_security_alerts"
-                                         {% if user_settings.notify_security_alerts %}checked{% endif %}>
-                              </div>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th style="font-family: Roboto; font-size: 16px; font-weight: 400; line-height: 20.8px; text-align: left;">
+                            Bildirimler
+                        </th>
+                        <th style="text-align: right"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Bildiri ve Kampanyalar</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_campaigns" data-setting="notify_campaigns"
+                                       {% if user_settings.notify_campaigns %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Gündemdekiler</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_trending" data-setting="notify_trending"
+                                       {% if user_settings.notify_trending %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Oylamaları</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_question_votes" data-setting="notify_question_votes"
+                                       {% if user_settings.notify_question_votes %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Yorumları</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_question_comments" data-setting="notify_question_comments"
+                                       {% if user_settings.notify_question_comments %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Soru Onayları</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_question_approval" data-setting="notify_question_approval"
+                                       {% if user_settings.notify_question_approval %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Anket Oylamaları</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_poll_votes" data-setting="notify_poll_votes"
+                                       {% if user_settings.notify_poll_votes %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #989491; font-family: Poppins; font-size: 16px; font-weight: 300; line-height: 20.8px; text-align: left;">Hesap Güvenliği</td>
+                        <td class="text-end">
+                            <div class="form-switch">
+                                <input class="form-check-input setting-toggle" type="checkbox" 
+                                       id="notify_security_alerts" data-setting="notify_security_alerts"
+                                       {% if user_settings.notify_security_alerts %}checked{% endif %}>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
               </div>
             </div>
           </div>

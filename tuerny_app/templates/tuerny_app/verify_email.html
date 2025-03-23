@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+      <div class="container py-5 ops-container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-6">
+                <div class="mt-4 d-flex flex-column gap-3">
+                    <div>
+                        <div class="row justify-content-center align-items-center ops-text">
+                            <div class="col-12 col-md-auto">
+                                <i style="
+                            font-size: 50px;
+                            color: var(--teurny-1);
+                            font-weight: 200;
+                          ">Mailiniz doğrulanmamış!!</i>
+                            </div>
+                            
+                        </div>
+                        <div class="py-5 text-center">
+                            
+                            <p class="fw-light">Mailinizi Doğrulamak İçin Aşağıdaki Butona Tıklayınız...</p>
+                        </div>
+                        <a style="text-align: center" href="{% url 'tuerny_app:verify_email_page' %}" class="tuerny-button-third">Mail Doğrulama Linki Göbder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="/search">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+{% endblock content %}
+      

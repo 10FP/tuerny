@@ -24,6 +24,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import get_backends
 # Create your views here.
 User = get_user_model()
+from .utils import generate_email_verification_token, HtmlEmailThread
 
 
 
@@ -805,7 +806,27 @@ def toggle_favorite_subcategory(request, subcategory_id):
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=400)
 
+def verify_email_page(request):
+    send_verification_email(request.user)
+    return render(request, 'tuerny_app/verify_email.html')
 
+def send_verification_email(user):
+    token = generate_email_verification_token(user.email)
+    verification_link = f"http://172.20.10.2:8000/verify-email/{token}"
+
+    context = {
+        "user": user,
+        "verification_link": verification_link,
+        "user": user
+    }
+
+    HtmlEmailThread(
+        subject="E-posta Adresinizi Doğrulayın",
+        template_name="email/verify_email.html",
+        context=context,
+        from_email='furkanp2002@gmail.com',
+        to=user.email
+    ).start()
 
 def verify_email(request, token):
     email = verify_email_token(token)

@@ -350,11 +350,10 @@ document.addEventListener('DOMContentLoaded', function () {
           
             <!-- Dropdown Menü (Başlangıçta Gizli) -->
             <ul id="dropdownMenu" class="dropdown-menu-custom">
-              <li><a href="#">Bildirim</a></li>
-              <li><a href="#">Bildirim</a></li>
-              <li><a href="#">Bildirim</a></li>
-              <li><a href="#">Bildirim</a></li>
-              <li><a href="#">Bildirim</a></li>
+              {% for n in request.user.notifications.all %}
+              <li><a href="{{n.url}}">{{n.content}}</a></li>
+              {% endfor %}
+              
               </li>
           </ul>
           
@@ -842,7 +841,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     <i class="fa-regular fa-bell"></i>
                   </button>
                   <ul class="dropdown-menu header-bell-drop">
-                    <li>testS</li>
+              {% for n in request.user.notifications.all %}
+                    <a href="{{n.url}}">
+                    <li>{{n.content}}</li>
+                  </a>
+                    {% endfor %}
                   </ul>
                 </div>
               </div>
