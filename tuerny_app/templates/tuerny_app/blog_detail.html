@@ -33,6 +33,9 @@
         #player-container {
             margin-top: -30px;
         }
+        .blog-comment {
+            margin-top: 50px;
+        }
         
     }
 </style>
@@ -573,10 +576,15 @@ color: #8F4D61;">Teurny Önerileri</span>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+    const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
     const commentForm = document.querySelector(".ajaxFormTrue");
 
     if (commentForm) {
         commentForm.addEventListener("submit", function (e) {
+            if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
             e.preventDefault(); // Sayfanın yenilenmesini engelle
 
             let formData = new FormData(commentForm); // Form verilerini al

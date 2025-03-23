@@ -3,6 +3,12 @@
 {% load math_filters %}
 {% block content %}
 <style>
+    .question-card-comments .ajaxFormTrue{
+                display: none !important;
+            }
+            .question-card {
+                padding: 34px 16px 0px 16px;
+            }
         @media screen and (max-width: 720px) {
             .gap-c {
                 gap: 0.2rem !important;
@@ -15,7 +21,7 @@
                 padding-bottom: 0.2rem !important;
             }
             div.d-flex.align-items-center.ps-3 {
-                padding-left: 0 !important;
+                padding-left: 0.2rem !important;
             }
             div.container.py-5 h1{
                 display: block !important;
@@ -410,6 +416,7 @@
 
 <script>
       document.addEventListener("DOMContentLoaded", function () {
+        const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
         console.log("🔄 Sıralama Scripti Yüklendi!");
     
         function initLikeAndVoteScripts() {
@@ -418,6 +425,10 @@
             // Beğeni Butonu
             document.querySelectorAll(".like-button").forEach(button => {
                 button.addEventListener("click", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
                     let questionId = this.dataset.id;
                     let csrfToken = "{{ csrf_token }}";
     
@@ -452,6 +463,10 @@
             // Beğenmeme Butonu
             document.querySelectorAll(".dislike-button").forEach(button => {
                 button.addEventListener("click", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
                     let questionId = this.dataset.id;
                     let csrfToken = "{{ csrf_token }}";
     
@@ -488,6 +503,10 @@
             // Oylama Butonu (Anket için)
             document.querySelectorAll("input[type=radio]").forEach(radio => {
                 radio.addEventListener("change", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
                     let questionId = this.name.split("_")[1]; // "vote_3" -> "3"
                     let optionId = this.value;
                     let csrfToken = "{{ csrf_token }}";
@@ -528,6 +547,10 @@
         // **Sıralama Değişince Yeni İçeriği Yükle ve Script'i Yeniden Çalıştır**
         document.querySelectorAll(".sort-option").forEach(option => {
             option.addEventListener("click", function (event) {
+                if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
                 event.preventDefault();
                 let selectedSort = this.dataset.sort;
     

@@ -1089,7 +1089,8 @@ input[name="argument"]:checked + label {
     padding-bottom: 1.2rem !important;
   }
   .teurny-footer-btn {
-    font-size: 14px;
+    font-size: 14px !important;
+    font-weight: 300;
   }
   
   .ask-detail-container .ask-detail-row .question-card .question-card-comments {
