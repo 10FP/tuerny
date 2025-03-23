@@ -12,8 +12,14 @@
   }
   .login .logincont .google:hover i, 
 .login .logincont .apple:hover i {
-    color: white;  /* İstediğin rengi buraya yaz */
+    color: white; 
 }
+    @media screen and (max-width: 720px) {
+    .contract-text {
+      display: block !important;
+    }
+    }
+
 </style>
 <div class="container-fluid login">
   <div class="container">
@@ -40,9 +46,9 @@
 
                   <div class="form-check vCheckRequired hstack gap-2 align-items-stretch">
                       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <label class="form-check-label contract-text" for="flexCheckDefault">
                           <a href="{% url 'tuerny_app:contract' %}" target="_blank"> Üyelik sözleşmesi &
-                              gizlilik politikasını </a> okudum ve kabul ediyorum.
+                              gizlilik politikasını</a> okudum ve kabul ediyorum.
                       </label>
                       <!-- <div>
                           <label for="flexCheckDefault"

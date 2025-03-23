@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" integrity="sha512-17EgCFERpgZKcm0j0fEq1YCJuyAWdz9KUtv1EjVuaOz8pDnh/0nZxmU6BBXwaaxqoi9PQXnRWqlcDB027hgv9A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.2.0/magnific-popup.min.css" integrity="sha512-lvaVbvmbHhG8cmfivxLRhemYlTT60Ly9Cc35USrpi8/m+Lf/f/T8x9kEIQq47cRj1VQIFuxTxxCcvqiQeQSHjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
@@ -137,7 +137,7 @@
 
     <div class="cookie-option">
       <label>
-        <input type="checkbox" id="analytics" />
+        <input type="checkbox" id="analytics" checked/>
         <strong>Analitik Çerezler</strong>
         <p>Bu çerezler, sizi anlamamıza yardım eden veriler sağlar. Sitemizi iyileştirmemizi sağlarlar.</p>
       </label>
@@ -145,7 +145,7 @@
 
     <div class="cookie-option">
       <label>
-        <input type="checkbox" id="marketing" />
+        <input type="checkbox" id="marketing" checked/>
         <strong>Pazarlama Çerezleri</strong>
         <p>Size özel teklifler, reklamlar ve deneyimler sunmamıza yardımcı olur.</p>
       </label>
@@ -153,7 +153,7 @@
 
     <div class="cookie-option">
       <label>
-        <input type="checkbox" id="functional" />
+        <input type="checkbox" id="functional" checked/>
         <strong>İşlevsel Çerezler</strong>
         <p>Tercihlerinizi hatırlamamızı ve deneyiminizi kişiselleştirmemizi sağlar.</p>
       </label>
@@ -186,14 +186,27 @@
 }
 
 .cookie-banner h2 {
-  font-size: 22px;
+  font-size: 16px;
   margin-bottom: 10px;
+  font-family: 'Roboto';
+  font-weight: 500;
+  color: white;
 }
 
 .cookie-banner p {
   font-size: 15px;
-  line-height: 1.6;
-  color: #ccc;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+.cookie-banner p strong {
+  font-size: 15px;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+  text-decoration: underline;
 }
 
 .cookie-banner a {
@@ -214,12 +227,21 @@
 .cookie-option input[type="checkbox"] {
   margin-right: 10px;
   transform: scale(1.2);
+  accent-color: white;
 }
 
 .cookie-option p {
   margin: 5px 0 0 28px;
   font-size: 14px;
-  color: #aaa;
+  color: #fff;
+  font-weight: 300;
+  font-family: 'Roboto';
+}
+.cookie-option strong {
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .cookie-buttons {
