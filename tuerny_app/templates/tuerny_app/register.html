@@ -28,6 +28,20 @@
           <div class="d-flex mb-3">
 
               <div class="ms-auto me-auto logincont">
+                {% if messages %}
+                        {% for message in messages %}
+                        {% if 'success' in message.tags %}
+                            
+
+                                    {% else %}
+                                    <div class="alert alert-danger">
+                                    <p>{{ message }}</p>
+
+                                    
+                            </div>
+                            {% endif %}
+                                {% endfor %}
+                        {% endif %}
                   <h2>ÜYE OL</h2>
 
                   <input type="email" class="form-control vRequired" name="mail" placeholder="E-Posta">

@@ -26,7 +26,7 @@ from django.contrib.auth import get_backends
 # Create your views here.
 User = get_user_model()
 from .utils import generate_email_verification_token, HtmlEmailThread
-
+from datetime import datetime, date
 
 
 
@@ -179,7 +179,7 @@ def add_comment(request):
                     subject="Soruna Yorum Yapıldı",
                     template_name="email/question_comment.html",
                     context=context,
-                    from_email='furkanp2002@gmail.com',
+                    from_email='no-reply@teurny.com',
                     to=receiver.email
                 ).start()
 
@@ -253,6 +253,24 @@ def register(request):
         print("gender", gender)
         password = request.POST.get('password')
         password_again = request.POST.get('password_again')
+
+
+        if not birth_date:
+            messages.error(request, "Doğum tarihi zorunludur!")
+            return render(request, 'tuerny_app/register.html')
+
+        # Yaş kontrolü
+        try:
+            birth_date_obj = datetime.strptime(birth_date, "%Y-%m-%d").date()
+            today = date.today()
+            age = today.year - birth_date_obj.year - ((today.month, today.day) < (birth_date_obj.month, birth_date_obj.day))
+
+            if age < 18:
+                messages.error(request, "18 yaşından küçükler kayıt olamaz.")
+                return render(request, 'tuerny_app/register.html')
+        except ValueError:
+            messages.error(request, "Geçerli bir doğum tarihi girin.")
+            return render(request, 'tuerny_app/register.html')
         
         # Temel validasyon
         if not email or not username or not password or not password_again:
@@ -283,7 +301,7 @@ def register(request):
         )
         user.password = make_password(password)  # Şifreyi hash'le
         user.save()
-
+        login(request, user)
         messages.success(request, "Kayıt başarılı! Giriş yapabilirsiniz.")
         return render(request, 'tuerny_app/login.html')  # Başarılı işlem sonrası login sayfasına yönlendirme
     return render(request, 'tuerny_app/register.html') 
@@ -586,7 +604,7 @@ def vote_poll(request, question_id, option_id):
 
                     HtmlEmailThread(
                         subject="Anketine Oy Verildi!",
-                        template_name="email/question_comment.html",
+                        template_name="email/poll_vote_milestone.html",
                         context=context,
                         from_email="furkanp2002@gmail.com",
                         to=poll_owner.email
@@ -670,7 +688,7 @@ def like_question(request, question_id):
 
                             HtmlEmailThread(
                                 subject="Sorun Beğeniliyor!",
-                                template_name="emails/question_like_milestone.html",
+                                template_name="email/question_like_milestone.html",
                                 context=context,
                                 from_email=settings.DEFAULT_FROM_EMAIL,
                                 to=receiver.email
@@ -722,9 +740,9 @@ def dislike_question(request, question_id):
 
                         HtmlEmailThread(
                             subject="Sorun Beğenilmedi!",
-                            template_name="emails/question_dislike_milestone.html",
+                            template_name="email/question_dislike_milestone.html",
                             context=context,
-                            from_email=settings.DEFAULT_FROM_EMAIL,
+                            from_email="furkanp2002@gmail.com",
                             to=receiver.email
                         ).start()
 
