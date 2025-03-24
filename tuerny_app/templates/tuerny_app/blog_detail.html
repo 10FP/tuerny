@@ -36,6 +36,10 @@
         .blog-comment {
             margin-top: 50px;
         }
+        .blog-comment-item .blog-comment-item-author {
+      margin-bottom: 10px !important;
+      margin-top: 10px !important;
+    }
         
     }
     @media screen and (max-width: 992px) {
@@ -486,7 +490,7 @@ color: #8F4D61;">Teurny Önerileri</span>
                         {% if comment.anonymous %}
                         <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
                         {% else %}
-                        <p class="blog-comment-item-author" style="margin-bottom: 5px !important;">@{{comment.user.username}}</p>
+                        <p class="blog-comment-item-author" style="margin-bottom: 10px !important;">@{{comment.user.username}}</p>
                         {% endif %}
                             
                             

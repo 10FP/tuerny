@@ -287,10 +287,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const acceptAllLong = document.getElementById('accept-all-long');
   const savePreferences = document.getElementById('save-preferences');
 
-  if (localStorage.getItem('cookiesAccepted') === 'true') {
-    banner.style.display = 'none';
-    preferencesPanel.style.display = 'none';
-  }
+  // if (localStorage.getItem('cookiesAccepted') === 'true') {
+  //   banner.style.display = 'none';
+  //   preferencesPanel.style.display = 'none';
+  // }
 
   openPreferences.addEventListener('click', () => {
     banner.style.display = 'none';
