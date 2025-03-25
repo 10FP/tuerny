@@ -27,8 +27,7 @@ from django.contrib.auth import get_backends
 User = get_user_model()
 from .utils import generate_email_verification_token, HtmlEmailThread
 from datetime import datetime, date
-
-
+from .utils import subscribe_to_mailchimp
 
 def index(request):
     products = Product.objects.all()
@@ -1182,3 +1181,16 @@ def change_blog_status(request, blog_id):
 
 def custom_404_view(request, exception):
     return render(request, "404.html", status=404)
+
+def newsletter(request):
+    if request.method == "POST":
+        email = request.POST.get("mail")
+        status, response = subscribe_to_mailchimp(email)
+        print(status)
+        if status == 200 or status == 201:
+            message = "Abonelik başarılı!"
+        else:
+            message = "Bir hata oluştu: " + response.get('detail', '')
+          
+        return render(request, "tuerny_app/index.html", {"message": message})
+    return render(request, "newsletter.html")

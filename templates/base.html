@@ -1001,9 +1001,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
                 <form
                   method="POST"
-                  action="/Controller/ajax/ajax.php?process=subc"
+                  action="{% url 'tuerny_app:newsletter' %}"
                   class="ajaxFormTrue"
                 >
+                {% csrf_token %}
                   <div class="p-2">
                     <input
                       name="mail"

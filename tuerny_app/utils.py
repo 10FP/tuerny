@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 import threading
 signer = TimestampSigner()
+import requests
 
 def generate_email_verification_token(email):
     return signer.sign(email)
@@ -39,3 +40,14 @@ class HtmlEmailThread(threading.Thread):
         msg = EmailMultiAlternatives(self.subject, "", self.from_email, [self.to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
+
+def subscribe_to_mailchimp(email):
+    url = f"https://{settings.MAILCHIMP_DATA_CENTER}.api.mailchimp.com/3.0/lists/{settings.MAILCHIMP_EMAIL_LIST_ID}/members/"
+    data = {
+        "email_address": email,
+        "status": "subscribed"
+    }
+    auth = ("anystring", settings.MAILCHIMP_API_KEY)
+    response = requests.post(url, auth=auth, json=data)
+    print("🔍 Hata Detayı:", response.status_code, response.json())
+    return response.status_code, response.json()        

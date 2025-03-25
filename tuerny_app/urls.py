@@ -20,6 +20,7 @@ urlpatterns = [
     path("add-blog-comment/", views.add_blog_comment, name="add_blog_comment"),
     path("hakkimizda/", views.about, name="about"),
     path("answer/", views.answer, name="answer"),   
+    path("newsletter/", views.newsletter, name="newsletter"),   
     path("questions/", views.question, name="question"),
     path("contact/", views.contact, name="contact"),
     path("teurny-uyelik-ve-gizlilik-sozlesmesi/", views.contract, name="contract"),
