@@ -22,19 +22,7 @@ button, input, optgroup, select, textarea{
                       <option value="{{ sub.id }}" style="color: #989491;">{{ sub.name }}</option>
                       {% endfor %}
                   </select>
-                  <select
-                    name="topic"
-                    class="teurny-input w-100 vRequired"
-                    style="color: #989491;"
-                    required
-                  >
                   
-                    <option value="">Konu</option>
-                    <option value="destek">Destek Talebi</option>
-                    <option value="oneri">Öneri</option>
-                    <option value="sikayet">Şikayet</option>
-                    <option value="diger">Diğer</option>
-                  </select>
                   <div class="limit-counter">
                     <label for="title" id="title-counter" class="counter-area">00/90</label>
                     <input name="title" type="text" placeholder="Soru Başlığı" class="teurny-input vRequired"

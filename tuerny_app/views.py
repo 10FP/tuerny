@@ -47,39 +47,62 @@ def about(request):
     return render(request, 'tuerny_app/about.html', {"extra": s_blogs})
 
 def ask_details(request, question_id):
-    question = get_object_or_404(Question, id=question_id)
     
+    question = get_object_or_404(Question, id=question_id)
+    print("que1", question)
+
+    if not question.slug:
+            base_slug = slugify(question.title)
+            slug = base_slug
+            count = 1
+            while Question.objects.filter(slug=slug).exclude(id=question.id).exists():
+                slug = f"{base_slug}-{count}"
+                count += 1
+            question.slug = slug
+            question.save()
+        
+    try:
+        if question.poll:
+        
+            return redirect("tuerny_app:ask_slug", slug=question.slug)
+    except:
+    
+        return redirect("tuerny_app:asked_slug", slug=question.slug)
+
+    
+
+def ask_details_by_slug(request, slug):
+    question = get_object_or_404(Question, slug=slug)
+
     try:
         if question.poll:
             pool = question.poll
             question_id = question.id
+
         cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
         if not cache.get(cache_key):
-            question.views_count += 1  # Görüntülenme sayısını artır
-            question.save()  # Değişiklikleri veritabanına kaydet
-            cache.set(cache_key, True, timeout=10)  
+            question.views_count += 1
+            question.save()
+            cache.set(cache_key, True, timeout=10)
 
         questions = Question.objects.prefetch_related("poll__options")
 
         poll_data = {}
 
-        for question in questions:
-            if hasattr(question, "poll"):
-                # Toplam oyları hesapla (`vote_count` property’sini kullanarak)
-                total_votes = sum(option.vote_count for option in question.poll.options.all())
-
-                # Seçeneklerin yüzdesini hesapla
-                poll_data[question.id] = {
+        for question_item in questions:
+            if hasattr(question_item, "poll"):
+                total_votes = sum(option.vote_count for option in question_item.poll.options.all())
+                poll_data[question_item.id] = {
                     "total_votes": total_votes,
                     "percentages": {
                         option.id: round((option.vote_count / total_votes * 100), 1) if total_votes > 0 else 0
-                        for option in question.poll.options.all()
+                        for option in question_item.poll.options.all()
                     }
                 }
-        
+
         return render(request, 'tuerny_app/ask-details.html', {"pool": pool, "questions": questions, "poll_data": poll_data})
     except Exception as e:
-        return redirect("tuerny_app:asked", asked_id = question.id)
+        return redirect("tuerny_app:asked_slug", slug=question.slug)
     
         
         
@@ -87,8 +110,8 @@ def ask_details(request, question_id):
     
         
 
-def asked_details(request, asked_id):
-    question = Question.objects.get(id=asked_id)
+def asked_details_by_slug(request, slug):
+    question = Question.objects.get(slug=slug)
     question_id = question.id
     cache_key = f"viewed_question_{question_id}_{request.user.id if request.user.is_authenticated else request.META['REMOTE_ADDR']}" 
     if not cache.get(cache_key):
@@ -97,6 +120,11 @@ def asked_details(request, asked_id):
             cache.set(cache_key, True, timeout=1)  
 
     return render(request, 'tuerny_app/asked-details.html', {"question": question})
+
+def asked_details(request, asked_id):
+    question = Question.objects.get(id=asked_id)
+    return redirect("tuerny_app:asked_slug", slug=question.slug)
+    
 
 @login_required
 def add_blog_comment(request):
@@ -191,7 +219,7 @@ def ask(request):
     if request.method == "POST":
         # 🔹 Formdan gelen verileri al
         subcategory_id = request.POST.get("subcategory")
-        topic = request.POST.get("topic")
+        
         title = request.POST.get("title")
         description = request.POST.get("description")
         anonymous = request.POST.get("anonymous") == "on"  # Checkbox "on" olarak gelir
@@ -204,7 +232,7 @@ def ask(request):
         question = Question.objects.create(
             user=request.user,
             subcategory=subcategory,
-            topic=topic,
+            
             title=title,
             description=description,
             anonymous=anonymous

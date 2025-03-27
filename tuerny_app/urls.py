@@ -12,7 +12,9 @@ app_name="tuerny_app"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("sorular-ve-anketler/<str:slug>/", views.ask_details_by_slug, name="ask_slug"),
     path("ask/<int:question_id>/", views.ask_details, name="ask"),
+    path("sorular/<str:slug>/", views.asked_details_by_slug, name="asked_slug"),
     path("asked/<int:asked_id>/", views.asked_details, name="asked"),
     path("login/", views.login, name="login"),
     path("ask/", views.ask, name="ask"),
