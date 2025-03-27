@@ -28,6 +28,7 @@ User = get_user_model()
 from .utils import generate_email_verification_token, HtmlEmailThread
 from datetime import datetime, date
 from .utils import subscribe_to_mailchimp
+from django.db.models import Q
 
 def index(request):
     products = Product.objects.all()
@@ -388,9 +389,17 @@ from .models import Question, SuggestedQuestion
 
 def question(request):
     sort_option = request.GET.get("sort", "latest")  # Varsayılan sıralama
+    keyword = request.GET.get("keyword", "")  # Arama kelimesi
 
     # **Sadece Onaylı Soruları Getir**
     questions = Question.objects.filter(status="approved").prefetch_related("poll__options")
+
+    # **Arama Filtresi**
+    if keyword:
+        questions = questions.filter(
+            Q(title__icontains=keyword) |
+            Q(description__icontains=keyword)
+        )
 
     # **Sıralama Seçenekleri**
     if sort_option == "latest":
@@ -403,8 +412,8 @@ def question(request):
         questions = questions.annotate(like_count_annotated=Count("likes", distinct=True)).order_by("-like_count_annotated")
 
     # **Paginator Kullanımı**
-    page = request.GET.get("page", 1)  # Varsayılan olarak ilk sayfa
-    paginator = Paginator(questions, 3)  # Sayfa başına 3 soru gösterilecek
+    page = request.GET.get("page", 1)
+    paginator = Paginator(questions, 3)
 
     try:
         questions = paginator.page(page)
@@ -432,8 +441,11 @@ def question(request):
         "poll_data": poll_data,
         "s_q": s_questions,
         "selected_sort": sort_option,
-        "paginator": paginator,  # Paginator nesnesini şablona gönder
+        "paginator": paginator,
+        "keyword": keyword,  # formda tekrar gösterebilmek için
     })
+
+
 def save(request):
     
     return render(request, "tuerny_app/save.html")

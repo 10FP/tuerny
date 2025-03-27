@@ -1,0 +1,762 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load math_filters %}
+{% block content %}
+<style>
+    .question-card-comments .ajaxFormTrue{
+                display: none !important;
+            }
+            .question-card {
+                padding: 34px 16px 0px 16px;
+            }
+        @media screen and (max-width: 720px) {
+            .gap-c {
+                gap: 0.2rem !important;
+            }
+            .gap-c-2 {
+                gap: 0.5rem !important;
+            }
+            .question-card-survey.py-2 {
+                padding-top: 0.2rem !important;
+                padding-bottom: 0.2rem !important;
+            }
+            div.d-flex.align-items-center.ps-3 {
+                padding-left: 0.2rem !important;
+            }
+            div.container.py-5 h1{
+                display: block !important;
+                font-family: 'Poppins';
+                font-size: 16px;
+                font-weight: 400;
+                color: #414141;
+                text-indent: 5px;
+            }
+            .question-card-comments .ajaxFormTrue{
+                display: none !important;
+            }
+            
+            .question-card {
+                padding: 34px 16px 0px 16px;
+            }
+            .question-card-title {
+                padding-bottom: 0 !important;
+            }
+        }
+
+        .question-card-survey-item-progress-rate span {
+            word-wrap: normal;
+        }
+</style>
+
+      <div class="container py-5">
+
+        <h1 style="display: none;">Gündemdeki Sorular</h1>
+
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="question-bar d-flex align-items-center p-1">
+                    <div class="d-flex align-items-center ps-3">
+                        <div class="dropdown">
+                            <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" viewBox="0 0 22 20"
+                                    fill="none">
+                                    <path
+                                        d="M9.75034 20C9.39618 20 9.0993 19.8802 8.85972 19.6406C8.62014 19.401 8.50034 19.1042 8.50034 18.75V11.25L1.25034 2C0.937845 1.58333 0.89097 1.14583 1.10972 0.6875C1.32847 0.229167 1.70868 0 2.25034 0H19.7503C20.292 0 20.6722 0.229167 20.891 0.6875C21.1097 1.14583 21.0628 1.58333 20.7503 2L13.5003 11.25V18.75C13.5003 19.1042 13.3806 19.401 13.141 19.6406C12.9014 19.8802 12.6045 20 12.2503 20H9.75034ZM11.0003 10.375L17.1878 2.5H4.81284L11.0003 10.375Z"
+                                        fill="#414141" />
+                                </svg>
+                            </button>
+                            <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item disabled" href="#">Kategori</a></li>
+                                            {% for s in subcategories %}
+                                            <li><a class="dropdown-item" href="#"> {{s.name}}</a></li>
+                                            {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="dropdown">
+                            <button
+                              class="btn"
+                              type="button"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                              id="sortDropdown"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="16"
+                                viewBox="0 0 24 16"
+                                fill="none"
+                              >
+                                <path
+                                  d="M0.75 15.5V13H8.25V15.5H0.75ZM0.75 9.25V6.75H15.75V9.25H0.75ZM0.75 3V0.5H23.25V3H0.75Z"
+                                  fill="#414141"
+                                />
+                              </svg>
+                              {% if selected_sort == "latest" %}
+            
+        {% elif selected_sort == "oldest" %}
+           
+        {% elif selected_sort == "most_commented" %}
+            
+        {% elif selected_sort == "most_liked" %}
+            
+        {% else %}
+            Sırala
+        {% endif %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item sort-option" data-sort="latest" href="#">En son eklenenler</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="oldest" href="#">İlk eklenenler</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="most_commented" href="#">En çok yorum alanlar</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="most_liked" href="#">En çok yorum beğenilenler</a></li>
+                            
+                            </ul>
+                          </div>
+                    </div>
+                    <div class="flex-grow-1 text-center">
+                        
+                    </div>
+                    <div>
+                        <a href="{% url 'tuerny_app:ask' %}" class="teurny-button-secondary">SOR</a>
+                    </div>
+                </div>
+    
+                <div class="mt-5">
+                    <div class="d-flex flex-column gap-4 quest-listdiv">
+                        {% for q in questions %}
+                        {% if q.status == "approved" %}
+                                <div class="question-card">
+                                    <div class="question-card-category">
+                                        <p>{{q.subcategory.name}}</p>
+                                    </div>
+                                    <div class="question-card-date">
+                                        <p>{{ q.created_at|date:"d.m.Y" }}</p>
+                                    </div>
+                                    <h3 class="question-card-title pb-2" style="margin-top: 20px; margin-bottom: 0px;">
+                                        <a href="{% url 'tuerny_app:ask' q.id %}" style="color: #202020; font-weight: 400;"> {{q.title}} </a>
+                                    </h3>
+                                    <p class="question-card-text py-2" style="color: #414141; line-height: 130%; margin-bottom: 20px;">
+                                        {{q.description}}
+                                    </p>
+                                    {% if q.poll %}
+                                    {% with poll=poll_data|get_item:q.id %}
+                                    {% with total_votes=poll.total_votes|default:0 %}
+                                
+                                        {% for vote in q.poll.options.all %}
+                                            <div class="question-card-survey py-2 vCheckRequired">
+                                                <div class="question-card-survey-item" style="margin-bottom: 0px">
+                                                    
+                                                    <div class="question-card-survey-item-label">
+                                                        <input name="vote_{{ q.id }}" class="votee" value="{{ vote.id }}" type="radio" id="r{{ vote.id }}"
+                                                        {% if request.user in vote.voted_users.all %} checked {% endif %}>
+                                                        
+                                                        <label class="vote-option" style="font-family: Roboto; {% if request.user in vote.voted_users.all %}color: #414141;{% else %}color: #989491; {% endif %}line-height: 130%;" for="r{{ vote.id }}">{{ vote.option_text }}</label>
+                                                    </div>
+                                                    
+                                                    <div class="question-card-survey-item-progress">
+                                                        <div class="question-card-survey-item-progress-rate"
+                                                             id="progress-{{ vote.id }}"
+                                                             style="width: {% if total_votes > 0 %}{{ poll.percentages|get_item:vote.id|floatformat:1 }}{% else %}0{% endif %}%">
+                                                            <span id="percentage-{{ vote.id }}">
+                                                                {% if total_votes > 0 %}
+                                                                    {{ poll.percentages|get_item:vote.id|floatformat:1 }}%
+                                                                {% else %}
+                                                                    0%
+                                                                {% endif %}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                
+                                    {% endwith %}
+                                {% endwith %}
+                            {% endif %}
+                           
+                                    <div class="d-flex justify-content-between align-items-center pt-4">
+                                        <div class="d-flex gap-4 gap-c-2">
+                                            <div class="question-card-button">
+                                                <i class="fa-regular fa-eye question-card-button-icon"></i>
+                                                <span class="question-card-button-text">{{q.views_count}}</span>
+                                            </div>
+                                            <div class="question-card-button">
+                                                <i class="fa-regular fa-message question-card-button-icon"></i>
+                                                <span
+                                                    class="question-card-button-text">{{q.comments.count}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-3 gap-c">
+                                            <!-- Beğenmeme Butonu -->
+                                            <div class="question-card-button">
+                                                <i {% if request.user in q.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ q.id }}"
+                                                   id="dislike-icon-{{ q.id }}"
+                                                   class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in q.dislikes.all %}active{% endif %}"></i>
+                                                <span id="dislike-count-{{ q.id }}">{{ q.dislike_count }}</span>
+                                            </div>
+                                        
+                                            <div class="question-card-rate-line-container">
+                                                <div class="question-card-rate-line">
+                                                    <div class="rate-line-dislike" id="rate-dislike-{{ q.id }}"></div>
+                                                    <div class="rate-line-like" id="rate-like-{{ q.id }}"></div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Beğeni Butonu -->
+                                            <div class="question-card-button">
+                                                <i style="cursor: pointer" data-id="{{ q.id }}"
+                                                   id="like-icon-{{ q.id }}"
+                                                   class="{% if request.user in q.likes.all %}fa-solid {% else %} fa-regular{% endif %} fa-heart question-card-button-icon like-button {% if request.user in q.likes.all %}active{% endif %}"></i>
+                                                <span id="like-count-{{ q.id }}">{{ q.like_count }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="question-card-comments" style="padding-top: 15px">
+                                        {% if q.comments.all %}
+                                        <div class="blog-section-title">
+                                            <span style="font-size: 14px; color: #414141; font-weight: 400;">Yorumlar</span>
+                                            <div class="blog-section-title-divider"></div>
+                                        </div>
+                                        {% else %}
+                                        <a href="{% url 'tuerny_app:ask' q.id %}" class="load-more-comments">
+                                            <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 0px; font-style: italic;">Devamını Gör</h1>
+                                        </a>
+                                        {% endif %}
+                                        {% if q.comments.all %}
+                                        <div class="comment-section">
+                                        <div class="d-flex flex-column gap-3 mt-4">
+                                            {% for c in q.comments.all %}
+                                            {% if forloop.counter <= 2 %}
+                                            <div class="blog-comment-item" style="gap: 6px;">
+                                                {% if c.anonymous %}
+                                                <p class="blog-comment-item-author">Kullanıcı adı gizli</p>
+                                                {% else %}
+                                                <p class="blog-comment-item-author">@{{c.user.username}}</p>
+                                                {% endif %}
+                                                <p class="blog-comment-item-text" style="font-weight: 400; font-size: 14px; line-height: 130%; margin-bottom: 12px !important;">{{c.content}}</p>
+                                                <div class="teurny-divider"></div>
+                                            </div>
+                                            {% endif %}
+                                            {% endfor %}
+                                            <a href="{% url 'tuerny_app:ask' q.id %}" class="load-more-comments">
+                                                <h1 style="font-family: 'Poppins'; font-weight: 400; font-size: 14px; line-height: 130%; margin-top: 0px; font-style: italic;">Devamını Gör</h1>
+                                            </a>  
+                                        </div>
+                                        </div>
+                                        {% endif %}
+                                        <div class="mt-4">
+                                            <form method="POST" class="ajaxFormTrue" action="{% url 'tuerny_app:add-comment' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="type_id" value="{{q.id}}" />
+                                                <input type="hidden" name="pool_id" value="{{q.poll.id}}" />
+                                                <input type="hidden" name="parent" value="0" />
+                                                <div class="limit-counter textarea-counter">
+                                                    <label for="content" id="content-counter" class="counter-area">00/360</label>
+                                                    <textarea name="content" class="teurny-input" id="counter-textarea" rows="8" maxlength="360" placeholder="Yorum Yap" style="resize: none; height: 50px;" required></textarea>
+                                                </div>
+                                                <div class="d-flex gap-3 mt-4">
+                                                    <div>
+                                                        <label for="cb-{{ q.id }}" class="teurny-checkbox">
+                                                            <input name="hidden_user_name" type="checkbox" id="cb-{{ q.id }}" class="d-none" />
+                                                            <div class="teurny-checkbox-inner"></div>
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <p class="fw-semibold font-roboto blog-comment-checkbox-label mb-1"> KULLANICI ADINI GİZLE </p>
+                                                        <p class="font-roboto blog-comment-checkbox-text"> Bu gönderi için kullanıcı adını gizlenecek </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 vAjaxErrors"></div>
+                                                <button type="submit" class="teurny-button-primary mt-4"> Gönder </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                        
+                    </div>
+                    <div class="col-md-12 mt-5" style="text-align: center">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                {% if questions.has_previous %}
+                                <li class="page-item"><a class="page-link"
+                                        href="?page={{ questions.previous_page_number }}&sort={{ selected_sort }}"><i class="fa fa-chevron-left"></i></a></li>
+                                        {% endif %}
+                                    <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                                        <a href="#" class="page-link">{{ questions.number }} / {{ questions.paginator.num_pages }}</a>
+                                    </li>
+                                    {% if questions.has_next %}
+                                <li class="page-item"><a class="page-link"
+                                        href="?page={{ questions.next_page_number }}&sort={{ selected_sort }}"><i class="fa fa-chevron-right"></i></a></li>
+                                        {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="d-flex flex-column gap-5 mt-5 mt-lg-0 question-sidebar">
+                    <div>
+                        {% if request.user.liked_questions.all %}
+                        <div class="blog-section-title soru">
+                            <span style="font-weight: 400;font-family: 'Roboto';">Beğenilen Sorular</span>
+                            <div class="blog-section-title-divider"></div>
+                            <p></p>
+                        </div>
+                        {% endif %}
+    
+                        <div class="mt-3 d-flex flex-column gap-3">
+                            {% for like in request.user.liked_questions.all %}
+                                    <div class="question-card-2">
+                                        <div>
+                                            <img src="{% static 'tuerny_app/images/icons/question1.png' %}" alt="">
+                                        </div>
+                                        
+                                        <p class="question-card-2-title special-que text-nowrap">
+                                            <a href="{% url 'tuerny_app:ask' like.id %}" class="special-que text-nowrap" style="display: block; width: 100%; height: 20px;"> {{like.title}} </a>
+                                        </p>
+                                       
+                                    </div>
+                                    {% endfor %}
+                        </div>
+                    </div>
+    
+                    <div>
+                        <div class="d-flex flex-column gap-5 mt-5 mt-lg-0 question-sidebar">
+
+                            <div>
+                                <div class="blog-section-title soru">
+                                    <span style="font-weight: 400;">Tartışalım</span>
+                                    <div class="blog-section-title-divider"></div>
+                                    <p></p>
+                                </div>
+                                {% for q in s_q %}
+                                <a href="{% url 'tuerny_app:ask' q.question.id %}" style="z-index: 999999;">
+                                <div class="mt-3 d-flex flex-column gap-special">
+                                    <div style="margin-bottom: 20px;">
+                                        <p style="font-family: 'Roboto';">
+                                            <span><img src="{% static 'tuerny_app/images/icons/question2.png' %}" alt=""></span>
+                                            {{q.question.title}}
+                                        </p>
+                                    </div>
+                                    {% if q.question.poll %}
+                                    {% for o in q.question.poll.options.all %}
+                                    <a hhref="{% url 'tuerny_app:ask' q.question.id %}">
+                                    <div class="argument-card-item-label">
+                                        <input name="argument" value="select_id" type="radio" id="select_id" />
+                                        <label for="select_id" class="text-nowrap option wrap special-que">{{o.option_text}}</label>
+                                    </div>
+                                </a>
+                                    {% endfor %}
+                                    {% endif %}
+                                </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <div
+        class="modal fade"
+        id="searchModal"
+        tabindex="-1"
+        aria-labelledby="searchModalLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header border-0">
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="container">
+                <div class="row justify-content-center">
+                  <div class="col-12 col-sm-8">
+                    <form method="GET" action="{% url 'tuerny_app:question' %}">
+                      <div>
+                        <div
+                          class="border py-2 ps-3 pe-2 d-flex align-items-center"
+                        >
+                          <i class="fa-solid fa-magnifying-glass fs-4"></i>
+                          <div class="flex-grow-1 ps-3">
+                            <input
+                              name="keyword"
+                              type="text"
+                              class="teurny-input border-0 w-100"
+                              placeholder="Ara..."
+                            />
+                          </div>
+                          <button
+                            type="submit"
+                            class="teurny-button-secondary w-auto"
+                          >
+                            ARA
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+        console.log("🔄 Sıralama Scripti Yüklendi!");
+    
+        function initLikeAndVoteScripts() {
+            console.log("♻️ Beğeni ve Oylama Scripti Yeniden Yüklendi!");
+    
+            // Beğeni Butonu
+            document.querySelectorAll(".like-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
+                    let questionId = this.dataset.id;
+                    let csrfToken = "{{ csrf_token }}";
+    
+                    fetch(`/like/${questionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                            document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                            let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                            let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                            if (data.liked) {
+                                likeIcon.classList.add("fa-solid", "active");
+                                dislikeIcon.style.color = "rgb(0, 0, 0)";
+                            } else {
+                                likeIcon.classList.remove("fa-solid", "active");
+                                likeIcon.classList.add("fa-regular");
+                            }
+                        }
+                    });
+                });
+            });
+    
+            // Beğenmeme Butonu
+            document.querySelectorAll(".dislike-button").forEach(button => {
+                button.addEventListener("click", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
+                    let questionId = this.dataset.id;
+                    let csrfToken = "{{ csrf_token }}";
+    
+                    fetch(`/dislike/${questionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById(`like-count-${questionId}`).textContent = data.like_count;
+                            document.getElementById(`dislike-count-${questionId}`).textContent = data.dislike_count;
+    
+                            let likeIcon = document.getElementById(`like-icon-${questionId}`);
+                            let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
+    
+                            if (data.disliked) {
+                                dislikeIcon.classList.add("active");
+                                dislikeIcon.style.color = "rgb(130, 68, 88)";
+                                likeIcon.classList.remove("fa-solid", "active");
+                                likeIcon.classList.add("fa-regular");
+                            } else {
+                                dislikeIcon.classList.remove("active");
+                                dislikeIcon.style.color = "rgb(0, 0, 0)";
+                            }
+                        }
+                    });
+                });
+            });
+    
+            // Oylama Butonu (Anket için)
+            document.querySelectorAll("input[type=radio]").forEach(radio => {
+                radio.addEventListener("change", function () {
+                    if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
+                    let questionId = this.name.split("_")[1]; // "vote_3" -> "3"
+                    let optionId = this.value;
+                    let csrfToken = "{{ csrf_token }}";
+    
+                    fetch(`/vote/${questionId}/${optionId}/`, {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken,
+                            "Content-Type": "application/json"
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            console.log("✅ Anket Güncellendi!");
+    
+                            Object.keys(data.percentages).forEach(optionId => {
+                                let progressBar = document.querySelector(`#progress-${optionId}`);
+                                let percentageText = document.querySelector(`#percentage-${optionId}`);
+    
+                                if (progressBar && percentageText) {
+                                    progressBar.style.width = data.percentages[optionId] + "%";
+                                    percentageText.innerText = data.percentages[optionId] + "%";
+                                }
+                            });
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => console.error("❌ Hata:", error));
+                });
+            });
+        }
+    
+        // İlk Yüklemede Çalıştır
+        initLikeAndVoteScripts();
+    
+        // **Sıralama Değişince Yeni İçeriği Yükle ve Script'i Yeniden Çalıştır**
+        document.querySelectorAll(".sort-option").forEach(option => {
+            option.addEventListener("click", function (event) {
+                if (!isAuthenticated) {
+                    window.location.href = "{% url 'tuerny_app:login' %}?next={{ request.path }}";
+                    return;
+                }
+                event.preventDefault();
+                let selectedSort = this.dataset.sort;
+    
+                console.log("📌 Seçilen Filtre:", selectedSort);
+    
+                fetch(`/questions/?sort=${selectedSort}`, {
+                    method: "GET",
+                })
+                .then(response => response.text())
+                .then(html => {
+                    let parser = new DOMParser();
+                    let doc = parser.parseFromString(html, "text/html");
+                    let newContent = doc.getElementsByClassName("quest-listdiv")[0].innerHTML;
+                    let newDropdownText = this.textContent.trim();
+    
+                    document.getElementsByClassName("quest-listdiv")[0].innerHTML = newContent;
+                    document.getElementById("sortDropdown").textContent = newDropdownText;
+    
+                    console.log("✅ Sıralama Güncellendi! Event'ler Yeniden Yükleniyor...");
+                    initLikeAndVoteScripts(); // **YENİ BUTONLARA EVENT EKLE**
+                })
+                .catch(error => console.error("❌ Hata:", error));
+            });
+        });
+    });
+    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("🔄 İç İçe Yorum ve Divider Gösterme Scripti Yüklendi!");
+    
+        document.querySelectorAll(".question-card").forEach((questionCard) => {
+            let comments = questionCard.querySelectorAll(".blog-comment-item"); // **Yorumları Seç**
+            let dividers = questionCard.querySelectorAll(".teurny-divider"); // **Dividerları Seç**
+            let showMoreBtn = questionCard.querySelector(".saved-more-ask"); // **Statik Butonu Seç**
+    
+            if (!showMoreBtn || comments.length <= 3) {
+                if (showMoreBtn) showMoreBtn.style.display = "none"; // **Eğer buton varsa ve yorum azsa gizle**
+                return;
+            }
+    
+            let visibleCount = 3; // **Başlangıçta sadece 3 yorum görünür**
+    
+            function updateCommentsVisibility() {
+                comments.forEach((comment, index) => {
+                    let divider = dividers[index] || null; // **Her yorumun altında bir divider olabilir**
+                    let isVisible = index < visibleCount;
+    
+                    comment.style.display = isVisible ? "block" : "none";
+                    if (divider) {
+                        divider.style.display = isVisible ? "block" : "none";
+                    }
+                });
+    
+                if (visibleCount >= comments.length) {
+                    showMoreBtn.style.display = "none"; // **Tüm yorumlar gösterildiyse butonu gizle**
+                }
+            }
+    
+            // **İlk yüklemede güncelle**
+            updateCommentsVisibility();
+    
+            // **"Daha Fazla" butonuna tıklanınca**
+            showMoreBtn.addEventListener("click", function () {
+                visibleCount += 3; // **3 tane daha göster**
+                updateCommentsVisibility();
+            });
+        });
+    });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // Tüm radio inputlarını seç
+    const radioButtons = document.querySelectorAll("input[type='radio'][name^='vote_']");
+
+    radioButtons.forEach((radio) => {
+        radio.addEventListener("change", function () {
+            // Aynı name'e sahip tüm labelları gri yap
+            const groupName = this.name;
+            const labels = document.querySelectorAll(`input[name='${groupName}'] + label`);
+
+            labels.forEach(label => {
+                label.style.color = "#989491"; // Varsayılan rengi uygula (gri)
+            });
+
+            // Seçili olan radio'nun label'ını koyu renk yap
+            const selectedLabel = document.querySelector(`label[for='${this.id}']`);
+            if (selectedLabel) {
+                selectedLabel.style.color = "#414141"; // Seçili olan koyu renk
+            }
+        });
+    });
+});
+    </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+
+    textareas.forEach(textarea => {
+        textarea.addEventListener("focus", function () {
+            this.style.height = "200px";
+        });
+
+        textarea.addEventListener("blur", function () {
+            if (this.value.trim() === "") {
+                this.style.height = "50px";
+            }
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    let textareas = document.querySelectorAll(".teurny-input"); // Tüm textarea'ları seç
+    let maxLength = 360; // Maksimum karakter sayısı
+
+    textareas.forEach(textarea => {
+        let counterLabel = textarea.parentElement.querySelector("#content-counter"); // Aynı parent içindeki sayacı bul
+
+        textarea.addEventListener("input", function () {
+            let currentLength = this.value.length;
+
+            // Eğer girilen karakter sayısı maxLength'i geçerse, fazlalıkları sil
+            if (currentLength > maxLength) {
+                this.value = this.value.substring(0, maxLength);
+                currentLength = maxLength; // Güncellenmiş uzunluğu al
+            }
+
+            // Sayaç değerini güncelle
+            counterLabel.textContent = currentLength + "/" + maxLength;
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".question-card").forEach(function (questionCard) {
+        let hasVoted = false;
+        let questionId = questionCard.querySelector(".votee")?.name.split("_")[1];
+
+        // Kullanıcının herhangi bir seçeneğe oy verip vermediğini kontrol et
+        questionCard.querySelectorAll(".votee").forEach(function (voteOption) {
+            if (voteOption.checked) {
+                hasVoted = true;
+            }
+        });
+
+        // Eğer kullanıcı oy vermemişse, yüzdeleri gizle
+        if (!hasVoted) {
+            questionCard.querySelectorAll(".question-card-survey-item-progress-rate").forEach(function (progressBar) {
+                progressBar.style.display = "none";
+            });
+        }
+
+        // Oy verildiğinde yüzdeleri göster
+        questionCard.querySelectorAll(".votee").forEach(function (voteOption) {
+            voteOption.addEventListener("change", function () {
+                questionCard.querySelectorAll(".question-card-survey-item-progress-rate").forEach(function (progressBar) {
+                    progressBar.style.display = "block";
+                });
+            });
+        });
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    function updateRateLines(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+        let likeBar = document.getElementById(`rate-like-${qId}`);
+        let dislikeBar = document.getElementById(`rate-dislike-${qId}`);
+
+        let likeCount = parseInt(likeCountEl.innerText) || 0;
+        let dislikeCount = parseInt(dislikeCountEl.innerText) || 0;
+        let total = likeCount + dislikeCount;
+
+        if (total === 0) {
+            likeBar.style.width = "0%";
+            dislikeBar.style.width = "0%";
+        } else {
+            likeBar.style.width = (likeCount / total) * 100 + "%";
+            dislikeBar.style.width = (dislikeCount / total) * 100 + "%";
+        }
+    }
+
+    // Like & Dislike sayıları değiştiğinde otomatik güncellemek için Observer tanımlıyoruz
+    function observeChanges(qId) {
+        let likeCountEl = document.getElementById(`like-count-${qId}`);
+        let dislikeCountEl = document.getElementById(`dislike-count-${qId}`);
+
+        let observer = new MutationObserver(() => updateRateLines(qId));
+
+        observer.observe(likeCountEl, { childList: true });
+        observer.observe(dislikeCountEl, { childList: true });
+    }
+
+    // Tüm sorular için güncelleme işlemini başlat
+    document.querySelectorAll("[id^='like-count-']").forEach(el => {
+        let qId = el.id.replace("like-count-", "");
+        updateRateLines(qId);
+        observeChanges(qId);
+    });
+});
+</script>
+
+{% endblock content %}
+  
