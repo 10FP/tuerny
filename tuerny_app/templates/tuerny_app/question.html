@@ -66,10 +66,25 @@
                                 </svg>
                             </button>
                             <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item disabled" href="#">Kategori</a></li>
-                                            {% for s in subcategories %}
-                                            <li><a class="dropdown-item" href="#"> {{s.name}}</a></li>
-                                            {% endfor %}
+                                <li><a class="dropdown-item disabled" href="#">Ana Kategoriler</a></li>
+                                {% for s in categories %}
+                                    <li>
+                                        <a class="dropdown-item"
+                                        href="?category={{ s.slug }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}">
+                                        {{ s.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            
+                                <li><a class="dropdown-item disabled" href="#">Alt Kategoriler</a></li>
+                                {% for s in subcategories %}
+                                    <li>
+                                        <a class="dropdown-item"
+                                        href="?subcategory={{ s.slug }}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}{% if request.GET.keyword %}&keyword={{ request.GET.keyword }}{% endif %}">
+                                            {{ s.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="dropdown">
@@ -108,7 +123,7 @@
                                 <li><a class="dropdown-item sort-option" data-sort="latest" href="#">En son eklenenler</a></li>
                                 <li><a class="dropdown-item sort-option" data-sort="oldest" href="#">İlk eklenenler</a></li>
                                 <li><a class="dropdown-item sort-option" data-sort="most_commented" href="#">En çok yorum alanlar</a></li>
-                                <li><a class="dropdown-item sort-option" data-sort="most_liked" href="#">En çok yorum beğenilenler</a></li>
+                                <li><a class="dropdown-item sort-option" data-sort="most_liked" href="#">En çok beğenilenler</a></li>
                             
                             </ul>
                           </div>
@@ -556,7 +571,7 @@
     
                 console.log("📌 Seçilen Filtre:", selectedSort);
     
-                fetch(`/questions/?sort=${selectedSort}`, {
+                fetch(`/sorular/?sort=${selectedSort}`, {
                     method: "GET",
                 })
                 .then(response => response.text())
@@ -564,7 +579,7 @@
                     let parser = new DOMParser();
                     let doc = parser.parseFromString(html, "text/html");
                     let newContent = doc.getElementsByClassName("quest-listdiv")[0].innerHTML;
-                    let newDropdownText = this.textContent.trim();
+                    // let newDropdownText = this.textContent.trim();
     
                     document.getElementsByClassName("quest-listdiv")[0].innerHTML = newContent;
                     document.getElementById("sortDropdown").textContent = newDropdownText;

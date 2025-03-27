@@ -387,21 +387,36 @@ from django.db.models import Count
 from django.shortcuts import render
 from .models import Question, SuggestedQuestion
 
-def question(request):
-    sort_option = request.GET.get("sort", "latest")  # Varsayılan sıralama
-    keyword = request.GET.get("keyword", "")  # Arama kelimesi
 
-    # **Sadece Onaylı Soruları Getir**
+def question(request):
+    sort_option = request.GET.get("sort", "latest")
+    keyword = request.GET.get("keyword", "")
+    category_slug = request.GET.get("category")
+    subcategory_slug = request.GET.get("subcategory")
+
     questions = Question.objects.filter(status="approved").prefetch_related("poll__options")
 
-    # **Arama Filtresi**
+    # Ana kategori filtresi
+    if category_slug:
+        try:
+            main_cat = MainCategory.objects.get(slug=category_slug)
+            subcats = SubCategory.objects.filter(main_category=main_cat)
+            questions = questions.filter(subcategory__in=subcats)
+        except MainCategory.DoesNotExist:
+            questions = questions.none()  # Geçersiz slug varsa boş dönsün
+
+    # Alt kategori filtresi (ana kategori varsa bunu ezebilir)
+    if subcategory_slug:
+        questions = questions.filter(subcategory__slug=subcategory_slug)
+
+    # Arama filtresi
     if keyword:
         questions = questions.filter(
             Q(title__icontains=keyword) |
             Q(description__icontains=keyword)
         )
 
-    # **Sıralama Seçenekleri**
+    # Sıralama
     if sort_option == "latest":
         questions = questions.order_by("-created_at")
     elif sort_option == "oldest":
@@ -411,7 +426,7 @@ def question(request):
     elif sort_option == "most_liked":
         questions = questions.annotate(like_count_annotated=Count("likes", distinct=True)).order_by("-like_count_annotated")
 
-    # **Paginator Kullanımı**
+    # Sayfalama
     page = request.GET.get("page", 1)
     paginator = Paginator(questions, 3)
 
@@ -422,7 +437,7 @@ def question(request):
     except EmptyPage:
         questions = paginator.page(paginator.num_pages)
 
-    # **Anket Verilerini Hazırla**
+    # Anket verileri
     poll_data = {}
     for question in questions:
         if hasattr(question, "poll"):
@@ -436,13 +451,20 @@ def question(request):
             }
 
     s_questions = SuggestedQuestion.objects.all()
+    categories = MainCategory.objects.all()
+    subcategories = SubCategory.objects.all()
+
     return render(request, "tuerny_app/question.html", {
         "questions": questions,
         "poll_data": poll_data,
         "s_q": s_questions,
         "selected_sort": sort_option,
+        "keyword": keyword,
+        "categories": categories,
+        "subcategories": subcategories,
+        "selected_category": category_slug,
+        "selected_subcategory": subcategory_slug,
         "paginator": paginator,
-        "keyword": keyword,  # formda tekrar gösterebilmek için
     })
 
 
