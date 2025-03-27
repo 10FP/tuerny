@@ -1173,7 +1173,7 @@ def edit_blog(request, slug):
                 if image_index < len(content_images_raw):
                     image = content_images_raw[image_index]
                     image_index += 1
-                elif content_id != "new" and content_id in old_contents:
+                elif content_id != "new" and content_id in existing_image_ids and content_id in old_contents:
                     image = old_contents[content_id].image
 
             BlogContent.objects.create(

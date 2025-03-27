@@ -203,7 +203,9 @@
                             <label>Resim Yükle:</label>
                             <input type="file" name="content_image[]" class="teurny-input w-100" accept="image/*">
                         </div>
-            
+                        {% if content.image %}
+                        <input type="hidden" name="existing_content_image[]" value="{{ content.id }}">
+                        {% endif %}
                         <div class="video-field content-field" {% if content.type != "video" %}style="display: none;"{% endif %}>
                             <label>Video URL:</label>
                             <input type="url" name="content_video[]" class="teurny-input w-100" value="{% if content.video %}{{ content.video }}{% endif %}">
