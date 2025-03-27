@@ -1012,7 +1012,7 @@ def verify_email_page(request):
 
 def send_verification_email(user):
     token = generate_email_verification_token(user.email)
-    verification_link = f"http://172.20.10.2:8000/verify-email/{token}"
+    verification_link = f"http://213.159.30.150:8000/verify-email/{token}"
 
     context = {
         "user": user,
