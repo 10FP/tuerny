@@ -51,6 +51,7 @@ class SubCategoryInline(admin.TabularInline):
     prepopulated_fields = {"slug": ("name",)}
 
 class MainCategoryAdmin(admin.ModelAdmin):
+    fields = ('name', 'slug')
     list_display = ('name',)
     inlines = [SubCategoryInline]
     prepopulated_fields = {"slug": ("name",)}
@@ -91,10 +92,6 @@ class BlogContentInline(admin.TabularInline):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    
-
-    
-
 
     list_display = ('title', 'category', 'user', 'created_at', 'copy_blog_link')
     search_fields = ('title',)
