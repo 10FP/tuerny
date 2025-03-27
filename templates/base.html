@@ -112,7 +112,7 @@
     <h2>Çerezler</h2>
     <p>
       Hey Teurners! Sizlere sorunsuz ve kişiselleştirilmiş bir deneyim sunabilmek için <strong>zorunlu</strong> ve üçüncü taraf çerezleri kullanıyoruz. 
-      Daha fazla bilgi için <a href="/cerez-politikasi" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
+      Daha fazla bilgi için <a href="{% url 'tuerny_app:contract' %}" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
     </p>
     <div class="cookie-buttons">
       <button id="open-preferences">TERCİHLER</button>
@@ -623,10 +623,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                             <div class="d-none d-lg-block col">
                                                 <div class="h-100">
                                                     <div class="row h-100 menu-load-div">
-                                                        <a href="/ask" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                        <a href="{% url 'tuerny_app:ask' %}" class="header-link d-flex align-items-center gap-2 text-decoration-none">
                                                             <span>Soru Sor</span>
                                                         </a>
-                                                        <a href="/questions" class="header-link d-flex align-items-center gap-2 text-decoration-none">
+                                                        <a href="{% url 'tuerny_app:question' %}" class="header-link d-flex align-items-center gap-2 text-decoration-none">
                                                             <span>Gündemdeki Sorular</span>
                                                         </a>
                                                     </div>

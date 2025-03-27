@@ -251,9 +251,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'no-reply@teurny.com'
 EMAIL_HOST_PASSWORD = 'xnwb pkbb oqtd gahj'
 
-MAILCHIMP_API_KEY = '4384579ba3c1279f81ca3dfd5465ff21-us21'
-MAILCHIMP_DATA_CENTER = 'us21'  # API key'deki son kısımdan: örn us21
-MAILCHIMP_EMAIL_LIST_ID = 'b490c74e91'
+MAILCHIMP_API_KEY = os.environ['MAILCHIMP_API_KEY']
+MAILCHIMP_DATA_CENTER = os.environ['MAILCHIMP_DATA_CENTER']  # API key'deki son kısımdan: örn us21
+MAILCHIMP_EMAIL_LIST_ID = os.environ['MAILCHIMP_EMAIL_LIST_ID']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

@@ -1255,5 +1255,5 @@ def newsletter(request):
         else:
             message = "Bir hata oluştu: " + response.get('detail', '')
           
-        return render(request, "tuerny_app/index.html", {"message": message})
-    return render(request, "newsletter.html")
+        
+    return redirect("tuerny_app:index")
