@@ -168,7 +168,7 @@ class Blog(models.Model):
     slug = models.SlugField(max_length=255, unique=True, blank=True)  # Slug alanı
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending", null=True, blank=True)
-
+    views_count = models.PositiveIntegerField(default=0)
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.title)

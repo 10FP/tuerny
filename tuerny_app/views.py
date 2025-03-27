@@ -470,17 +470,38 @@ def blog_detail(request, slug):
     blog = Blog.objects.all()
     s_blogs = SuggestedBlog.objects.all()
     blog_ = get_object_or_404(Blog, slug=slug)
-    if blog_.status != "approved":
-        return redirect("tuerny_app:control_blog", slug=blog_.slug)
 
+    if blog_.status != "approved":
+        if request.user.is_staff:
+            return redirect("tuerny_app:control_blog", slug=blog_.slug)
+        else:
+            return redirect("tuerny_app:index")
+
+    # SPAM KORUMALI GÖRÜNTÜLEME SAYACI (10 dk içinde tekrar sayma)
+    user_identifier = request.user.id if request.user.is_authenticated else request.META.get("REMOTE_ADDR")
+    cache_key = f"viewed_blog_{blog_.id}_{user_identifier}"
+
+    if not cache.get(cache_key):
+        blog_.views_count += 1
+        blog_.save()
+        cache.set(cache_key, True, timeout=60 * 10)
+
+    # Kayıtlı bloglar
     if request.user.is_authenticated:
         saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
     else:
         saved_blogs = Blog.objects.none() 
 
-    
+    # EN ÇOK OKUNAN BLOG'LAR (3 ADET)
+    most_read_blogs = Blog.objects.filter(status="approved").order_by("-views_count")[:3]
 
-    return render(request, "tuerny_app/blog_detail.html", {"blog": blog, "blog_": blog_, "s_blog":s_blogs, "saved_blog": saved_blogs})
+    return render(request, "tuerny_app/blog_detail.html", {
+        "blog": blog,
+        "blog_": blog_,
+        "s_blog": s_blogs,
+        "saved_blog": saved_blogs,
+        "most_read_blogs": most_read_blogs,  
+    })
 
 def control_blog(request, slug):
     blog_ = get_object_or_404(Blog, slug=slug)
@@ -950,6 +971,8 @@ def toggle_favorite_subcategory(request, subcategory_id):
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=400)
 
 def verify_email_page(request):
+    if request.user.is_email_verified:
+        return redirect("tuerny_app:index")
     send_verification_email(request.user)
     return render(request, 'tuerny_app/verify_email.html')
 

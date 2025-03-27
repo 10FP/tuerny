@@ -12,7 +12,7 @@
     <div class="col-12 col-xl-8">
       <div class="py-4">
         <div class="d-flex flex-column gap-4 asked-listing" style="gap: 2.5rem !important;">
-          {% for question in request.user.questions.all %}    
+          {% for question in request.user.questions.all|dictsortreversed:"id" %}
           <div class="question-card">
             <div class="question-card-category">
               <p>{{question.subcategory.name}}</p>
