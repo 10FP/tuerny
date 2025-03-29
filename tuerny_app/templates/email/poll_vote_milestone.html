@@ -1,280 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mail Template</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-    
-        html, body {
-            overflow-x: hidden;
-            width: 100%;
-        }
-    
-        .header-brand {
-            height: 60px;
-            width: 100%;
-            background-color: black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            text-align: center;
-        }
-    
-        .container {
-            width: 100%;
-            padding-left: 28px;
-            padding-right: 28px;
-        }
-    
-        .text-white {
-            color: #fff;
-        }
-    
-        .hey-teurner {
-            font-weight: 400;
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-        }
-    
-        .nav-teurny {
-            height: 100px;
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    
-        .nav-teurny img {
-            height: 37.27px;
-        }
-    
-        .bg-black-footer {
-            height: 199px;
-            background-color: black;
-
-            bottom: 0;
-            width: 100%;
-            align-items: center;
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 20px 28px;
-            flex-wrap: wrap;
-        }
-    
-        .footer-logo {
-            height: 63px;
-            margin-left: 77.5px;
-            padding-left: 28px;
-            padding-right: 28px;
-        }
-    
-        .footer-logo-2 {
-            height: 44px;
-        }
-    
-        .footer-logo-3 {
-            height: 18.63px;
-        }
-    
-        .logos {
-            display: flex;
-            align-items: center;
-            gap: 47px;
-            flex-wrap: wrap;
-            margin-right: 77.5px;
-            padding-left: 28px;
-            padding-right: 28px;
-
-        }
-    
-        .hak-sakli-text {
-            font-weight: 400;
-            font-size: 13px;
-            font-family: 'Poppins', sans-serif;
-            color: #fff;
-        }
-    
-        @media (max-width: 1070px) {
-    .bg-black-footer {
-        flex-direction: column;
-        align-items: center;
-        gap: 12px;
-        text-align: center;
-        position: absolute;
-        justify-content: center; 
-        bottom: 0;
-    }
-
-    .logos {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        margin-right: 0;
-    }
-
-    .footer-logo {
-        margin-left: 0;
-        padding: 0;
-    }
-
-    .hak-sakli-text {
-        font-size: 14px;
-    }
-}
-
-
-.mail-content {
-    width: 100%;
-    background-color: #f9f9f9;
-    padding: 40px 28px;
-    display: flex;
-    justify-content: center;
-}
-
-.mail-container {
-    max-width: 700px;
-    text-align: center;
-    background: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.05);
-}
-
-.mail-title {
-    font-family: 'Poppins', sans-serif;
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #000;
-}
-
-.mail-text {
-    font-family: 'Poppins', sans-serif;
-    font-size: 16px;
-    color: #333;
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-.mail-text.small {
-    font-size: 14px;
-    color: #888;
-}
-
-.cta-button {
-    display: inline-block;
-    background-color: #000;
-    color: white;
-    padding: 14px 32px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    transition: 0.3s ease-in-out;
-    margin-bottom: 40px;
-}
-
-.cta-button:hover {
-    background-color: white;
-    border: 2px solid black;
-    color: black;
-    transition: 0.3s ease-in-out;
-}
-
-@media (max-width: 768px) {
-    .mail-container {
-        padding: 24px;
-    }
-
-    .mail-title {
-        font-size: 22px;
-    }
-
-    .mail-text {
-        font-size: 15px;
-    }
-
-    .cta-button {
-        padding: 12px 24px;
-        font-size: 15px;
-    }
-}
-
-    </style>
-    
-    
-    
+  <meta charset="UTF-8">
+  <title>Mail Template</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-<body>
+<body style="margin: 0; padding: 0; font-family: 'Poppins', Arial, sans-serif;">
 
-  
-        <div class="header-brand bg-black">
-            <div class="container">
-              <div>
-                <p class="text-white hey-teurner">Welcome {{ user.first_name }} {{ user.last_name }}!</p>
-              </div>
-            </div>
-          </div> 
-   
+  <!-- Header Brand -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; height: 60px;">
+    <tr>
+      <td align="center" valign="middle" style="padding-left: 28px; padding-right: 28px;">
+        <p style="color: #ffffff; font-size: 16px; font-weight: 400; margin: 0;">
+          Welcome {{ user.first_name }} {{ user.last_name }}!
+        </p>
+      </td>
+    </tr>
+  </table>
 
-          <nav class="nav-teurny"><img src="http://213.159.30.150:8000/static/tuerny_app/images/logo.svg" alt=""></nav>
-          <main class="mail-content">
-            <div class="mail-container">
-              <h1 class="mail-title">NEW NOTIFICATION</h1>
-              <p class="mail-text">
-                {{ user.username }}<br><br>
-                Sorun İlgi Çekiyor!
-                 <br> 
-                 Anketine oy verildi!
-              </p>
-          
-              <a href="{{question_url}}" class="cta-button">Anketine oy verildi</a>
-          
-              
-              <p class="mail-text small">
-                Dilediğin zaman e-posta iletileri izin tercihlerini ayarlardan değiştirebilirsin.
-              </p>
-            </div>
-          </main>
-         
-          
-          <footer style="margin-top: 50px;">
+  <!-- Logo -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff;">
+    <tr>
+      <td align="center" valign="middle" height="100">
+        <img src="http://213.159.30.150:8000/static/tuerny_app/images/logo.png" alt="logo" width="150" style="display: block;">
+      </td>
+    </tr>
+  </table>
 
-            <div class="bg-black-footer">
-                    <div>
-                      <img class="footer-logo" src="http://213.159.30.150:8000/static/tuerny_app/images/logo-light.svg" alt="logo">
-                    </div>
-                    <div>
-                      <p class="hak-sakli-text">
-                        © 2025 Teurny. Tüm Hakları Saklıdır.
-                      </p>
-                    </div>
-                    <div class="logos">
-                    <div>
-                      <img class="footer-logo-2" src="http://213.159.30.150:8000/static/tuerny_app/images/artrodite.svg"  alt="artrodite">
-                    </div>
-                    <div>
-                      <img class="footer-logo-3" src="http://213.159.30.150:8000/static/tuerny_app/images/VopagencyLogo2.png" alt="vopagency">
-                    </div>
-                </div>
-                  </div>
-          </footer>
-   
+  <!-- Mail Content -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" align="center" style="background-color: #f9f9f9; padding: 40px 28px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.05); padding: 40px; text-align: center;">
+          <tr>
+            <td style="font-size: 28px; font-weight: 600; color: #000000; padding-bottom: 20px;">
+              NEW NOTIFICATION
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 16px; color: #333333; line-height: 1.6; padding-bottom: 30px;">
+              {{ user.username }}<br><br>
+              Sorun İlgi Çekiyor!<br>
+              Anketine oy verildi!
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <a href="{{question_url}}" target="_blank" style="display: inline-block; background-color: #000000; color: #ffffff; padding: 14px 32px; border-radius: 6px; text-decoration: none; font-weight: 500; margin-bottom: 40px;">
+                Anketine oy verildi
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-size: 14px; color: #888888;">
+              Dilediğin zaman e-posta iletileri izin tercihlerini ayarlardan değiştirebilirsin.
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Footer -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #000000; padding: 40px 28px; margin-top: 50px;">
+    <tr>
+      <td align="center">
+        <img src="http://213.159.30.150:8000/static/tuerny_app/images/logo-light.png" alt="logo" width="120" style="display:block; margin-bottom: 20px;">
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <p style="color: #ffffff; font-size: 13px; font-weight: 400; margin: 0 0 20px 0;">
+          © 2025 Teurny. Tüm Hakları Saklıdır.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <table cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr>
+            <td align="center" style="padding: 0 15px;">
+              <img src="http://213.159.30.150:8000/static/tuerny_app/images/artrodite.png" alt="artrodite" width="80" style="display:block;">
+            </td>
+            <td align="center" style="padding: 0 15px;">
+              <img src="http://213.159.30.150:8000/static/tuerny_app/images/VopagencyLogo2.png" alt="vopagency" width="80" style="display:block;">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
 </body>
 </html>
-
-

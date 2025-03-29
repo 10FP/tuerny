@@ -3,17 +3,38 @@ from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from .utils import send_verification_email, HtmlEmailThread
 from .models import Comment, UserSettings, Notification, Question
+from allauth.socialaccount.models import SocialAccount
 from django.core.mail import send_mail
 from django.urls import reverse
 from django.conf import settings
+from django.utils.timezone import now
 
 
 User = get_user_model()
 
 @receiver(post_save, sender=User)
 def send_verification_email_signal(sender, instance, created, **kwargs):
-    if created and not instance.is_email_verified:  # Yeni kullanıcı oluşturulduysa
+    if not created:
+        return
+
+    # Sosyal hesapla mı geldi?
+    if SocialAccount.objects.filter(user=instance).exists():
+        instance.is_email_verified = True
+        instance.save(update_fields=['is_email_verified'])
+    else:
+        # Normal kayıt → kullanıcıya doğrulama bildirimi
+        Notification.objects.create(
+            user=instance,
+            content="Lütfen e-posta adresinizi doğrulayın.",
+            url="",  # Varsa profil doğrulama sayfasının linki
+            notification_type="email_verification",
+            created_at=now()
+        )
+
+        # Eğer e-posta da göndereceksen:
         send_verification_email(instance)
+
+
 
 
 @receiver(pre_save, sender=Question)

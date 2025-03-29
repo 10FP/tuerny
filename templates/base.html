@@ -628,7 +628,7 @@
                   >
                     <i class="fa-regular fa-bell"></i>
                   </button>
-                  <ul class="dropdown-menu header-bell-drop">
+                  <ul class="dropdown-menu header-bell-drop" style="height: 70vh; overflow-y: auto;">
               {% for n in request.user.notifications.all %}
                     <a href="{{n.url}}">
                     <li>{{n.content}}</li>

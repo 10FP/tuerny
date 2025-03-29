@@ -673,7 +673,7 @@ def vote_poll(request, question_id, option_id):
 
             # ✉️ E-posta kontrolü
             if poll_owner.settings.email_poll_votes:
-                if total_votes % 10 != 0 or total_votes % 50 != 0:
+                if total_votes % 10 == 0 or total_votes % 50 == 0:
                     context = {
                         "user": poll_owner,
                         "question": question,
@@ -745,7 +745,7 @@ def like_question(request, question_id):
 
                 # 🔔 Bildirim & Mail
                 receiver = question.user
-                if receiver == request.user and hasattr(receiver, "settings"):
+                if receiver != request.user and hasattr(receiver, "settings"):
                     # 🔔 Bildirim ayarı açıksa
                     if receiver.settings.notify_question_votes:
                         Notification.objects.create(
@@ -758,7 +758,7 @@ def like_question(request, question_id):
                     # 📧 E-posta eşik kontrolü
                     like_count = question.like_count
                     if receiver.settings.email_question_votes:
-                        if like_count % 10 != 0 or like_count % 50 != 0:
+                        if like_count % 10 == 0 or like_count % 50 == 0:
                             context = {
                                 "user": receiver,
                                 "question": question,
@@ -1004,15 +1004,17 @@ def toggle_favorite_subcategory(request, subcategory_id):
 
     return JsonResponse({"success": False, "message": "Geçersiz istek!"}, status=400)
 
+
 def verify_email_page(request):
     if request.user.is_email_verified:
         return redirect("tuerny_app:index")
     send_verification_email(request.user)
     return render(request, 'tuerny_app/verify_email.html')
 
+
 def send_verification_email(user):
     token = generate_email_verification_token(user.email)
-    verification_link = f"http://213.159.30.150:8000/verify-email/{token}"
+    verification_link = f"http://127.0.0.1:8000/verify-email/{token}"
 
     context = {
         "user": user,
@@ -1027,8 +1029,10 @@ def send_verification_email(user):
         from_email='furkanp2002@gmail.com',
         to=user.email
     ).start()
-
+@login_required
 def verify_email(request, token):
+    if request.user.is_email_verified == True:
+        return redirect("tuerny_app:index")
     email = verify_email_token(token)
     if email is None:
         return JsonResponse({"message": "Geçersiz veya süresi dolmuş token!"}, status=400)
@@ -1266,6 +1270,9 @@ def change_blog_status(request, blog_id):
 
 def custom_404_view(request, exception):
     return render(request, "404.html", status=404)
+
+def custom_500_view(request):
+    return render(request, "500.html", status=500)
 
 def newsletter(request):
     if request.method == "POST":
