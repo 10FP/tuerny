@@ -106,221 +106,7 @@
   </style>
   <body>
 
-<!-- Kısa Bilgilendirme Kutusu -->
-<div id="cookie-banner" class="cookie-banner">
-  <div class="cookie-inner">
-    <h2>Çerezler</h2>
-    <p>
-      Hey Teurners! Sizlere sorunsuz ve kişiselleştirilmiş bir deneyim sunabilmek için <strong>zorunlu</strong> ve üçüncü taraf çerezleri kullanıyoruz. 
-      Daha fazla bilgi için <a href="{% url 'tuerny_app:contract' %}" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
-    </p>
-    <div class="cookie-buttons">
-      <button id="open-preferences">TERCİHLER</button>
-      <button id="accept-all-short">KABUL ET</button>
-    </div>
-  </div>
-</div>
 
-<!-- Detaylı Tercih Ekranı -->
-<div id="cookie-preferences" class="cookie-banner" style="display: none;">
-  <div class="cookie-inner">
-    <h2>Çerezler</h2>
-    <p>Her bir çerez, sitemizdeki deneyiminizi nasıl iyileştireceğimize dair bize fikirler sunar. Gerekli çerezleri Web sitesini kullanarak kabul etmiş oluyorsunuz. Diğer çerez tipleri için ise tercih yapabilirsiniz.</p>
-
-    <div class="cookie-option">
-      <label>
-        <input type="checkbox" checked disabled />
-        <strong>Gerekli Çerezler</strong>
-        <p>Bu çerezler, Web sitesinin düzgün çalışmasını sağlar. Sizinle etkileşime geçebilmemiz ve güvenli ve sorunsuz bir gezinme sağlamamız için olmazsa olmazlar.</p>
-      </label>
-    </div>
-
-    <div class="cookie-option">
-      <label>
-        <input type="checkbox" id="analytics" checked/>
-        <strong>Analitik Çerezler</strong>
-        <p>Bu çerezler, sizi anlamamıza yardım eden veriler sağlar. Sitemizi iyileştirmemizi sağlarlar.</p>
-      </label>
-    </div>
-
-    <div class="cookie-option">
-      <label>
-        <input type="checkbox" id="marketing" checked/>
-        <strong>Pazarlama Çerezleri</strong>
-        <p>Size özel teklifler, reklamlar ve deneyimler sunmamıza yardımcı olur.</p>
-      </label>
-    </div>
-
-    <div class="cookie-option">
-      <label>
-        <input type="checkbox" id="functional" checked/>
-        <strong>İşlevsel Çerezler</strong>
-        <p>Tercihlerinizi hatırlamamızı ve deneyiminizi kişiselleştirmemizi sağlar.</p>
-      </label>
-    </div>
-
-    <div class="cookie-buttons">
-      <button id="save-preferences">TERCİHLERİMİ KAYDET</button>
-      <button id="accept-all-long">HEPSİNİ KABUL ET</button>
-    </div>
-  </div>
-</div>
-
-<style>
-.cookie-banner {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #000;
-  color: #fff;
-  z-index: 10000;
-  padding: 30px 20px;
-  box-shadow: 0 -2px 20px rgba(0,0,0,0.6);
-  overflow-y: auto;
-  max-height: 95vh;
-}
-
-.cookie-inner {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.cookie-banner h2 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  font-family: 'Roboto';
-  font-weight: 500;
-  color: white;
-}
-
-.cookie-banner p {
-  font-size: 15px;
-  line-height: 130%;
-  color: #fff;
-  font-family: 'Roboto';
-  font-weight: 300;
-}
-.cookie-banner p strong {
-  font-size: 15px;
-  line-height: 130%;
-  color: #fff;
-  font-family: 'Roboto';
-  font-weight: 300;
-  text-decoration: underline;
-}
-
-.cookie-banner a {
-  color: #fff;
-  text-decoration: underline;
-}
-
-.cookie-option {
-  margin-top: 20px;
-}
-
-.cookie-option label {
-  display: block;
-  font-size: 16px;
-  color: #fff;
-}
-
-.cookie-option input[type="checkbox"] {
-  margin-right: 10px;
-  transform: scale(1.2);
-  accent-color: white;
-}
-
-.cookie-option p {
-  margin: 5px 0 0 28px;
-  font-size: 14px;
-  color: #fff;
-  font-weight: 300;
-  font-family: 'Roboto';
-}
-.cookie-option strong {
-  color: #fff;
-  font-family: 'Roboto';
-  font-weight: 500;
-  font-size: 14px;
-}
-
-.cookie-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 30px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.cookie-buttons button {
-  padding: 12px 24px;
-  border-radius: 10px;
-  font-size: 14px;
-  cursor: pointer;
-  border: none;
-  min-width: 180px;
-  transition: 0.3s;
-}
-
-.cookie-buttons button:hover {
-  opacity: 0.85;
-}
-
-#open-preferences, #save-preferences {
-  background-color: transparent;
-  border: 2px solid white;
-  color: white;
-}
-
-#accept-all-short, #accept-all-long {
-  background-color: white;
-  color: black;
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const banner = document.getElementById('cookie-banner');
-  const preferencesPanel = document.getElementById('cookie-preferences');
-  const openPreferences = document.getElementById('open-preferences');
-  const acceptAllShort = document.getElementById('accept-all-short');
-  const acceptAllLong = document.getElementById('accept-all-long');
-  const savePreferences = document.getElementById('save-preferences');
-
-  if (localStorage.getItem('cookiesAccepted') === 'true') {
-    banner.style.display = 'none';
-    preferencesPanel.style.display = 'none';
-  }
-
-  openPreferences.addEventListener('click', () => {
-    banner.style.display = 'none';
-    preferencesPanel.style.display = 'block';
-  });
-
-  function saveAndClose(preferences) {
-    localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
-    localStorage.setItem('cookiesAccepted', 'true');
-    banner.style.display = 'none';
-    preferencesPanel.style.display = 'none';
-  }
-
-  acceptAllShort.addEventListener('click', () => {
-    saveAndClose({ analytics: true, marketing: true, functional: true });
-  });
-
-  acceptAllLong.addEventListener('click', () => {
-    saveAndClose({ analytics: true, marketing: true, functional: true });
-  });
-
-  savePreferences.addEventListener('click', () => {
-    const analytics = document.getElementById('analytics').checked;
-    const marketing = document.getElementById('marketing').checked;
-    const functional = document.getElementById('functional').checked;
-
-    saveAndClose({ analytics, marketing, functional });
-  });
-});
-</script>
 
 
 
@@ -1118,7 +904,393 @@ document.addEventListener('DOMContentLoaded', function () {
   </div>
 
 </footer>
+<!-- Kısa Bilgilendirme Kutusu -->
+<div id="cookie-banner" class="cookie-banner">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>
+      Hey Teurners! Sizlere sorunsuz ve kişiselleştirilmiş bir deneyim sunabilmek için <strong>zorunlu</strong> ve üçüncü taraf çerezleri kullanıyoruz. 
+      Daha fazla bilgi için <a href="{% url 'tuerny_app:contract' %}" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
+    </p>
+    <div class="cookie-buttons">
+      <button id="open-preferences">TERCİHLER</button>
+      <button id="accept-all-short">KABUL ET</button>
+    </div>
+  </div>
+</div>
 
+<!-- Detaylı Tercih Ekranı -->
+<div id="cookie-preferences" class="cookie-banner" style="display: none;">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>Her bir çerez, sitemizdeki deneyiminizi nasıl iyileştireceğimize dair bize fikirler sunar. Gerekli çerezleri Web sitesini kullanarak kabul etmiş oluyorsunuz. Diğer çerez tipleri için ise tercih yapabilirsiniz.</p>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" checked disabled />
+        <strong>Gerekli Çerezler</strong>
+        <p>Bu çerezler, Web sitesinin düzgün çalışmasını sağlar. Sizinle etkileşime geçebilmemiz ve güvenli ve sorunsuz bir gezinme sağlamamız için olmazsa olmazlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="analytics" checked/>
+        <strong>Analitik Çerezler</strong>
+        <p>Bu çerezler, sizi anlamamıza yardım eden veriler sağlar. Sitemizi iyileştirmemizi sağlarlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="marketing" checked/>
+        <strong>Pazarlama Çerezleri</strong>
+        <p>Size özel teklifler, reklamlar ve deneyimler sunmamıza yardımcı olur.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="functional" checked/>
+        <strong>İşlevsel Çerezler</strong>
+        <p>Tercihlerinizi hatırlamamızı ve deneyiminizi kişiselleştirmemizi sağlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-buttons">
+      <button id="save-preferences">TERCİHLERİMİ KAYDET</button>
+      <button id="accept-all-long">HEPSİNİ KABUL ET</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  z-index: 10000;
+  padding: 30px 20px;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.6);
+  overflow-y: auto;
+  max-height: 95vh;
+}
+
+.cookie-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cookie-banner h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-family: 'Roboto';
+  font-weight: 500;
+  color: white;
+}
+
+.cookie-banner p {
+  font-size: 15px;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+.cookie-banner p strong {
+  font-size: 15px;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+  text-decoration: underline;
+}
+
+.cookie-banner a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.cookie-option {
+  margin-top: 20px;
+}
+
+.cookie-option label {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+}
+
+.cookie-option input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+  accent-color: white;
+}
+
+.cookie-option p {
+  margin: 5px 0 0 28px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 300;
+  font-family: 'Roboto';
+}
+.cookie-option strong {
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.cookie-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-buttons button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  min-width: 180px;
+  transition: 0.3s;
+}
+
+.cookie-buttons button:hover {
+  opacity: 0.85;
+}
+
+#open-preferences, #save-preferences {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+#accept-all-short, #accept-all-long {
+  background-color: white;
+  color: black;
+}
+</style>
+
+<!-- Kısa Bilgilendirme Kutusu -->
+<div id="cookie-banner" class="cookie-banner" style="display: none;">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>
+      Hey Teurners! Sizlere sorunsuz ve kişiselleştirilmiş bir deneyim sunabilmek için <strong>zorunlu</strong> ve üçüncü taraf çerezleri kullanıyoruz. 
+      Daha fazla bilgi için <a href="{% url 'tuerny_app:contract' %}" target="_blank">Çerez Politikası</a> sayfamızı ziyaret edebilirsiniz.
+    </p>
+    <div class="cookie-buttons">
+      <button id="open-preferences">TERCİHLER</button>
+      <button id="accept-all-short">KABUL ET</button>
+    </div>
+  </div>
+</div>
+
+<!-- Detaylı Tercih Ekranı -->
+<div id="cookie-preferences" class="cookie-banner" style="display: none;">
+  <div class="cookie-inner">
+    <h2>Çerezler</h2>
+    <p>Her bir çerez, sitemizdeki deneyiminizi nasıl iyileştireceğimize dair bize fikirler sunar. Gerekli çerezleri Web sitesini kullanarak kabul etmiş oluyorsunuz. Diğer çerez tipleri için ise tercih yapabilirsiniz.</p>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" checked disabled />
+        <strong>Gerekli Çerezler</strong>
+        <p>Bu çerezler, Web sitesinin düzgün çalışmasını sağlar. Sizinle etkileşime geçebilmemiz ve güvenli ve sorunsuz bir gezinme sağlamamız için olmazsa olmazlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="analytics" checked/>
+        <strong>Analitik Çerezler</strong>
+        <p>Bu çerezler, sizi anlamamıza yardım eden veriler sağlar. Sitemizi iyileştirmemizi sağlarlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="marketing" checked/>
+        <strong>Pazarlama Çerezleri</strong>
+        <p>Size özel teklifler, reklamlar ve deneyimler sunmamıza yardımcı olur.</p>
+      </label>
+    </div>
+
+    <div class="cookie-option">
+      <label>
+        <input type="checkbox" id="functional" checked/>
+        <strong>İşlevsel Çerezler</strong>
+        <p>Tercihlerinizi hatırlamamızı ve deneyiminizi kişiselleştirmemizi sağlar.</p>
+      </label>
+    </div>
+
+    <div class="cookie-buttons">
+      <button id="save-preferences">TERCİHLERİMİ KAYDET</button>
+      <button id="accept-all-long">HEPSİNİ KABUL ET</button>
+    </div>
+  </div>
+</div>
+
+<style>
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  z-index: 10000;
+  padding: 30px 20px;
+  box-shadow: 0 -2px 20px rgba(0,0,0,0.6);
+  overflow-y: auto;
+  max-height: 95vh;
+}
+
+.cookie-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cookie-banner h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-family: 'Roboto';
+  font-weight: 500;
+  color: white;
+}
+
+.cookie-banner p {
+  font-size: 15px;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+.cookie-banner p strong {
+  font-size: 15px;
+  line-height: 130%;
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 300;
+  text-decoration: underline;
+}
+
+.cookie-banner a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.cookie-option {
+  margin-top: 20px;
+}
+
+.cookie-option label {
+  display: block;
+  font-size: 16px;
+  color: #fff;
+}
+
+.cookie-option input[type="checkbox"] {
+  margin-right: 10px;
+  transform: scale(1.2);
+  accent-color: white;
+}
+
+.cookie-option p {
+  margin: 5px 0 0 28px;
+  font-size: 14px;
+  color: #fff;
+  font-weight: 300;
+  font-family: 'Roboto';
+}
+.cookie-option strong {
+  color: #fff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.cookie-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cookie-buttons button {
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  min-width: 180px;
+  transition: 0.3s;
+}
+
+.cookie-buttons button:hover {
+  opacity: 0.85;
+}
+
+#open-preferences, #save-preferences {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+#accept-all-short, #accept-all-long {
+  background-color: white;
+  color: black;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const banner = document.getElementById('cookie-banner');
+  const preferencesPanel = document.getElementById('cookie-preferences');
+  const openPreferences = document.getElementById('open-preferences');
+  const acceptAllShort = document.getElementById('accept-all-short');
+  const acceptAllLong = document.getElementById('accept-all-long');
+  const savePreferences = document.getElementById('save-preferences');
+
+  if (localStorage.getItem('cookiesAccepted') === 'true') {
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'none';
+  }
+
+  openPreferences.addEventListener('click', () => {
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'block';
+  });
+
+  function saveAndClose(preferences) {
+    localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
+    localStorage.setItem('cookiesAccepted', 'true');
+    banner.style.display = 'none';
+    preferencesPanel.style.display = 'none';
+  }
+
+  acceptAllShort.addEventListener('click', () => {
+    saveAndClose({ analytics: true, marketing: true, functional: true });
+  });
+
+  acceptAllLong.addEventListener('click', () => {
+    saveAndClose({ analytics: true, marketing: true, functional: true });
+  });
+
+  savePreferences.addEventListener('click', () => {
+    const analytics = document.getElementById('analytics').checked;
+    const marketing = document.getElementById('marketing').checked;
+    const functional = document.getElementById('functional').checked;
+
+    saveAndClose({ analytics, marketing, functional });
+  });
+});
+</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.2.0/jquery.magnific-popup.min.js" integrity="sha512-fCRpXk4VumjVNtE0j+OyOqzPxF1eZwacU3kN3SsznRPWHgMTSSo7INc8aY03KQDBWztuMo5KjKzCFXI/a5rVYQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

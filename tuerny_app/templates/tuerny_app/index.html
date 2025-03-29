@@ -12,6 +12,15 @@
 .blog-card-slider .slick-slide > div {
   margin: 0 !important;
 }
+.blog-section-title span{
+  font-weight: 500 !important;
+}
+.blog-section-title a {
+  font-weight: 400;
+}
+.fs-m-14{
+  font-size: 16px !important;
+}
 #hero-slider-bottom .slider-item span {
   margin-top: 0px;
 }
@@ -21,7 +30,7 @@
 .m-cat {
   gap: 0 !important;
 }
-.blog-section-more.d-flex.d-md-none {
+.home-blogs-3-d-none {
   display: none !important;
 }
 .blog-card-slider .slick-arrow {
@@ -89,7 +98,7 @@
 <div class="blog-section-1 py-5">
   <div class="container d-flex flex-column gap-4">
     <div class="blog-section-title px-2">
-      <span class="fs-m-12">Cinsel Sağlık</span>
+      <span class="fs-m-12 special-title">Cinsel Sağlık</span>
       <div class="blog-section-title-divider"></div>
       <a class="home-blogs" href="{% url 'tuerny_app:category' 'cinsel-saglik' %}">Daha Fazla</a>
     </div>
@@ -175,8 +184,8 @@
   <div class="container d-flex flex-column gap-4">
     <div class="blog-section-title px-2">
       <span class="fs-m-14">Dekorasyon</span>
-      <div class="blog-section-title-divider"></div>
-      <a class="home-blogs fs-m-12" href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
+      <div class="blog-section-title-divider home-blogs-3-d-none"></div>
+      <a class="home-blogs home-blogs-3-d-none fs-m-12" href="{% url 'tuerny_app:category' 'dekorasyon' %}">Daha Fazla</a>
     </div>
     <div class="d-flex flex-column gap-4d px-2">
       <div class="row">
@@ -263,8 +272,8 @@
   <div class="container d-flex flex-column gap-4">
     <div class="blog-section-title px-2">
       <span>Kendin Yap</span>
-      <div class="blog-section-title-divider"></div>
-      <a class="home-blogs" href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
+      <div class="blog-section-title-divider home-blogs-3-d-none"></div>
+      <a class="home-blogs home-blogs-3-d-none" href="{% url 'tuerny_app:category' 'kendin-yap' %}">Daha Fazla</a>
     </div>
     <div class="d-flex flex-column gap-4d section-3 px-2">
       <div class="row">
