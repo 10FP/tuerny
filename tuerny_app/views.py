@@ -745,7 +745,7 @@ def like_question(request, question_id):
 
                 # 🔔 Bildirim & Mail
                 receiver = question.user
-                if receiver != request.user and hasattr(receiver, "settings"):
+                if receiver == request.user and hasattr(receiver, "settings"):
                     # 🔔 Bildirim ayarı açıksa
                     if receiver.settings.notify_question_votes:
                         Notification.objects.create(
@@ -758,7 +758,7 @@ def like_question(request, question_id):
                     # 📧 E-posta eşik kontrolü
                     like_count = question.like_count
                     if receiver.settings.email_question_votes:
-                        if like_count % 10 == 0 or like_count % 50 == 0:
+                        if like_count % 10 != 0 or like_count % 50 != 0:
                             context = {
                                 "user": receiver,
                                 "question": question,
@@ -772,7 +772,7 @@ def like_question(request, question_id):
                                 subject="Sorun Beğeniliyor!",
                                 template_name="email/question_like_milestone.html",
                                 context=context,
-                                from_email=settings.DEFAULT_FROM_EMAIL,
+                                from_email='no-reply@teurny.com',
                                 to=receiver.email
                             ).start()
 
