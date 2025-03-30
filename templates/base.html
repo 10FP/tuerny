@@ -905,7 +905,7 @@
 
 </footer>
 <!-- Kısa Bilgilendirme Kutusu -->
-<div id="cookie-banner" class="cookie-banner">
+<div id="cookie-banner" class="cookie-banner" style="display: none;">
   <div class="cookie-inner">
     <h2>Çerezler</h2>
     <p>
@@ -1266,7 +1266,9 @@ document.addEventListener('DOMContentLoaded', function () {
     banner.style.display = 'none';
     preferencesPanel.style.display = 'block';
   });
-
+  if (localStorage.getItem('cookiesAccepted') !== 'true') {
+  banner.style.display = 'block';
+}
   function saveAndClose(preferences) {
     localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
     localStorage.setItem('cookiesAccepted', 'true');

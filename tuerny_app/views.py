@@ -33,15 +33,34 @@ from django.db.models import Q
 def index(request):
     products = Product.objects.all()
     api = APISettings.objects.all()
-    blog = Blog.objects.all()
-    main = MainSuggestedBlog.objects.all()
+    blog = Blog.objects.filter(status="approved")
+    main = MainSuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
+
+   
+    blog_cinsel = Blog.objects.filter(Q(category__name="Cinsel Sağlık") | Q(extra_categories__name="Cinsel Sağlık"),status="approved").select_related("category").distinct()
+    blog_dekorasyon = Blog.objects.filter(
+        Q(category__name="Dekorasyon") | Q(extra_categories__name="Dekorasyon"),
+        status="approved"
+    ).select_related("category").distinct()
+
+    blog_kendinyap = Blog.objects.filter(
+        Q(category__name="Kendin Yap") | Q(extra_categories__name="Kendin Yap"),
+        status="approved"
+    ).select_related("category").distinct()
+
+    blog_iliskiler = Blog.objects.filter(
+        Q(category__name="İlişkiler") | Q(extra_categories__name="İlişkiler"),
+        status="approved"
+    ).select_related("category").distinct()
     
     if request.user.is_authenticated:
         saved_blogs = Blog.objects.filter(saved_by_users__user=request.user)
     else:
         saved_blogs = Blog.objects.none()  # Kullanıcı giriş yapmamışsa boş bir queryset döndür
 
-    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs, "products": products})
+    return render(request, 'tuerny_app/index.html', {"blog": blog, "api": api, "main": main,'saved_blogs': saved_blogs, "products": products,"blog_cinsel": blog_cinsel,"blog_dekorasyon": blog_dekorasyon,
+        "blog_kendinyap": blog_kendinyap,
+        "blog_iliskiler": blog_iliskiler,})
 
 def about(request):
     s_blogs = SuggestedBlog.objects.all()

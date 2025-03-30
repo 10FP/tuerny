@@ -104,8 +104,8 @@
     </div>
     <div>
       <div class="blog-card-slider">
-        {% for blog in blog %}
-        {% if blog.category.name == "Cinsel Sağlık" %}
+        {% for blog in blog_cinsel %}
+      
         <div class="px-2">
           <div class="blog-card-1">
             <div class="ratio-1">
@@ -171,7 +171,7 @@
         </div>
         
         
-        {% endif %}
+       
         {% endfor %}
 
       </div>
@@ -189,9 +189,9 @@
     </div>
     <div class="d-flex flex-column gap-4d px-2">
       <div class="row">
-        {% for blog in blog %}
+        {% for blog in blog_dekorasyon %}
         
-        {% if blog.category.name == "Dekorasyon" %}
+     
         <div class="col-md-6">
           <div class="my-2">
             <div class="blog-card-2">
@@ -210,7 +210,7 @@
             </div>
           </div>
         </div>
-        {% endif %}
+       
         {% endfor %}
       </div>
     </div>
@@ -278,8 +278,8 @@
     <div class="d-flex flex-column gap-4d section-3 px-2">
       <div class="row">
         
-        {% for blog in blog %}
-        {% if blog.category.name == "Kendin Yap" %}
+        {% for blog in blog_kendinyap %}
+     
         <div class="col-6">
           <div class="my-3">
             <div class="blog-card-3">
@@ -379,7 +379,7 @@
             </div>
           </div>
         </div>
-        {% endif %}
+        
         {% endfor %}
       </div>
     </div>
@@ -398,8 +398,8 @@
     </div>
     <div>
       <div class="blog-card-slider-3">
-        {% for blog in blog %}
-        {% if blog.category.name == "İlişkiler" %}
+        {% for blog in blog_iliskiler %}
+
         <div class="px-2">
           <div class="blog-card-1 mw-100">
             <a href="{% url 'tuerny_app:blog_detail' blog.slug %}">
@@ -415,7 +415,7 @@
             </a>
           </div>
         </div>
-        {% endif %}
+       
         {% endfor %}
 
       </div>
