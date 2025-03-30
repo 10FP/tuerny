@@ -79,10 +79,26 @@
                               </div>
                               <div class="d-flex align-items-center gap-3 gap-c">
                                 <div class="question-card-button">
-                                    <i {% if request.user in vote.poll.question.dislikes.all %}style="cursor: pointer; color: rgb(130, 68, 88);"{% else %}style="cursor: pointer;"{% endif %}  data-id="{{ vote.poll.question.id }}"
-                                       id="dislike-icon-{{ vote.poll.question.id }}"
-                                       class="fa-solid fa-heart-crack question-card-button-icon dislike-button {% if request.user in vote.poll.question.dislikes.all %}active{% endif %}"></i>
-                                    <span id="dislike-count-{{ vote.poll.question.id }}">{{ vote.poll.question.dislike_count }}</span>
+                                    {% if request.user in vote.poll.question.dislikes.all %}
+                                    <svg style="cursor: pointer;" data-id="{{ vote.poll.question.id }}"  id="dislike-icon-{{ vote.poll.question.id }}" class="a-solid fa-heart-crack question-card-button-icon dislike-button"
+                                     version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                        width="22" height="22" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                                    <path fill="#000000" stroke="#000000" stroke-width="4" stroke-miterlimit="10" d="M1,21c0,20,31,38,31,38s31-18,31-38
+                                        c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"/>
+                                    <polyline fill="none" stroke="#fff" stroke-width="4" stroke-miterlimit="10" points="29,57 36,50 30,44 36,38 30,32 38,24 
+                                        32,19 32,17 "/>
+                                    </svg>
+                                    {% else %}
+                                    <svg style="cursor: pointer;" data-id="{{ vote.poll.question.id }}"  id="dislike-icon-{{ vote.poll.question.id }}" class="a-solid fa-heart-crack question-card-button-icon dislike-button"
+                                     version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                        width="22" height="22" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                                    <path fill="none" stroke="#000000" stroke-width="4" stroke-miterlimit="10" d="M1,21c0,20,31,38,31,38s31-18,31-38
+                                        c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"/>
+                                    <polyline fill="none" stroke="#000000" stroke-width="4" stroke-miterlimit="10" points="29,57 36,50 30,44 36,38 30,32 38,24 
+                                        32,19 32,17 "/>
+                                    </svg>
+                                    {% endif %}
+                                       <span id="dislike-count-{{ vote.poll.question.id }}">{{ vote.poll.question.dislike_count }}</span>
                                 </div>
                             
                                 <div class="question-card-rate-line-container">
@@ -94,10 +110,22 @@
                             
                                 <!-- Beğeni Butonu -->
                                 <div class="question-card-button">
-                                    <i style="cursor: pointer" data-id="{{ vote.poll.question.id }}"
-                                       id="like-icon-{{ vote.poll.question.id }}"
-                                       class="{% if request.user in vote.poll.question.likes.all %}fa-solid {% else %} fa-regular{% endif %} fa-heart question-card-button-icon like-button {% if request.user in vote.poll.question.likes.all %}active{% endif %}"></i>
-                                    <span id="like-count-{{ vote.poll.question.id }}">{{ vote.poll.question.like_count }}</span>
+                                    {% if request.user in vote.poll.question.likes.all %}
+                                    <svg class="question-card-button-icon like-button" style="cursor: pointer;" data-id="{{ vote.poll.question.id }}" id="like-icon-{{ vote.poll.question.id }}" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                    width="22" height="22" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                               <path fill="#8f4d61" stroke="#8f4d61" stroke-width="4" stroke-miterlimit="10" d="M1,21c0,20,31,38,31,38s31-18,31-38
+                                   c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"/>
+                               
+                               </svg>
+                               {% else %}
+                               <svg class="question-card-button-icon like-button" style="cursor: pointer;" data-id="{{ vote.poll.question.id }}" id="like-icon-{{ vote.poll.question.id }}" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                                    width="22" height="22" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                               <path fill="none" stroke="#000000" stroke-width="4" stroke-miterlimit="10" d="M1,21c0,20,31,38,31,38s31-18,31-38
+                                   c0-8.285-6-16-15-16c-8.285,0-16,5.715-16,14c0-8.285-7.715-14-16-14C7,5,1,12.715,1,21z"/>
+                               
+                               </svg>
+                               {% endif %}
+                                       <span id="like-count-{{ vote.poll.question.id }}">{{ vote.poll.question.like_count }}</span>
                                 </div>
                                   
                                   

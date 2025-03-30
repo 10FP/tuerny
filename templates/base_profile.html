@@ -1450,16 +1450,27 @@ document.addEventListener('DOMContentLoaded', function () {
                       let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
   
                       if (data.liked) {
-                          likeIcon.classList.add("fa-solid");
-                          likeIcon.classList.add("active");
-                          dislikeIcon.style.color = "rgb(0, 0, 0)";
+    likeIcon.classList.add("active");
 
-                      } else {
-                          likeIcon.classList.remove("fa-solid");
-                          likeIcon.classList.add("fa-regular");
+    const path = likeIcon.querySelector("path");
+    path.setAttribute("fill", "#8f4d61");
+    path.setAttribute("stroke", "#8f4d61");
 
-                          likeIcon.classList.remove("active");
-                      }
+    // Dislike'ı pasifleştir
+    const dislikePath = dislikeIcon.querySelector("path");
+    const dislikePolyline = dislikeIcon.querySelector("polyline");
+    dislikeIcon.classList.remove("active");
+    dislikePath.setAttribute("fill", "none");
+    dislikePath.setAttribute("stroke", "#000000");
+    dislikePolyline.setAttribute("stroke", "#000000");
+
+} else {
+    likeIcon.classList.remove("active");
+
+    const path = likeIcon.querySelector("path");
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "#000000");
+}
   
                       // dislikeIcon.classList.remove("fa-solid");
                       // dislikeIcon.classList.remove("active");
@@ -1491,22 +1502,33 @@ document.addEventListener('DOMContentLoaded', function () {
                       let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
   
                       if (data.disliked) {
-                          console.log("a")
-                          
-                          dislikeIcon.classList.add("active");
-                          dislikeIcon.style.color = "rgb(130, 68, 88)";
-                          likeIcon.classList.remove("fa-solid");
-                          likeIcon.classList.add("fa-regular");
+    dislikeIcon.classList.add("active");
 
-                          likeIcon.classList.remove("active");
-                          
-                      } else {
-                          // dislikeIcon.classList.remove("fa-solid");
-                          dislikeIcon.classList.remove("active");
-                          dislikeIcon.style.color = "rgb(0, 0, 0)";
-                          console.log("b")
+    const path = dislikeIcon.querySelector('path');
+    const polyline = dislikeIcon.querySelector('polyline');
 
-                      }
+    path.setAttribute("fill", "#000000");
+    path.setAttribute("stroke", "#000000");
+    polyline.setAttribute("stroke", "#ffffff");
+
+    // Eğer daha önceden like yapıldıysa, like'ı sıfırla
+    likeIcon.classList.remove("active");
+
+    const likePath = likeIcon.querySelector("path");
+    likePath.setAttribute("fill", "none");
+    likePath.setAttribute("stroke", "#000000");
+
+} else {
+    dislikeIcon.classList.remove("active");
+
+    const path = dislikeIcon.querySelector('path');
+    const polyline = dislikeIcon.querySelector('polyline');
+
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "#000000");
+    polyline.setAttribute("stroke", "#000000");
+}
+  
                       console.log("c")
                       
                       
@@ -1556,12 +1578,27 @@ document.addEventListener('DOMContentLoaded', function () {
                               let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
   
                               if (data.liked) {
-                                  likeIcon.classList.add("fa-solid", "active");
-                                  dislikeIcon.style.color = "rgb(0, 0, 0)";
-                              } else {
-                                  likeIcon.classList.remove("fa-solid", "active");
-                                  likeIcon.classList.add("fa-regular");
-                              }
+    likeIcon.classList.add("active");
+
+    const path = likeIcon.querySelector("path");
+    path.setAttribute("fill", "#8f4d61");
+    path.setAttribute("stroke", "#8f4d61");
+
+    // Dislike'ı pasifleştir
+    const dislikePath = dislikeIcon.querySelector("path");
+    const dislikePolyline = dislikeIcon.querySelector("polyline");
+    dislikeIcon.classList.remove("active");
+    dislikePath.setAttribute("fill", "none");
+    dislikePath.setAttribute("stroke", "#000000");
+    dislikePolyline.setAttribute("stroke", "#000000");
+
+} else {
+    likeIcon.classList.remove("active");
+
+    const path = likeIcon.querySelector("path");
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "#000000");
+}
                           }
                       });
                   });
@@ -1598,16 +1635,33 @@ document.addEventListener('DOMContentLoaded', function () {
                               let dislikeIcon = document.getElementById(`dislike-icon-${questionId}`);
   
                               if (data.disliked) {
-                                  console.log("❌ Beğenme iptal edildi, Beğenmeme aktif!");
-                                  dislikeIcon.classList.add("active");
-                                  dislikeIcon.style.color = "rgb(130, 68, 88)";
-                                  likeIcon.classList.remove("fa-solid", "active");
-                                  likeIcon.classList.add("fa-regular");
-                              } else {
-                                  console.log("✅ Beğenmeme iptal edildi!");
-                                  dislikeIcon.classList.remove("active");
-                                  dislikeIcon.style.color = "rgb(0, 0, 0)";
-                              }
+    dislikeIcon.classList.add("active");
+
+    const path = dislikeIcon.querySelector('path');
+    const polyline = dislikeIcon.querySelector('polyline');
+
+    path.setAttribute("fill", "#000000");
+    path.setAttribute("stroke", "#000000");
+    polyline.setAttribute("stroke", "#ffffff");
+
+    // Eğer daha önceden like yapıldıysa, like'ı sıfırla
+    likeIcon.classList.remove("active");
+
+    const likePath = likeIcon.querySelector("path");
+    likePath.setAttribute("fill", "none");
+    likePath.setAttribute("stroke", "#000000");
+
+} else {
+    dislikeIcon.classList.remove("active");
+
+    const path = dislikeIcon.querySelector('path');
+    const polyline = dislikeIcon.querySelector('polyline');
+
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "#000000");
+    polyline.setAttribute("stroke", "#000000");
+}
+  
                           }
                       });
                   });
