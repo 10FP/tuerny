@@ -46,9 +46,7 @@
     .extra-s {
         display: none !important;
     }
-    .blog-comment {
-            margin-top: 550px;
-        }
+    
     .d-lg-none.suggestions {
         position: absolute;
         width: 100vw;
@@ -57,6 +55,15 @@
     }
     }
 </style>
+{% if blog_.extra_product.all %}
+<style>
+    @media screen and (max-width: 992px) {
+    .blog-comment {
+            margin-top: 550px;
+        }
+    }
+    </style>
+{% endif %}
 
 <div class="container py-5">
     <div class="row justify-content-around">
@@ -379,6 +386,7 @@
         
     </div>
     </div>
+    {% if blog_.extra_product.all %}
     <div class="d-lg-none suggestions">
         <div
           class="w-100 position-relative pt-5 pb-lg-0 pb-5"
@@ -423,8 +431,10 @@
           </div>
         </div>
       </div>
+      {% endif %}
+     
         <div class="d-flex flex-column gap-4 py-5 extra-s">
-            {% if blog_.extra_product %}
+            {% if blog_.extra_product.all %}
             <div class="">
                 <span style="    font-family: Playfair Display;
 font-size: 16px;
@@ -434,9 +444,11 @@ line-height: 20.8px;
 color: #8F4D61;">Teurny Önerileri</span>
                 <p></p>
             </div>
+            {% endif %}            
+          
             <div>
                 <div class="blog-card-slider">
-                    
+                    {% if blog_.extra_product.all %}
                         {% for product in blog_.extra_product.all %}
                        
                         <div class="">
@@ -455,12 +467,12 @@ color: #8F4D61;">Teurny Önerileri</span>
                     
                     
                            
-                        {% endif %}
+                        {% endif %}            
 
                 </div>
             </div>
         </div>
-       
+
 
     <div class="blog-comment">
         {% if blog_.comments.all %}
