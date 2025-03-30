@@ -1,5 +1,8 @@
 {% extends 'base.html' %} {% load static %} {% load math_filters %} {% block content %}
 <style>
+    .question-card-survey-item-progress-rate span {
+        word-break: normal;
+    }
 .vote-option{
   font-family: 'Roboto';
   color: #989491;
@@ -558,4 +561,36 @@ radioButtons.forEach((radio) => {
       updateComments();
   });
   </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".question-card").forEach(function (questionCard) {
+        let hasVoted = false;
+        let questionId = questionCard.querySelector(".votee")?.name.split("_")[1];
+
+        // Kullanıcının herhangi bir seçeneğe oy verip vermediğini kontrol et
+        questionCard.querySelectorAll(".votee").forEach(function (voteOption) {
+            if (voteOption.checked) {
+                hasVoted = true;
+            }
+        });
+
+        // Eğer kullanıcı oy vermemişse, yüzdeleri gizle
+        if (!hasVoted) {
+            questionCard.querySelectorAll(".question-card-survey-item-progress-rate").forEach(function (progressBar) {
+                progressBar.style.display = "none";
+            });
+        }
+
+        // Oy verildiğinde yüzdeleri göster
+        questionCard.querySelectorAll(".votee").forEach(function (voteOption) {
+            voteOption.addEventListener("change", function () {
+                questionCard.querySelectorAll(".question-card-survey-item-progress-rate").forEach(function (progressBar) {
+                    progressBar.style.display = "block";
+                });
+            });
+        });
+    });
+});
+</script>
 {% endblock content %}
