@@ -387,3 +387,17 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.notification_type}"
+    
+
+class InstagramPost(models.Model):
+    title = models.CharField(max_length=255, blank=True)
+    image = models.ImageField(upload_to="instagram/")
+    caption = models.TextField(blank=True)
+    post_url = models.URLField(blank=True, null=True)  # İsteğe bağlı gerçek IG post linki
+    created_at = models.DateTimeField(default=now)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.title or f"Post {self.id}"

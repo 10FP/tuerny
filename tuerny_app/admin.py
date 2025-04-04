@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion, BlogContent,ContactMessage
+from .models import CustomUser, Question, Poll, PollOption, SubCategory, MainCategory, Blog, Product, Comment, Save, SuggestedBlog, CategorySuggestedBlog, APISettings, MainSuggestedBlog, SavedBlog, SuggestedQuestion, BlogContent,ContactMessage, InstagramPost
 from django.contrib.auth.admin import UserAdmin
 from django import forms
 from ckeditor.widgets import CKEditorWidget
@@ -27,6 +27,16 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'phone', 'birth_date', 'gender'),
         }),
     )
+
+@admin.register(PollOption)
+class PollOptionAdmin(admin.ModelAdmin):
+    list_display = ('option_text', 'poll', 'votes', 'voted_users_count')
+    search_fields = ('option_text', 'poll__question')
+    list_filter = ('poll',)
+
+    def voted_users_count(self, obj):
+        return obj.voted_users.count()
+    voted_users_count.short_description = "Oy Kullanan Kullanıcı Sayısı"
 
 
 class PollOptionInline(admin.TabularInline):
@@ -56,6 +66,11 @@ class MainCategoryAdmin(admin.ModelAdmin):
     inlines = [SubCategoryInline]
     prepopulated_fields = {"slug": ("name",)}
 
+@admin.register(InstagramPost)
+class InstagramPostAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at')
+    search_fields = ('title', 'caption')
+    list_filter = ('created_at',)
 
 
 class BlogPostForm(forms.ModelForm):
@@ -90,15 +105,28 @@ class BlogContentInline(admin.TabularInline):
             return format_html('<img src="{}" style="max-width: 100px; max-height: 100px;" />', obj.image.url)
         return "-"
 
+@admin.action(description="Seçilenleri Onayla")
+def approve_blogs(modeladmin, request, queryset):
+    queryset.update(status="approved")
+
+@admin.action(description="Seçilenleri Reddet")
+def reject_blogs(modeladmin, request, queryset):
+    queryset.update(status="rejected")
+
+@admin.action(description="Seçilenleri Beklemeye Al")
+def pend_blogs(modeladmin, request, queryset):
+    queryset.update(status="pending")
+
+
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
 
     list_display = ('title', 'category', 'user', 'created_at', 'copy_blog_link')
-    search_fields = ('title',)
+    search_fields = ('title', 'status')
     list_filter = ('category', 'created_at')
     prepopulated_fields = {'slug': ('title',)} 
     inlines = [BlogContentInline]
-    
+    actions = ['approve_blogs', 'reject_blogs', 'pend_blogs', 'copy_blog']
     def copy_blog(self, request, queryset):
         """
         Seçilen blog objelerini kopyalar.
@@ -113,7 +141,23 @@ class BlogAdmin(admin.ModelAdmin):
 
     copy_blog.short_description = "Seçili blogları kopyala"
 
-    actions = ['copy_blog']  # Admin actions'a kopyalama işlevini ekle
+    def approve_blogs(self, request, queryset):
+        queryset.update(status="approved")
+        self.message_user(request, f"{queryset.count()} blog başarıyla onaylandı.")
+    approve_blogs.short_description = "Seçilenleri Onayla"
+
+    def reject_blogs(self, request, queryset):
+        queryset.update(status="rejected")
+        self.message_user(request, f"{queryset.count()} blog reddedildi.")
+    reject_blogs.short_description = "Seçilenleri Reddet"
+
+    def pend_blogs(self, request, queryset):
+        queryset.update(status="pending")
+        self.message_user(request, f"{queryset.count()} blog beklemeye alındı.")
+    pend_blogs.short_description = "Seçilenleri Beklemeye Al"
+
+   
+    
 
     def copy_blog_link(self, obj):
         """
@@ -159,55 +203,6 @@ class SaveAdmin(admin.ModelAdmin):
         return "Bilinmeyen"
     get_saved_item.short_description = "Kaydedilen İçerik"
 
-class CustomAdminSite(AdminSite):
-    site_header = "Yönetim Paneli"
-    site_title = "Admin Panel"
-    index_title = "Hoş Geldiniz"
-
-    def get_urls(self):
-        urls = super().get_urls()
-        custom_urls = [
-            path('export-all-csv/', self.export_all_csv, name='export_all_csv'),
-        ]
-        return custom_urls + urls
-
-    def export_all_csv(self, request):
-        # ZIP dosyası oluşturmak için geçici bir bellek alanı
-        buffer = BytesIO()
-        zip_file = zipfile.ZipFile(buffer, 'w', zipfile.ZIP_DEFLATED)
-
-        # Tüm modelleri al
-        models = apps.get_models()
-
-        for model in models:
-            model_name = model._meta.verbose_name_plural
-            queryset = model.objects.all()
-
-            # CSV yazmak için StringIO kullan
-            csv_buffer = StringIO()
-            writer = csv.writer(csv_buffer)
-
-            # CSV başlıkları
-            fields = [field.name for field in model._meta.fields]
-            writer.writerow(fields)
-
-            # Verileri yaz
-            for obj in queryset:
-                writer.writerow([getattr(obj, field) for field in fields])
-
-            # CSV dosyasını ZIP'e ekle
-            csv_filename = f"{model_name}.csv"
-            zip_file.writestr(csv_filename, csv_buffer.getvalue())
-            csv_buffer.close()
-
-        # ZIP dosyasını kapat
-        zip_file.close()
-        buffer.seek(0)
-
-        # HTTP yanıtını döndür
-        response = HttpResponse(buffer, content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename="all_tables.zip"'
-        return response
 
 @admin.register(SuggestedBlog)
 class SuggestedBlogAdmin(admin.ModelAdmin):
@@ -306,16 +301,8 @@ class APISettingsAdmin(admin.ModelAdmin):
             "fields": ("name", "script", "is_active"),
         }),
     )
-# Özel admin siteyi tanımlayın
-custom_admin_site = CustomAdminSite(name='custom_admin')
 
-# Tüm modelleri admin'e ekle
-models = apps.get_models()
-for model in models:
-    try:
-        custom_admin_site.register(model)
-    except admin.sites.AlreadyRegistered:
-        pass
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Poll, PollAdmin)
 admin.site.register(MainCategory, MainCategoryAdmin)

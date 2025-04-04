@@ -63,7 +63,7 @@ def index(request):
         "blog_iliskiler": blog_iliskiler,})
 
 def about(request):
-    s_blogs = SuggestedBlog.objects.all()
+    s_blogs = SuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
     return render(request, 'tuerny_app/about.html', {"extra": s_blogs})
 
 def ask_details(request, question_id):
@@ -149,7 +149,7 @@ def asked_details(request, asked_id):
 @login_required
 def add_blog_comment(request):
     blog = Blog.objects.all()
-    s_blogs = SuggestedBlog.objects.all()
+    s_blogs = SuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
     
     if request.method == "POST":
         
@@ -520,8 +520,8 @@ def z(request):
     return render(request, "tuerny_app/comments.html")
 
 def blog_detail(request, slug):
-    blog = Blog.objects.all()
-    s_blogs = SuggestedBlog.objects.all()
+    blog = Blog.objects.filter(status='approved')
+    s_blogs = SuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
     blog_ = get_object_or_404(Blog, slug=slug)
 
     if blog_.status != "approved":
@@ -572,19 +572,19 @@ def category(request, slug):
             main_category = category.main_category 
             other_subcategories = list(main_category.subcategories.exclude(id=category.id))
             
-            extra = CategorySuggestedBlog.objects.all()
+            extra = CategorySuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
             if len(other_subcategories) >= 2:
                 random_categories = random.sample(other_subcategories, 2)
                 second_category, third_category = random_categories
-                second_blogs = second_category.blogs.all()
-                second_blogss = second_category.extra_blogs.all()
+                second_blogs = second_category.blogs.filter(status="approved")
+                second_blogss = second_category.extra_blogs.filter(status="approved")
                 merged_second_blogs = chain(second_blogs, second_blogss)
-                third_blogs = third_category.blogs.all()
-                third_blogss = third_category.extra_blogs.all()
+                third_blogs = third_category.blogs.filter(status="approved")
+                third_blogss = third_category.extra_blogs.filter(status="approved")
                 merged_third_blogs = chain(third_blogs, third_blogss)
                 
-            blogs = category.blogs.all()
-            blogss = category.extra_blogs.all()
+            blogs = category.blogs.filter(status="approved")
+            blogss = category.extra_blogs.filter(status="approved")
             merged_blogs = chain(blogs, blogss)
             return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": merged_blogs, "second_blogs": merged_second_blogs, "third_blogs": merged_third_blogs, "extra": extra, "saved_blogs": saved_blogs})
     except:
@@ -599,14 +599,14 @@ def category(request, slug):
             random_subcategories = random.sample(all_subcategories[1:], 2)
         else:
             random_subcategories = all_subcategories
-        blogs = first_subcategory.blogs.all()
-        second = random_subcategories[0].blogs.all()
-        seconds = random_subcategories[0].extra_blogs.all()
+        blogs = first_subcategory.blogs.filter(status="approved")
+        second = random_subcategories[0].blogs.filter(status="approved")
+        seconds = random_subcategories[0].extra_blogs.filter(status="approved")
         merged_second_blogs = chain(second, seconds)
-        third = random_subcategories[1].blogs.all()
-        thirds = random_subcategories[1].extra_blogs.all()
+        third = random_subcategories[1].blogs.filter(status="approved")
+        thirds = random_subcategories[1].extra_blogs.filter(status="approved")
         merged_third_blogs = chain(third, thirds)
-        extra = CategorySuggestedBlog.objects.all()
+        extra = CategorySuggestedBlog.objects.filter(blog__status='approved').select_related('blog') 
         return render(request, "tuerny_app/category_detail.html", {"category": category, "blogs": blogs,"second_blogs":merged_second_blogs, "third_blogs": merged_third_blogs,"extra": extra,"saved_blogs": saved_blogs})
         
 def confirm(request):

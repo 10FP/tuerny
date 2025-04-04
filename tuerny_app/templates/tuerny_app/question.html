@@ -393,7 +393,7 @@
                                     {% for o in q.question.poll.options.all %}
                                     <a hhref="{% url 'tuerny_app:ask' q.question.id %}">
                                     <div class="argument-card-item-label">
-                                        <input name="argument" value="select_id" type="radio" id="select_id" />
+                                        <input class="votee" name="vote_{{ q.question.id }}" name="argument" value="{{ o.id }}" type="radio" id="r{{ o.id }}" {% if request.user in o.voted_users.all %} checked {% endif %}/>
                                         <label for="select_id" class="text-nowrap option wrap special-que">{{o.option_text}}</label>
                                     </div>
                                 </a>

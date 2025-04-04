@@ -313,86 +313,18 @@
   <div class="py-5">
     <div class="blog-section-2 blog-card-slider-2-container" style="overflow-x: clip;">
       <div class="image-slider mb-5">
+        {% for i in insta %}
         <div class="px-2">
           <div class="ratio-1">
-            <a href="#" target="_blank">
+            <a href="{{i.post_url}}" target="_blank">
               <img
-                src="{% static 'tuerny_app/images/9786604.jpeg' %}"
+                src="{{i.image.url}}"
                 class="w-100 h-100 object-fit-cover"
               />
             </a>
           </div>
         </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/4142920.png' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/9786604.jpeg' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/4142920.png' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/9786604.jpeg' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/4142920.png' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/9786604.jpeg' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
-        <div class="px-2">
-          <div class="ratio-1">
-            <a href="#" target="_blank">
-              <img
-                src="{% static 'tuerny_app/images/4142920.png' %}"
-                class="w-100 h-100 object-fit-cover"
-              />
-            </a>
-          </div>
-        </div>
+{% endfor %}
       </div>
       <div class="row justify-content-center">
         

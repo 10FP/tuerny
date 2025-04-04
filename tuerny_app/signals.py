@@ -19,6 +19,7 @@ def send_verification_email_signal(sender, instance, created, **kwargs):
 
     # Sosyal hesapla mı geldi?
     if SocialAccount.objects.filter(user=instance).exists():
+        print("fp")
         instance.is_email_verified = True
         instance.save(update_fields=['is_email_verified'])
     else:
