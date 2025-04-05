@@ -19,11 +19,16 @@
           <ul class="nav nav-tabs nav-fill" id="contractsTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button
+              {% if active_tab %}
               {% if active_tab == "1" %}
                 class="nav-link active"
                 {% else %}
                 class="nav-link"
               {% endif %}
+              {% else %}
+              class="nav-link active"
+              {% endif %}
+
                 id="tab1-tab"
                 data-bs-toggle="tab"
                 data-bs-target="#tab1"
@@ -93,7 +98,16 @@
 
           <div class="tab-content" id="contractsTabContent">
             <div
+            {% if active_tab %}
+            {% if active_tab == "1" %}
+            class="tab-pane fade show active"
+              {% else %}
+              class="tab-pane fade"
+            {% endif %}
+              {% else %}
               class="tab-pane fade show active"
+            {% endif %}
+
               id="tab1"
               role="tabpanel"
               aria-labelledby="tab1-tab"
@@ -242,7 +256,12 @@ E-posta: info@Teurny.com
             </div>
 
             <div
+            {% if active_tab == "2" %}
+            class="tab-pane fade show active"
+              {% else %}
               class="tab-pane fade"
+            {% endif %}
+              
               id="tab2"
               role="tabpanel"
               aria-labelledby="tab2-tab"
@@ -342,7 +361,12 @@ E-posta: info@teurny.com
             </div>
 
             <div
+            {% if active_tab == "3" %}
+            class="tab-pane fade show active"
+              {% else %}
               class="tab-pane fade"
+            {% endif %}
+              
               id="tab3"
               role="tabpanel"
               aria-labelledby="tab3-tab"
@@ -399,7 +423,12 @@ Veri Sahibi Olarak Haklarınız
             </div>
 
             <div
+            {% if active_tab == "4" %}
+            class="tab-pane fade show active"
+              {% else %}
               class="tab-pane fade"
+            {% endif %}
+              
               id="tab4"
               role="tabpanel"
               aria-labelledby="tab4-tab"
